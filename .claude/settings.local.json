@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "PowerShell(wsl node -v)",
+      "PowerShell(wsl npm -v)",
+      "PowerShell(wsl --status)",
+      "PowerShell(wsl --cd \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\" npm install --no-audit --no-fund)",
+      "PowerShell(wsl --cd \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\" npx tsc --noEmit 2>&1)",
+      "PowerShell(wsl --cd \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\" npm run build 2>&1)",
+      "PowerShell(wsl --cd \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\" npm run dev)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5173 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1 OwningProcess | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -Confirm:$false }; wsl --shutdown; \"stopped\")",
+      "PowerShell(\\(Select-String -Path \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\\\\src\\\\App.tsx\" -Pattern \"Applause\"\\).Count; \\(Select-String -Path \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\\\\src\\\\App.tsx\" -Pattern \"0.16em\"\\).Count; wsl --cd \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\" grep -c \"0.16em\" src/App.tsx)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = [System.Drawing.Image]::FromFile\\(\"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\\\\public\\\\emids-logo.png\"\\); $icon = New-Object System.Drawing.Bitmap\\(88, 88\\); $g = [System.Drawing.Graphics]::FromImage\\($icon\\); $g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic; $dw = 70; $dh = 52; $dx = [int]\\(\\(88 - $dw\\) / 2\\); $dy = [int]\\(\\(88 - $dh\\) / 2\\); $dstRect = New-Object System.Drawing.Rectangle\\($dx, $dy, $dw, $dh\\); $srcRect = New-Object System.Drawing.Rectangle\\(0, 82, 119, 87\\); $g.DrawImage\\($src, $dstRect, $srcRect, [System.Drawing.GraphicsUnit]::Pixel\\); $g.Dispose\\(\\); $icon.Save\\(\"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\\\\public\\\\emids-icon.png\", [System.Drawing.Imaging.ImageFormat]::Png\\); $icon.Dispose\\(\\); $src.Dispose\\(\\); Get-Item \"C:\\\\Users\\\\syeda2\\\\Desktop\\\\recognition_portal\\\\public\\\\emids-icon.png\" | Select-Object Name, Length)"
+    ]
+  }
+}
