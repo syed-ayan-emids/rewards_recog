@@ -84,13 +84,13 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
   const previewValue = valueKey ? CORE_VALUES[valueKey] : null
 
   return (
-    <Modal open={open} onClose={() => setComposer({ open: false })} wide label="New Congratz">
+    <Modal open={open} onClose={() => setComposer({ open: false })} wide label="New Congrats">
       <div className="flex flex-col overflow-hidden">
         {/* Compact header */}
         <div className="flex items-center gap-3 border-b border-line px-6 py-4">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy"><PartyPopper size={18} className="text-gold" /></span>
           <div className="min-w-0">
-            <p className="text-[17px] font-extrabold tracking-tight text-navy">New Congratz</p>
+            <p className="text-[17px] font-extrabold tracking-tight text-navy">New Congrats</p>
             <p className="text-[11.5px] text-muted">Recognition in under 30 seconds — no forms, just the specific thing</p>
           </div>
           <CloseX onClick={() => setComposer({ open: false })} />
@@ -243,7 +243,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
             <p className="mt-2 flex items-start gap-1.5 text-[11px] leading-snug text-muted">
               {points >= 100
                 ? <><Lock size={12} className="mt-0.5 shrink-0" /> 100+ pts needs your manager's approval — budget has 945 pts left</>
-                : <><Globe size={12} className="mt-0.5 shrink-0" /> Points come from your team pool and hit their wallet instantly</>}
+                : <><Globe size={12} className="mt-0.5 shrink-0" /> Points come from your team pool and land in their My Rewards balance instantly</>}
             </p>
 
             {/* Delivery */}

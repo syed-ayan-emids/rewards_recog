@@ -45,7 +45,7 @@ export default function OrgTreeScreen() {
             {heat && <Chip className="tnum bg-white/80 text-gold-ink border border-gold/30"><Flame size={10} /> {RECOGNITION_HEAT[id] ?? 0}</Chip>}
             <button
               onClick={() => setComposer({ open: true, preset: { toId: id } })}
-              aria-label={`Send Congratz to ${p.name}`}
+              aria-label={`Send Congrats to ${p.name}`}
               className="hidden h-7 w-7 items-center justify-center rounded-full bg-gold text-[#3d2b00] shadow-fab transition group-hover:flex"
             >
               <PartyPopper size={13} />
@@ -110,7 +110,7 @@ export default function OrgTreeScreen() {
           <Card className="p-5">
             <p className="flex items-center gap-2 text-[14px] font-extrabold text-navy"><GitBranch size={16} className="text-brand" /> How the tree drives the portal</p>
             <ul className="mt-2.5 space-y-2 text-[12.5px] leading-relaxed text-muted">
-              <li className="flex gap-2"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" /> Every Congratz alerts the recipient's manager instantly</li>
+              <li className="flex gap-2"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" /> Every Congrats alerts the recipient's manager instantly</li>
               <li className="flex gap-2"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-mint" /> Point approvals route up this exact chain</li>
               <li className="flex gap-2"><span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet" /> EoQ jury visibility follows their span of control</li>
             </ul>

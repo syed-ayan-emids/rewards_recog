@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import { POSTS, NOTIFICATIONS, PEOPLE } from './data'
 import type { Post, ReactionKey } from './data'
 
-export type Screen = 'home' | 'feed' | 'wallet' | 'rewards' | 'awards' | 'jury' | 'approvals' | 'team' | 'org' | 'profile'
+export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile'
 
 export type Toast = { id: number; msg: string; kind?: 'gold' | 'mint' | 'navy' }
 

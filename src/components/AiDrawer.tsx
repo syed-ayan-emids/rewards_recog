@@ -61,7 +61,7 @@ export default function AiDrawer() {
           </>
         ),
         actions: [
-          { label: 'Open team dashboard', fn: () => { setScreen('team'); setAi(false) } },
+          { label: 'Open team dashboard', fn: () => { setScreen('team', 'team'); setAi(false) } },
           { label: 'Praise Sanjay', fn: () => { setComposer({ open: true, preset: { toId: 'p9' } }); setAi(false); confettiBurst(0.5, 0.6) } },
         ],
       })
@@ -79,7 +79,7 @@ export default function AiDrawer() {
             <p className="mt-2 text-xs text-muted">Assisted — routing suggestion prepared.</p>
           </>
         ),
-        actions: [{ label: 'Review in approvals', fn: () => { setScreen('approvals'); setAi(false) } }],
+        actions: [{ label: 'Review in approvals', fn: () => { setScreen('team', 'approvals'); setAi(false) } }],
       })
     } else if (lower.includes('summar') || lower.includes('health')) {
       push({

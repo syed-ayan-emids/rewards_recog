@@ -1,13 +1,49 @@
 import React, { useState } from 'react'
-import { Bell, Check, Mail, MessageSquare, PartyPopper, Send, ShieldAlert, Sparkles, TrendingUp, Users } from 'lucide-react'
+import { Bell, Check, GitBranch, PartyPopper, CalendarCheck, Send, ShieldAlert, TrendingUp, Users } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, Ring } from '../ui'
 import { CORE_VALUES, TEAM_STATS, person } from '../data'
 import { useStore, fmtNum } from '../store'
+import OrgTreeScreen from './OrgTree'
+import ApprovalsScreen from './Approvals'
 
-export default function TeamScreen() {
+type TeamTab = 'team' | 'org' | 'approvals'
+
+export default function MyTeamScreen() {
+  const { screenParam, notifications } = useStore()
+  const [tab, setTab] = useState<TeamTab>((screenParam as TeamTab) || 'team')
+  const approvalsCount = notifications.filter((n) => n.unread && n.group === 'approval').length
+
+  const TABS: { key: TeamTab; label: string; icon: React.ReactNode; badge?: number }[] = [
+    { key: 'team', label: 'Pod overview', icon: <Users size={16} /> },
+    { key: 'org', label: 'Org tree', icon: <GitBranch size={16} /> },
+    { key: 'approvals', label: 'Approvals', icon: <CalendarCheck size={16} />, badge: approvalsCount },
+  ]
+
+  return (
+    <div>
+      <div className="rail-scroll mb-6 flex gap-2 overflow-x-auto pb-1">
+        {TABS.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-[13.5px] font-bold transition ${tab === t.key ? 'border-brand bg-brand text-white shadow-card' : 'border-line bg-white text-muted hover:text-ink'}`}
+          >
+            {t.icon}
+            {t.label}
+            {t.badge ? <span className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10.5px] font-extrabold ${tab === t.key ? 'bg-white/25 text-white' : 'bg-brand-soft text-brand'}`}>{t.badge}</span> : null}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'team' && <TeamScreen />}
+      {tab === 'org' && <OrgTreeScreen />}
+      {tab === 'approvals' && <ApprovalsScreen />}
+    </div>
+  )
+}
+
+function TeamScreen() {
   const { setComposer, openProfile, toast } = useStore()
-  const [digest, setDigest] = useState(true)
-  const [channels, setChannels] = useState({ email: true, teams: true, slack: false })
   const [nudged, setNudged] = useState<string[]>([])
 
   const totalGiven = TEAM_STATS.reduce((s, t) => s + t.given, 0)
@@ -105,36 +141,8 @@ export default function TeamScreen() {
           </div>
         </section>
 
-        {/* Digest + guardrails */}
+        {/* Guardrails */}
         <aside className="space-y-4">
-          <Card className="p-5">
-            <p className="flex items-center gap-2 text-[15px] font-extrabold text-navy"><Mail size={17} className="text-violet" /> Weekly digest</p>
-            <p className="mt-1 text-[12.5px] text-muted">A Monday summary of your pod's recognition health, budget burn and upcoming windows.</p>
-            <button
-              onClick={() => { setDigest(!digest); toast(digest ? 'Digest paused' : 'Digest on', 'mint') }}
-              aria-pressed={digest}
-              className={`mt-4 flex h-7 w-12 items-center rounded-full p-1 transition ${digest ? 'bg-mint justify-end' : 'bg-slate-300 justify-start'}`}
-            >
-              <span className="h-5 w-5 rounded-full bg-white shadow" />
-            </button>
-            <div className="mt-4 space-y-2">
-              {([['email', 'Email'], ['teams', 'Microsoft Teams'], ['slack', 'Slack']] as const).map(([k, l]) => (
-                <label key={k} className="flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-1.5 text-[13.5px] font-semibold text-ink hover:bg-slate-50">
-                  <button
-                    role="checkbox"
-                    aria-checked={channels[k]}
-                    onClick={(e) => { e.preventDefault(); setChannels({ ...channels, [k]: !channels[k] }) }}
-                    className={`flex h-5 w-5 items-center justify-center rounded-md border-2 transition ${channels[k] ? 'border-brand bg-brand text-white' : 'border-line bg-white'}`}
-                    aria-label={l}
-                  >
-                    {channels[k] && <Check size={12} />}
-                  </button>
-                  {l}
-                </label>
-              ))}
-            </div>
-          </Card>
-
           <Card className="p-5">
             <p className="flex items-center gap-2 text-[15px] font-extrabold text-navy"><ShieldAlert size={17} className="text-coral" /> Fair-distribution watch</p>
             <p className="mt-1 text-[12.5px] text-muted">Spotlight called out — keep the quarter healthy:</p>
@@ -143,16 +151,6 @@ export default function TeamScreen() {
               <WatchRow label="Customer First dominance" note="38% of recognition lands on one value — diversify" pct={38} color="bg-brand" />
               <WatchRow label="Milestone auto-posts" note="2 anniversaries this week proceed automatically" pct={100} color="bg-mint" />
             </div>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-gold-soft to-white p-5">
-            <p className="flex items-center gap-2 text-[15px] font-extrabold text-navy"><Sparkles size={17} className="text-violet" /> AI suggestion</p>
-            <p className="mt-2 text-[13.5px] leading-relaxed text-ink">
-              Rohan went 2 weeks without recognition but shipped 3 clean PRs. A specific Congratz on Tuesday mornings gets the highest team-lift per send.
-            </p>
-            <Btn size="sm" variant="gold" className="mt-3" onClick={() => setComposer({ open: true, preset: { toId: 'p4' } })}>
-              <MessageSquare size={13} /> Draft one for Rohan
-            </Btn>
           </Card>
         </aside>
       </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
-  Bell, Check, ChevronDown, Home, ListFilter, Gift, Wallet, CalendarCheck,
-  Sparkles, Trophy, MessageSquare, Cake, PartyPopper,
+  Bell, Check, ChevronDown, Home, Gift, CalendarCheck,
+  Sparkles, Trophy, MessageSquare, Cake, PartyPopper, Users,
 } from 'lucide-react'
 import { StoreProvider, useStore, type Screen } from './store'
 import { Avatar, useOutside } from './ui'
@@ -9,22 +9,16 @@ import Composer from './components/Composer'
 import AiDrawer from './components/AiDrawer'
 import Toasts from './components/Toasts'
 import HomeScreen from './screens/Home'
-import FeedScreen from './screens/Feed'
 import RewardsScreen from './screens/Rewards'
-import WalletScreen from './screens/Wallet'
 import AwardsScreen from './screens/Awards'
-import ApprovalsScreen from './screens/Approvals'
-import TeamScreen from './screens/Team'
+import MyTeamScreen from './screens/Team'
 import JuryScreen from './screens/Jury'
-import OrgTreeScreen from './screens/OrgTree'
 import ProfileScreen from './screens/Profile'
 
 const NAV: { key: Screen; label: string; icon: React.ReactNode }[] = [
   { key: 'home', label: 'Dashboard', icon: <Home size={17} /> },
-  { key: 'feed', label: 'Feed', icon: <ListFilter size={17} /> },
-  { key: 'wallet', label: 'My Wallet', icon: <Wallet size={17} /> },
+  { key: 'team', label: 'My Team', icon: <Users size={17} /> },
   { key: 'rewards', label: 'My Rewards', icon: <Gift size={17} /> },
-  { key: 'approvals', label: 'Approvals', icon: <CalendarCheck size={17} /> },
 ]
 
 /* ---------------------------------- Notifications ---------------------------------- */
@@ -66,7 +60,7 @@ function NotifBell() {
                   {items.map((n) => (
                     <button
                       key={n.id}
-                      onClick={() => { setOpen(false); setScreen(n.go ?? 'home') }}
+                      onClick={() => { setOpen(false); if (n.group === 'approval') setScreen('team', 'approvals'); else setScreen(n.go ?? 'home') }}
                       className="flex w-full items-start gap-3 rounded-xl px-2.5 py-2 text-left transition hover:bg-slate-50"
                     >
                       <span className="mt-1 h-2 w-2 shrink-0 rounded-full" style={{ background: n.unread ? 'var(--color-brand)' : 'transparent' }} />
@@ -116,7 +110,7 @@ function Shell() {
                 >
                   {n.icon}
                   {n.label}
-                  {n.key === 'approvals' && approvalsCount > 0 && (
+                  {n.key === 'team' && approvalsCount > 0 && (
                     <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-soft px-1.5 text-[10.5px] font-extrabold text-brand">{approvalsCount}</span>
                   )}
                 </button>
@@ -156,35 +150,30 @@ function Shell() {
       <main className="mx-auto max-w-[1560px] px-5 pb-28 pt-8 lg:px-10 lg:pb-16 xl:pt-[72px]">
         <div key={screen} className="page-fade">
           {screen === 'home' && <HomeScreen />}
-          {screen === 'feed' && <FeedScreen />}
           {screen === 'rewards' && <RewardsScreen />}
-          {screen === 'wallet' && <WalletScreen />}
           {screen === 'awards' && <AwardsScreen />}
           {screen === 'jury' && <JuryScreen />}
-          {screen === 'approvals' && <ApprovalsScreen />}
-          {screen === 'team' && <TeamScreen />}
-          {screen === 'org' && <OrgTreeScreen />}
+          {screen === 'team' && <MyTeamScreen />}
           {screen === 'profile' && <ProfileScreen />}
         </div>
       </main>
 
       {/* Mobile bottom bar */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 backdrop-blur-md lg:hidden" aria-label="Mobile">
-        <div className="mx-auto grid max-w-md grid-cols-5 items-center px-2">
+        <div className="mx-auto grid max-w-md grid-cols-4 items-center px-2">
           <MobileTab k="home" icon={<Home size={21} />} label="Home" />
-          <MobileTab k="feed" icon={<MessageSquare size={21} />} label="Feed" />
           <div className="relative flex justify-center">
             <button
               onClick={() => setComposer({ open: true })}
-              aria-label="Send a Congratz"
+              aria-label="Recognize a teammate"
               className="absolute -top-6 flex h-14 w-14 animate-pulse-dot items-center justify-center rounded-full bg-gold text-[#3d2b00] shadow-fab transition active:scale-95"
             >
               <PartyPopper size={22} />
             </button>
             <span className="pt-2 text-xs font-semibold text-gold-ink">Praise</span>
           </div>
-          <MobileTab k="wallet" icon={<Wallet size={21} />} label="Wallet" />
-          <MobileTab k="approvals" icon={<CalendarCheck size={21} />} label="Approve" badge={approvalsCount} />
+          <MobileTab k="rewards" icon={<Gift size={21} />} label="Rewards" />
+          <MobileTab k="team" icon={<Users size={21} />} label="My Team" badge={approvalsCount} />
         </div>
       </nav>
 
@@ -220,19 +209,15 @@ function ProfileMenu({ close }: { close: () => void }) {
         </div>
       </div>
       <div className="my-1 h-px bg-line" />
+      <div className="my-1 h-px bg-line" />
       {[
-        { l: 'My rewards', fn: () => go('rewards') },
         { l: 'My profile', fn: () => go('profile') },
-        { l: 'My team', fn: () => go('team') },
-        { l: 'Org tree', fn: () => go('org') },
         { l: 'Quarterly awards', fn: () => go('awards') },
         { l: 'Jury dashboard', fn: () => go('jury') },
         { l: 'AI assistant', fn: () => { setAi(true); close() } },
       ].map((i) => (
         <button key={i.l} onClick={i.fn} className="block w-full rounded-xl px-3 py-2 text-left text-sm font-semibold text-ink transition hover:bg-slate-50">{i.l}</button>
       ))}
-      <div className="my-1 h-px bg-line" />
-      <button onClick={() => { setComposer({ open: true }); close() }} className="block w-full rounded-xl px-3 py-2 text-left text-sm font-semibold text-brand transition hover:bg-brand-soft">Send a Congratz</button>
     </div>
   )
 }

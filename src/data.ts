@@ -1,11 +1,11 @@
 export type ValueKey = 'customerFirst' | 'innovation' | 'collaboration' | 'ownership' | 'winningMindset'
 
-export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: string }> = {
-  customerFirst: { label: 'Customer First', ink: 'text-value-cf', soft: 'bg-value-cf-soft' },
-  innovation: { label: 'Innovation', ink: 'text-value-in', soft: 'bg-value-in-soft' },
-  collaboration: { label: 'Collaboration', ink: 'text-value-co', soft: 'bg-value-co-soft' },
-  ownership: { label: 'Ownership', ink: 'text-value-ow', soft: 'bg-value-ow-soft' },
-  winningMindset: { label: 'Winning Mindset', ink: 'text-value-wm', soft: 'bg-value-wm-soft' },
+export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: string; solid: string }> = {
+  customerFirst: { label: 'Customer First', ink: 'text-value-cf', soft: 'bg-value-cf-soft', solid: '#0fa3a3' },
+  innovation: { label: 'Innovation', ink: 'text-value-in', soft: 'bg-value-in-soft', solid: '#7a5af8' },
+  collaboration: { label: 'Collaboration', ink: 'text-value-co', soft: 'bg-value-co-soft', solid: '#3898ff' },
+  ownership: { label: 'Ownership', ink: 'text-value-ow', soft: 'bg-value-ow-soft', solid: '#ff8938' },
+  winningMindset: { label: 'Winning Mindset', ink: 'text-value-wm', soft: 'bg-value-wm-soft', solid: '#ff5a5f' },
 }
 export const VALUE_KEYS = Object.keys(CORE_VALUES) as ValueKey[]
 
@@ -145,20 +145,6 @@ export const LEDGER: LedgerEntry[] = [
   { id: 'l8', label: 'Milestone — 5-year tenure award', kind: 'award', amount: 500, when: 'Jul 21' },
 ]
 
-export type Voucher = {
-  id: string; brand: string; title: string; sub: string; points: number
-  accentBg: string; accentInk: string; chip?: string; stock: 'in' | 'low'
-}
-
-export const VOUCHERS: Voucher[] = [
-  { id: 'v1', brand: 'Amazon', title: 'Amazon Pay Gift Card', sub: '₹500 · instant delivery', points: 500, accentBg: 'bg-[#0a2038]', accentInk: '#ffffff', stock: 'in' },
-  { id: 'v2', brand: 'Amazon', title: 'Amazon Pay Gift Card', sub: '₹1,000 · instant delivery', points: 950, accentBg: 'bg-[#154071]', accentInk: '#ffffff', chip: 'Popular', stock: 'in' },
-  { id: 'v3', brand: 'Amazon', title: 'Amazon Pay Gift Card', sub: '₹2,500 · instant delivery', points: 2300, accentBg: 'bg-gradient-to-br from-[#154071] to-[#0a2038]', accentInk: '#ffffff', chip: '5% bonus value', stock: 'in' },
-  { id: 'v4', brand: 'Starbucks', title: 'Starbucks Gift Card', sub: '₹250 · instant delivery', points: 220, accentBg: 'bg-[#f7f1e1]', accentInk: '#3d2b1f', stock: 'in' },
-  { id: 'v5', brand: 'Swiggy', title: 'Swiggy Order Voucher', sub: '₹300 · instant delivery', points: 290, accentBg: 'bg-[#feeae4]', accentInk: '#c2410c', stock: 'in' },
-  { id: 'v6', brand: 'MakeMyTrip', title: 'Travel Voucher', sub: '₹2,000 · flexible', points: 1850, accentBg: 'bg-[#e8f4fd]', accentInk: '#0b5ea8', chip: 'Only 9 left', stock: 'low' },
-]
-
 export type ApprovalItem = {
   id: string
   kind: 'points-approval' | 'nomination-endorsement' | 'high-value-redemption'
@@ -271,29 +257,24 @@ export const JURY_NOMINEES: JuryNominee[] = [
   { id: 'j7', categories: 'Rising Star', nomId: 'p1', nomBy: 'Rohan Patel', brief: 'Jumped on the eligibility feed at 6 AM and stabilised it within one week of a major client demo — operating well above tenure.', flags: [], score: 5, votes: 4 },
 ]
 
-export type Notification = { id: string; group: 'praise' | 'approval' | 'window' | 'milestone'; title: string; sub: string; when: string; unread: boolean; go?: 'approvals' | 'awards' | 'home' }
+export type Notification = { id: string; group: 'praise' | 'approval' | 'window' | 'milestone'; title: string; sub: string; when: string; unread: boolean; go?: 'team' | 'awards' | 'home' }
 
 export const NOTIFICATIONS: Notification[] = [
-  { id: 'nt1', group: 'approval', title: 'Approval pending — Rohan → Sofia +100 pts', sub: 'Needs budget confirmation', when: '3 h ago', unread: true, go: 'approvals' },
-  { id: 'nt2', group: 'approval', title: 'Nomination endorsement — Nia Thomas', sub: 'Jury review next', when: '6 h ago', unread: true, go: 'approvals' },
+  { id: 'nt1', group: 'approval', title: 'Approval pending — Rohan → Sofia +100 pts', sub: 'Needs budget confirmation', when: '3 h ago', unread: true, go: 'team' },
+  { id: 'nt2', group: 'approval', title: 'Nomination endorsement — Nia Thomas', sub: 'Jury review next', when: '6 h ago', unread: true, go: 'team' },
   { id: 'nt3', group: 'praise', title: 'Daniel Cho praised your runbook work', sub: '+ Team Player react by 9 others', when: '1 d ago', unread: true, go: 'home' },
   { id: 'nt4', group: 'window', title: 'EoQ nominations close Oct 31', sub: '4 categories are open', when: '2 d ago', unread: false, go: 'awards' },
-  { id: 'nt5', group: 'milestone', title: "Vikram's 8-year anniversary today", sub: 'Say Congratz on the feed', when: '3 d ago', unread: false, go: 'home' },
+  { id: 'nt5', group: 'milestone', title: "Vikram's 8-year anniversary today", sub: 'Say Congrats on the feed', when: '3 d ago', unread: false, go: 'home' },
   { id: 'nt6', group: 'praise', title: 'You appeared in 3 recognitions this week', sub: 'Weekly digest', when: '4 d ago', unread: false, go: 'home' },
 ]
 
 export type Modalities = { week: string; personId: string; type: string }
 
-export const MONTHLY_PROGRESS = {
-  labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-  values: [320, 380, 290, 460, 520, 610],
-  recognitions: [22, 26, 19, 31, 36, 47],
-}
+export const ORG_STATS = { recognitions: 279 }
 
 export const DASH_STATS = {
-  rewards: 47, rewardsDelta: 12,
-  given: 14, givenDelta: 8,
-  got: 9, gotDelta: 20,
+  given: 14,
+  got: 9,
 }
 
 export const MILESTONES: Modalities[] = [
