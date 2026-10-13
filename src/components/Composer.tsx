@@ -119,7 +119,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
             {/* To */}
             <label className="mb-1.5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
               <span>To</span>
-              {!toSel.length && <span className="tnum normal-case tracking-normal font-semibold">1st of 3 taps</span>}
             </label>
             <div
               className="flex min-h-12 flex-wrap items-center gap-2 rounded-xl border border-line bg-slate-50 px-3 py-2 transition focus-within:border-brand/40 focus-within:bg-white"
@@ -155,9 +154,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
             )}
 
             {/* CC */}
-            <label className="mb-1.5 mt-4 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
-              <span>CC — gets an email copy</span>
-            </label>
             <div
               className="flex min-h-11 flex-wrap items-center gap-2 rounded-xl border border-line bg-slate-50 px-3 py-2 transition focus-within:border-brand/40 focus-within:bg-white"
             >
@@ -199,7 +195,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
             {/* Value */}
             <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
               <span>Which emids value did they live?</span>
-              <span className="tnum normal-case tracking-normal font-semibold">2nd tap</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {VALUE_KEYS.map((k) => {
@@ -228,7 +223,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
             {/* Message */}
             <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
               <span>What exactly did they do?</span>
-              <span className="tnum normal-case tracking-normal font-semibold">3rd tap</span>
             </label>
             <div className="rounded-xl border border-line bg-slate-50 transition focus-within:border-brand/40 focus-within:bg-white">
               <textarea

@@ -1,5 +1,5 @@
 import React from 'react'
-import { CalendarClock, Sparkles, Trophy, Users } from 'lucide-react'
+import { CalendarClock, Trophy, Users } from 'lucide-react'
 import { Avatar, Btn, Card } from '../ui'
 import EoQShowcase from '../components/EoQShowcase'
 import Mascot from '../components/Mascot'
@@ -15,10 +15,10 @@ export default function HomeScreen() {
   return (
     <div>
       {/* Dominating hero */}
-      <div className="relative isolate mb-16">
+      <div className="relative isolate mb-16 flex min-h-[236px] items-center">
         <HeroBackdrop />
         <Mascot />
-        <div className="relative z-10 flex flex-col items-start justify-between gap-6 xl:flex-row xl:items-center">
+        <div className="relative z-10 flex w-full flex-col items-start justify-between gap-6 xl:flex-row xl:items-center">
           <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-white">
             Hello Ayan — someone had a great week.{' '}
             <span className="relative inline-block">
@@ -28,7 +28,7 @@ export default function HomeScreen() {
               </svg>
             </span>
           </h1>
-          <Btn variant="primary" size="lg" className="shrink-0 shadow-[0_10px_24px_rgba(14,147,132,0.35)] xl:mr-[26px]" onClick={() => setComposer({ open: true })}>
+          <Btn variant="primary" size="lg" className="shrink-0 shadow-[0_10px_24px_rgba(14,147,132,0.35)]" onClick={() => setComposer({ open: true })}>
             Recognize a teammate
           </Btn>
         </div>
@@ -66,8 +66,6 @@ export default function HomeScreen() {
         {/* Total reward balance — bank card */}
         <Card className="bank-aurora relative h-full overflow-hidden">
             <div className="relative flex h-full flex-col p-4">
-              <Sparkles size={42} className="absolute -right-2 -top-3 text-violet/30" aria-hidden />
-              <Sparkles size={22} className="absolute right-10 top-8 text-violet/20" aria-hidden />
               <div className="flex items-start justify-between gap-2">
                 <img src="/emids-logo-tight.png" alt="emids" className="mt-0.5 h-4 w-auto shrink-0" />
               </div>
