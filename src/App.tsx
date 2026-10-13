@@ -187,6 +187,16 @@ function Shell() {
         </div>
       </main>
 
+      {/* Footer */}
+      <footer className="border-t border-line bg-white pb-20 lg:pb-0">
+        <div className="mx-auto flex max-w-[1560px] flex-col items-center justify-between gap-2 px-5 py-6 text-center sm:flex-row sm:px-10 sm:text-left">
+          <div className="flex items-center gap-2">
+            <img src="/emids-icon.png" alt="emids" className="h-6 w-6 object-contain" />
+            <p className="text-[13px] font-extrabold tracking-tight text-navy">EMIDS <span className="font-bold text-muted">· Rewards and Recognition</span></p>
+          </div>
+        </div>
+      </footer>
+
       {/* Mobile bottom bar */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 backdrop-blur-md lg:hidden" aria-label="Mobile">
         <div className="mx-auto grid max-w-md grid-cols-4 items-center px-2">
