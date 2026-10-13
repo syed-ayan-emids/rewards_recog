@@ -64,29 +64,22 @@ export default function HomeScreen() {
         </Card>
 
         {/* Total reward balance — bank card */}
-        <div className="bg-white p-3" style={{ borderRadius: 16 }}>
-          <div className="bank-aurora relative h-full overflow-hidden" style={{ borderRadius: 16 }}>
-            <div className="dotgrid relative flex h-full flex-col p-4">
-              <Sparkles size={42} className="absolute -right-2 -top-3 text-gold/25" aria-hidden />
-              <Sparkles size={22} className="absolute right-10 top-8 text-gold/15" aria-hidden />
+        <Card className="bank-aurora relative h-full overflow-hidden">
+            <div className="relative flex h-full flex-col p-4">
+              <Sparkles size={42} className="absolute -right-2 -top-3 text-violet/30" aria-hidden />
+              <Sparkles size={22} className="absolute right-10 top-8 text-violet/20" aria-hidden />
               <div className="flex items-start justify-between gap-2">
                 <img src="/emids-logo-tight.png" alt="emids" className="mt-0.5 h-4 w-auto shrink-0" />
-                <span className="relative mt-0.5 h-5 w-7 shrink-0 overflow-hidden rounded-md bg-gradient-to-br from-gold to-[#F5A10E]">
-                  <span className="absolute inset-x-1 top-1/2 h-px bg-[#3d2b00]/35" />
-                  <span className="absolute inset-y-1 left-1/2 w-px bg-[#3d2b00]/20" />
-                </span>
               </div>
-              <p className="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-gold/90">Total reward balance</p>
+              <p className="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-violet-ink">Total reward balance</p>
               <div className="mt-auto flex items-end justify-between gap-2 pt-3">
-                <p className="tnum text-[25px] font-extrabold leading-none tracking-[0.04em] text-white">
+                <p className="tnum text-[25px] font-extrabold leading-none tracking-[0.04em] text-navy">
                   {fmtNum(useCountUp(balance))}
-                  <span className="ml-1.5 text-[12px] font-bold tracking-normal text-white/60">pts</span>
+                  <span className="ml-1.5 text-[12px] font-bold tracking-normal text-muted">pts</span>
                 </p>
-                <span className="tnum shrink-0 rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold text-gold">🔥 6-week streak</span>
               </div>
             </div>
-          </div>
-        </div>
+        </Card>
       </div>
 
       {/* Quick cards */}

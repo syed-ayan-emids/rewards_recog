@@ -109,7 +109,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy"><PartyPopper size={18} className="text-gold" /></span>
           <div className="min-w-0">
             <p className="text-[17px] font-extrabold tracking-tight text-navy">New Congrats</p>
-            <p className="text-[11.5px] text-muted">Recognition in under 30 seconds — no forms, just the specific thing</p>
           </div>
         </div>
       </header>
@@ -352,8 +351,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
 
       {/* Footer */}
       <footer className="border-t border-line bg-white">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-          <p className="tnum text-[12px] text-muted">≈ {7 + Math.floor(msg.length / 90)} seconds · {visibility === 'public' ? 'public post' : 'quiet note'}{points > 0 ? ` · ${points} pts from team pool` : ''}</p>
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-end gap-3 px-4 py-3.5 sm:px-6">
           <div className="flex gap-2">
             <Btn variant="ghost" onClick={closeComposer}>Cancel</Btn>
             <Btn variant="primary" onClick={submit} disabled={!canSend} className="px-5">
