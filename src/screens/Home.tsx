@@ -20,7 +20,7 @@ export default function HomeScreen() {
         <HeroBackdrop />
         <Mascot />
         <div className="relative z-10 flex flex-col items-start justify-between gap-6 xl:flex-row xl:items-center">
-          <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-navy">
+          <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-white">
             Hello Ayan — someone had a great week.{' '}
             <span className="relative inline-block">
               <span className="say-shimmer">Say so.</span>
@@ -143,9 +143,9 @@ export default function HomeScreen() {
 
 function HeroBackdrop() {
   return (
-    <div className="hero-edge-fade pointer-events-none absolute -inset-x-8 -bottom-10 -top-16 -z-10 overflow-hidden" aria-hidden>
-      <div className="hero-grad absolute inset-0" />
-      <div className="hero-shine" />
+    <div className="pointer-events-none absolute -inset-x-8 -bottom-10 -top-16 -z-10 overflow-hidden" aria-hidden>
+      <img src="/emids-hero.webp" alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#030d1c]/65 via-[#030d1c]/30 to-[#030d1c]/45" />
     </div>
   )
 }
