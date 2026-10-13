@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react'
+
 export type ValueKey = 'customerFirst' | 'innovation' | 'collaboration' | 'ownership' | 'winningMindset'
 
 export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: string; solid: string }> = {
@@ -8,6 +10,27 @@ export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: s
   winningMindset: { label: 'Winning Mindset', ink: 'text-value-wm', soft: 'bg-value-wm-soft', solid: '#ff5a5f' },
 }
 export const VALUE_KEYS = Object.keys(CORE_VALUES) as ValueKey[]
+
+/* Per-value recognition templates. `{recipient}` in prefill is swapped with the receiver's name. */
+export type PraiseTemplate = { id: string; name: string; emoji: string; bg: CSSProperties; prefill?: string }
+
+export const VALUE_TEMPLATES: Record<ValueKey, PraiseTemplate[]> = {
+  customerFirst: [
+    { id: 'cf-star', name: 'Service Star', emoji: '⭐', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #2ec9c6 0%, #0f7f86 75%)' }, prefill: 'Every client thread {recipient} touched came back a little happier. Small moves, big trust — thank you.' },
+  ],
+  innovation: [
+    { id: 'in-spark', name: 'Fresh Spark', emoji: '💡', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #a98cff 0%, #6547e0 75%)' }, prefill: '{recipient} questioned the default, tested the idea, and made it real before anyone could call it impossible.' },
+  ],
+  collaboration: [
+    { id: 'co-team', name: 'One Team', emoji: '🤝', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #6cbaff 0%, #2a80e0 75%)' }, prefill: 'No silos today: {recipient} pulled people together, split the load, and we shipped as one team.' },
+  ],
+  ownership: [
+    { id: 'ow-done', name: 'Done & Done', emoji: '✅', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ffb066 0%, #e5701f 75%)' }, prefill: 'Assigned Friday, shipped Monday: {recipient} carried it across the line with zero supervision.' },
+  ],
+  winningMindset: [
+    { id: 'wm-champion', name: "Champion's Push", emoji: '🔥', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ff8f92 0%, #e84349 75%)' }, prefill: 'Nobody expected that comeback. {recipient} pushed when it mattered and carried the whole thing.' },
+  ],
+}
 
 export type Person = {
   id: string
@@ -64,6 +87,7 @@ export type Post = {
   fromId: string
   toIds: string[]
   valueKey?: ValueKey
+  tpl?: string
   message: string
   points?: number
   when: string
