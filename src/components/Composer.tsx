@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, Eye, PartyPopper, Send, Sparkles, Users, X } from 'lucide-react'
+import { ArrowLeft, Eye, Send, Sparkles, Users, X } from 'lucide-react'
 import { Avatar, Btn } from '../ui'
 import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE } from '../data'
 import type { ValueKey } from '../data'
@@ -106,10 +106,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
       <header className="border-b border-line bg-white">
         <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-3.5 sm:px-6 sm:py-4">
           <Btn variant="ghost" size="sm" onClick={closeComposer}><ArrowLeft size={16} /> Back</Btn>
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy"><PartyPopper size={18} className="text-gold" /></span>
-          <div className="min-w-0">
-            <p className="text-[17px] font-extrabold tracking-tight text-navy">New Congrats</p>
-          </div>
         </div>
       </header>
 
@@ -135,7 +131,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
                 id="composer-to-input"
                 value={q}
                 onChange={(e) => { setQ(e.target.value); setPickerOpen(true) }}
-                placeholder={toSel.length ? 'Add more…' : 'Type a name — synced from the org tree'}
+                placeholder={toSel.length ? 'Add more…' : 'Type a name'}
                 className="h-8 min-w-[170px] flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
               />
             </div>
@@ -155,7 +151,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
 
             {/* CC */}
             <div
-              className="flex min-h-11 flex-wrap items-center gap-2 rounded-xl border border-line bg-slate-50 px-3 py-2 transition focus-within:border-brand/40 focus-within:bg-white"
+              className="mt-2.5 flex min-h-11 flex-wrap items-center gap-2 rounded-xl border border-line bg-slate-50 px-3 py-2 transition focus-within:border-brand/40 focus-within:bg-white"
             >
               {ccManagers.map((id) => (
                 <span key={id} className="flex items-center gap-1.5 rounded-full bg-navy/5 border border-line py-0.5 pl-1 pr-2">
@@ -174,7 +170,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
               <input
                 value={ccq}
                 onChange={(e) => { setCcq(e.target.value); setCcPickerOpen(true) }}
-                placeholder={ccSel.length || ccManagers.length ? 'Add more CC…' : 'Add CC — teammate, manager, or leader'}
+                placeholder={ccSel.length || ccManagers.length ? 'Add more CC…' : 'Add CC'}
                 className="h-7 min-w-[150px] flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted"
               />
             </div>
