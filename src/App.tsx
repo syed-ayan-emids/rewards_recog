@@ -175,7 +175,7 @@ function Shell() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1560px] px-5 pb-28 pt-8 lg:px-10 lg:pb-16 xl:pt-[72px]">
+      <main className="mx-auto mt-2.5 max-w-[1560px] px-5 pb-28 pt-8 lg:px-10 lg:pb-16 xl:pt-[72px]">
         <div key={screen} className="page-fade">
           {screen === 'home' && <HomeScreen />}
           {screen === 'rewards' && <RewardsScreen />}
