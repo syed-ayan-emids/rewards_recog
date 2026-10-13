@@ -222,6 +222,21 @@ export const TEAM_STATS: TeamMemberStat[] = [
   { id: 'p4', given: 3, received: 4, lastRecognized: '— 16 days', valuesTop: 'ownership' },
 ]
 
+export type LeaderRow = { id: string; pts: number }
+
+// Peer points received this quarter — EoQ prize payouts not included
+export const TEAM_LEADERBOARD: LeaderRow[] = [
+  { id: 'p2', pts: 420 },
+  { id: 'me', pts: 380 },
+  { id: 'p1', pts: 275 },
+  { id: 'p3', pts: 250 },
+  { id: 'p6', pts: 220 },
+  { id: 'p10', pts: 190 },
+  { id: 'p5', pts: 160 },
+  { id: 'p4', pts: 90 },
+  { id: 'p9', pts: 25 },
+]
+
 export type AwardCategory = {
   id: string; name: string; base: ValueKey; desc: string
   status: 'open' | 'voting' | 'announced'; nomCount: number; prize: number
