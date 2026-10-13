@@ -39,25 +39,25 @@ export default function HomeScreen() {
       <div className="mb-8 grid gap-4 md:grid-cols-3 xl:grid-cols-[0.78fr_1fr_1.22fr]">
         {/* Org data */}
         <Card className="card-org p-5">
-          <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-white/70">
+          <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0E0E0E]">
             Org data
           </div>
-          <p className="tnum mt-4 text-[58px] font-extrabold leading-[0.95] tracking-[-0.03em] text-white">{fmtNum(orgCount)}</p>
-          <p className="mt-2 text-[12.5px] font-semibold text-white/70">Total recognitions at EMIDS</p>
+          <p className="tnum mt-4 text-[58px] font-extrabold leading-[0.95] tracking-[-0.03em] text-[#0E0E0E]">{fmtNum(orgCount)}</p>
+          <p className="mt-2 text-[12.5px] font-semibold text-muted">Total recognitions at EMIDS</p>
         </Card>
 
         {/* My data — one card, two halves */}
         <Card className="card-my p-5">
-          <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0f7a4d]">
+          <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0E0E0E]">
             My data
           </div>
           <div className="mt-3.5 grid grid-cols-2">
-            <div className="border-r border-mint/25 pr-4">
-              <p className="tnum text-[30px] font-extrabold leading-none text-navy">{givenCount}</p>
+            <div className="border-r border-bp-green/30 pr-4">
+              <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{givenCount}</p>
               <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions given</p>
             </div>
             <div className="pl-4">
-              <p className="tnum text-[30px] font-extrabold leading-none text-navy">{gotCount}</p>
+              <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{gotCount}</p>
               <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions received</p>
             </div>
           </div>
@@ -67,11 +67,14 @@ export default function HomeScreen() {
         <Card className="bank-aurora relative h-full overflow-hidden">
             <div className="relative flex h-full flex-col p-4">
               <div className="flex items-start justify-between gap-2">
-                <img src="/emids-logo-tight.png" alt="emids" className="mt-0.5 h-4 w-auto shrink-0" />
+                <span className="flex items-center gap-2">
+                  <img src="/emids-icon.png" alt="" className="h-6 w-6 object-contain" />
+                  <span className="text-[15px] font-extrabold tracking-tight text-navy">EMIDS</span>
+                </span>
               </div>
-              <p className="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-violet-ink">Total reward balance</p>
+              <p className="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-[#0E0E0E]">Total reward balance</p>
               <div className="mt-auto flex items-end justify-between gap-2 pt-3">
-                <p className="tnum text-[25px] font-extrabold leading-none tracking-[0.04em] text-navy">
+                <p className="tnum text-[25px] font-extrabold leading-none tracking-[0.04em] text-[#0E0E0E]">
                   {fmtNum(useCountUp(balance))}
                   <span className="ml-1.5 text-[12px] font-bold tracking-normal text-muted">pts</span>
                 </p>
@@ -87,7 +90,7 @@ export default function HomeScreen() {
         <Card className="flex flex-col min-h-[248px] p-5">
           <p className="flex items-center gap-2 text-[14px] font-extrabold text-navy"><Trophy size={16} className="text-gold-ink" /> Team leaderboard</p>
           <div className="mt-3 flex flex-1 flex-col gap-0.5">
-            {TEAM_LEADERBOARD.map((r, i) => (
+            {TEAM_LEADERBOARD.slice(0, 5).map((r, i) => (
               <button
                 key={r.id}
                 onClick={() => openProfile(r.id)}
