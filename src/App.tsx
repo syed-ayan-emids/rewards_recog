@@ -122,7 +122,7 @@ function Shell() {
         <div className="mx-auto flex h-16 max-w-[1560px] items-stretch gap-2 px-5 lg:px-10">
           <div className="mr-5 flex items-center gap-2.5">
             <img src="/emids-icon.png" alt="emids" className="h-9 w-9 object-contain" />
-            <p className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Recognition &amp; Rewards</span></p>
+            <p className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Rewards and Recognition</span></p>
           </div>
 
           <nav ref={navRef} className="rail-scroll relative hidden flex-1 items-stretch gap-1 overflow-x-auto lg:flex" aria-label="Primary">
@@ -175,7 +175,7 @@ function Shell() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1560px] px-5 pb-28 pt-8 lg:px-10 lg:pb-16 xl:pt-[72px]">
+      <main className="mx-auto mt-2.5 max-w-[1560px] px-5 pb-28 pt-8 lg:px-10 lg:pb-16 xl:pt-[72px]">
         <div key={screen} className="page-fade">
           {screen === 'home' && <HomeScreen />}
           {screen === 'rewards' && <RewardsScreen />}
@@ -183,8 +183,19 @@ function Shell() {
           {screen === 'jury' && <JuryScreen />}
           {screen === 'team' && <MyTeamScreen />}
           {screen === 'profile' && <ProfileScreen />}
+          {screen === 'compose' && <Composer open preset={openComposer.preset} />}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-line bg-white pb-20 lg:pb-0">
+        <div className="mx-auto flex max-w-[1560px] flex-col items-center justify-between gap-2 px-5 py-6 text-center sm:flex-row sm:px-10 sm:text-left">
+          <div className="flex items-center gap-2">
+            <img src="/emids-icon.png" alt="emids" className="h-6 w-6 object-contain" />
+            <p className="text-[13px] font-extrabold tracking-tight text-navy">EMIDS <span className="font-bold text-muted">· Rewards and Recognition</span></p>
+          </div>
+        </div>
+      </footer>
 
       {/* Mobile bottom bar */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-white/95 backdrop-blur-md lg:hidden" aria-label="Mobile">
@@ -205,7 +216,16 @@ function Shell() {
         </div>
       </nav>
 
-      <Composer open={openComposer.open} preset={openComposer.preset} />
+      {/* Floating AI assistant */}
+      <button
+        onClick={() => setAi(true)}
+        aria-label="Open AI assistant"
+        className={`fixed bottom-24 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-violet text-white shadow-[0_10px_26px_rgba(122,90,248,0.5)] ring-2 ring-white/70 transition-all duration-300 hover:scale-105 lg:bottom-7 lg:right-7 lg:h-14 lg:w-14 ${aiOpen ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
+      >
+        <Sparkles size={20} />
+        <span className="absolute -left-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-mint" aria-hidden />
+      </button>
+
       <AiDrawer />
       <Toasts />
     </div>
@@ -225,7 +245,7 @@ function MobileTab({ k, icon, label, badge }: { k: Screen; icon: React.ReactNode
 }
 
 function ProfileMenu({ close }: { close: () => void }) {
-  const { setScreen, setComposer, setAi } = useStore()
+  const { setScreen, setComposer, toast } = useStore()
   const go = (s: Screen) => { setScreen(s); close() }
   return (
     <div className="absolute right-0 top-12 z-40 w-60 animate-rise overflow-hidden rounded-2xl border border-line bg-white p-1.5 shadow-lift">
@@ -237,12 +257,9 @@ function ProfileMenu({ close }: { close: () => void }) {
         </div>
       </div>
       <div className="my-1 h-px bg-line" />
-      <div className="my-1 h-px bg-line" />
       {[
         { l: 'My profile', fn: () => go('profile') },
-        { l: 'Quarterly awards', fn: () => go('awards') },
-        { l: 'Jury dashboard', fn: () => go('jury') },
-        { l: 'AI assistant', fn: () => { setAi(true); close() } },
+        { l: 'Log out', fn: () => { toast('You are logged out'); close() } },
       ].map((i) => (
         <button key={i.l} onClick={i.fn} className="block w-full rounded-xl px-3 py-2 text-left text-sm font-semibold text-ink transition hover:bg-slate-50">{i.l}</button>
       ))}

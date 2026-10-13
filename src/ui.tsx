@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import ReactDOM from 'react-dom'
 import confetti from 'canvas-confetti'
 import { X } from 'lucide-react'
 import { person, initials } from './data'
@@ -175,13 +176,14 @@ export function Modal({ open, onClose, children, wide = false, label = 'Dialog' 
     return () => window.removeEventListener('keydown', h)
   }, [open, onClose])
   if (!open) return null
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-label={label}>
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-6" role="dialog" aria-modal="true" aria-label={label}>
       <div className="absolute inset-0 bg-navy-deep/50 backdrop-blur-[3px]" onClick={onClose} />
       <div className={`relative m-auto w-full ${wide ? 'max-w-3xl' : 'max-w-lg'} animate-rise overflow-hidden rounded-t-3xl sm:rounded-3xl bg-white shadow-lift max-h-[92vh] flex flex-col`}>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ArrowUp, Sparkles, X } from 'lucide-react'
 import { Btn, useOutside, confettiBurst } from '../ui'
-import { AI_PROMPTS, PEOPLE, TEAM_STATS } from '../data'
+import { AI_PROMPTS, PEOPLE, TEAMS, TEAM_STATS } from '../data'
 import { useStore } from '../store'
 
 type Msg = { id: number; who: 'ai' | 'me'; text: React.ReactNode; actions?: { label: string; fn: () => void }[] }
@@ -48,12 +48,13 @@ export default function AiDrawer() {
         ],
       })
     } else if (lower.includes('recogn') || lower.includes('hasn') || lower.includes('team')) {
-      const weak = TEAM_STATS.filter((t) => t.received <= 4 || t.lastRecognized.includes('days')).map((t) => `${PEOPLE[t.id].name} — ${t.received} received`)
+      const teamRows = TEAMS.flatMap((tm) => TEAM_STATS[tm.id].map((t) => ({ ...t, teamName: tm.name })))
+      const weak = teamRows.filter((t) => t.received <= 4 || t.lastRecognized.includes('days')).map((t) => `${PEOPLE[t.id].name} (${t.teamName}) — ${t.received} received`)
       push({
         id: nid(), who: 'ai',
         text: (
           <>
-            <p>Recognition health for your 8 direct reports this quarter:</p>
+            <p>Recognition health across your teams this quarter:</p>
             <p className="mt-2 rounded-xl border-l-4 border-coral bg-coral-soft/50 px-3 py-2.5 text-[13.5px] font-medium">
               Falling through the cracks: {weak.join(' · ')}. Sanjay and Rohan haven't been recognized in 2+ weeks.
             </p>

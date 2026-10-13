@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react'
+
 export type ValueKey = 'customerFirst' | 'innovation' | 'collaboration' | 'ownership' | 'winningMindset'
 
 export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: string; solid: string }> = {
@@ -8,6 +10,27 @@ export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: s
   winningMindset: { label: 'Winning Mindset', ink: 'text-value-wm', soft: 'bg-value-wm-soft', solid: '#ff5a5f' },
 }
 export const VALUE_KEYS = Object.keys(CORE_VALUES) as ValueKey[]
+
+/* Per-value recognition templates. Composer prepends the recipient's first name to prefill when one is selected. */
+export type PraiseTemplate = { id: string; name: string; emoji: string; bg: CSSProperties; prefill?: string }
+
+export const VALUE_TEMPLATES: Record<ValueKey, PraiseTemplate[]> = {
+  customerFirst: [
+    { id: 'cf-star', name: 'Service Star', emoji: '⭐', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #2ec9c6 0%, #0f7f86 75%)' }, prefill: 'Thank you for putting the client first this week — every request you took got a quick, clear reply.' },
+  ],
+  innovation: [
+    { id: 'in-spark', name: 'Fresh Spark', emoji: '💡', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #a98cff 0%, #6547e0 75%)' }, prefill: 'The simpler way you found is saving all of us real time now — great catch, and thank you.' },
+  ],
+  collaboration: [
+    { id: 'co-team', name: 'One Team', emoji: '🤝', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #6cbaff 0%, #2a80e0 75%)' }, prefill: 'Thanks for jumping in to help another team this week — we all noticed, and they did too.' },
+  ],
+  ownership: [
+    { id: 'ow-done', name: 'Done & Done', emoji: '✅', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ffb066 0%, #e5701f 75%)' }, prefill: 'Nobody wanted that job — you took it, finished it well, and never needed reminders. Thank you.' },
+  ],
+  winningMindset: [
+    { id: 'wm-champion', name: "Champion's Push", emoji: '🔥', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ff8f92 0%, #e84349 75%)' }, prefill: 'Rough week, and you still kept everyone moving — you made the hard part look easy. Thank you.' },
+  ],
+}
 
 export type Person = {
   id: string
@@ -39,6 +62,8 @@ export const PEOPLE: Record<string, Person> = {
   p10: { id: 'p10', name: 'Nia Thomas', title: 'Sr. Analyst', dept: 'Analytics', office: 'Kochi', managerId: 'me', tenure: '3 yrs', joined: 'Jan 2023', badges: ['Spotlight Star', 'Value Champion'], status: 'online' },
   p11: { id: 'p11', name: 'David Park', title: 'Cloud Architect', dept: 'Data Engineering', office: 'Chicago', managerId: 'vp', tenure: '5 yrs', joined: 'Feb 2021', badges: ['Cloud Craft'], status: 'offline' },
   p12: { id: 'p12', name: 'Anjali Gupta', title: 'EA, Engineering', dept: 'Operations', office: 'Bengaluru', managerId: 'vp', tenure: '2 yrs', joined: 'Jul 2024', badges: [], status: 'online' },
+  p13: { id: 'p13', name: 'Ishaan Verma', title: 'Cloud Engineer II', dept: 'Data Engineering', office: 'Pune', managerId: 'me', tenure: '1 yr', joined: 'Aug 2025', badges: [], status: 'online' },
+  p14: { id: 'p14', name: 'Grace Mathew', title: 'QA Lead', dept: 'Quality', office: 'Kochi', managerId: 'me', tenure: '2 yrs', joined: 'May 2024', badges: [], status: 'offline' },
 }
 export const PEOPLE_LIST = Object.values(PEOPLE)
 export const person = (id: string): Person => PEOPLE[id] ?? PEOPLE.me
@@ -64,6 +89,7 @@ export type Post = {
   fromId: string
   toIds: string[]
   valueKey?: ValueKey
+  tpl?: string
   message: string
   points?: number
   when: string
@@ -210,9 +236,15 @@ export const PENDING_APPROVALS: ApprovalItem[] = [
 ]
 
 export type TeamMemberStat = { id: string; given: number; received: number; lastRecognized: string; valuesTop: ValueKey }
+export type TeamId = 'humana' | 'dev'
 
-export const TEAM_STATS: TeamMemberStat[] = [
-  { id: 'p1', given: 14, received: 9, lastRecognized: 'Today', valuesTop: 'ownership' },
+export const TEAMS: { id: TeamId; name: string }[] = [
+  { id: 'humana', name: 'Humana Team' },
+  { id: 'dev', name: 'Development Team' },
+]
+
+export const TEAM_STATS: Record<TeamId, TeamMemberStat[]> = {
+  humana: [  { id: 'p1', given: 14, received: 9, lastRecognized: 'Today', valuesTop: 'ownership' },
   { id: 'p3', given: 11, received: 12, lastRecognized: 'Yesterday', valuesTop: 'customerFirst' },
   { id: 'p10', given: 9, received: 8, lastRecognized: '2 d ago', valuesTop: 'collaboration' },
   { id: 'p5', given: 8, received: 10, lastRecognized: '3 d ago', valuesTop: 'winningMindset' },
@@ -220,6 +252,29 @@ export const TEAM_STATS: TeamMemberStat[] = [
   { id: 'p2', given: 7, received: 17, lastRecognized: 'Today', valuesTop: 'innovation' },
   { id: 'p9', given: 0, received: 2, lastRecognized: '— 21 days', valuesTop: 'collaboration' },
   { id: 'p4', given: 3, received: 4, lastRecognized: '— 16 days', valuesTop: 'ownership' },
+  ],
+  dev: [
+    { id: 'p7', given: 10, received: 13, lastRecognized: 'Today', valuesTop: 'customerFirst' },
+    { id: 'p11', given: 4, received: 9, lastRecognized: '3 d ago', valuesTop: 'ownership' },
+    { id: 'p12', given: 2, received: 3, lastRecognized: '6 d ago', valuesTop: 'winningMindset' },
+    { id: 'p13', given: 5, received: 6, lastRecognized: '2 d ago', valuesTop: 'innovation' },
+    { id: 'p14', given: 7, received: 5, lastRecognized: '5 d ago', valuesTop: 'collaboration' },
+  ],
+}
+
+export type LeaderRow = { id: string; pts: number }
+
+// Peer points received this quarter — EoQ prize payouts not included
+export const TEAM_LEADERBOARD: LeaderRow[] = [
+  { id: 'p2', pts: 420 },
+  { id: 'me', pts: 380 },
+  { id: 'p1', pts: 275 },
+  { id: 'p3', pts: 250 },
+  { id: 'p6', pts: 220 },
+  { id: 'p10', pts: 190 },
+  { id: 'p5', pts: 160 },
+  { id: 'p4', pts: 90 },
+  { id: 'p9', pts: 25 },
 ]
 
 export type AwardCategory = {
@@ -300,14 +355,14 @@ export const ORG_TREE: TreeNode = {
     { id: 'cto', children: [
       { id: 'vp', children: [
         { id: 'p11' }, { id: 'p12' },
-        { id: 'me', children: [ { id: 'p1' }, { id: 'p2' }, { id: 'p3' }, { id: 'p4' }, { id: 'p5' }, { id: 'p6' }, { id: 'p9' }, { id: 'p10' } ] },
+        { id: 'me', children: [ { id: 'p1' }, { id: 'p2' }, { id: 'p3' }, { id: 'p4' }, { id: 'p5' }, { id: 'p6' }, { id: 'p9' }, { id: 'p10' }, { id: 'p13' }, { id: 'p14' } ] },
       ] },
     ] },
     { id: 'p8' },
   ],
 }
 
-export const RECOGNITION_HEAT: Record<string, number> = { ceo: 12, cto: 9, vp: 31, me: 44, p1: 18, p2: 29, p3: 21, p4: 5, p5: 14, p6: 19, p9: 2, p10: 15, p11: 8, p12: 4, p8: 16, p7: 11 }
+export const RECOGNITION_HEAT: Record<string, number> = { ceo: 12, cto: 9, vp: 31, me: 44, p1: 18, p2: 29, p3: 21, p4: 5, p5: 14, p6: 19, p9: 2, p10: 15, p11: 8, p12: 4, p8: 16, p7: 11, p13: 3, p14: 4 }
 
 export const AI_PROMPTS = [
   'Draft a nomination for Daniel Cho — Innovator',

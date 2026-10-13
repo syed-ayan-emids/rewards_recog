@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import { POSTS, NOTIFICATIONS, PEOPLE } from './data'
 import type { Post, ReactionKey } from './data'
 
-export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile'
+export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile' | 'compose'
 
 export type Toast = { id: number; msg: string; kind?: 'gold' | 'mint' | 'navy' }
 
@@ -10,7 +10,7 @@ type Ctx = {
   balance: number
   postGesture: (n: number) => void
   posts: Post[]
-  sendPraise: (p: { toIds: string[]; valueKey: string; message: string; points: number }) => void
+  sendPraise: (p: { toIds: string[]; valueKey: string; message: string; points: number; tpl?: string }) => void
   react: (postId: string, key: ReactionKey | 'none') => void
   addComment: (postId: string, text: string) => void
   notifications: typeof NOTIFICATIONS
@@ -18,6 +18,8 @@ type Ctx = {
   redeem: (pts: number) => void
   openComposer: { open: boolean; preset?: { toId?: string } }
   setComposer: (o: { open: boolean; preset?: { toId?: string } }) => void
+  composerFrom: Screen
+  closeComposer: () => void
   openAi: boolean
   setAi: (b: boolean) => void
   toasts: Toast[]
@@ -36,7 +38,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [balance, setBalance] = useState(1240)
   const [posts, setPosts] = useState<Post[]>(POSTS)
   const [notifications, setNotifications] = useState(NOTIFICATIONS)
-  const [composer, setComposer] = useState<{ open: boolean; preset?: { toId?: string } }>({ open: false })
+  const [composer, setComposerRaw] = useState<{ open: boolean; preset?: { toId?: string } }>({ open: false })
+  const [composerFrom, setComposerFrom] = useState<Screen>('home')
   const [ai, setAi] = useState(false)
   const [toasts, setToasts] = useState<Toast[]>([])
   const [screen, setScreenRaw] = useState<Screen>('home')
@@ -52,10 +55,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const postGesture = (n: number) => setBalance((b) => b + n)
 
-  const sendPraise = ({ toIds, valueKey, message, points }: { toIds: string[]; valueKey: string; message: string; points: number }) => {
+  const sendPraise = ({ toIds, valueKey, message, points, tpl }: { toIds: string[]; valueKey: string; message: string; points: number; tpl?: string }) => {
     const p: Post = {
       id: 'u' + Date.now(), kind: 'praise', fromId: 'me', toIds, valueKey: valueKey as Post['valueKey'],
-      message, points, when: 'Just now', comments: [], counts: {},
+      tpl, message, points, when: 'Just now', comments: [], counts: {},
     }
     setPosts((prev) => [p, ...prev])
     if (points > 0) setBalance((b) => b - points)
@@ -85,10 +88,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const redeem = (pts: number) => setBalance((b) => Math.max(0, b - pts))
 
-  const setScreen = (s: Screen, param?: string) => { setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 }) }
-  const openProfile = (id: string) => { setProfileId(id); setScreenRaw('profile'); window.scrollTo({ top: 0 }) }
+  const setScreen = (s: Screen, param?: string) => { setComposerRaw({ open: false }); setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 }) }
+  const openProfile = (id: string) => { setComposerRaw({ open: false }); setProfileId(id); setScreenRaw('profile'); window.scrollTo({ top: 0 }) }
+  const setComposer = (o: { open: boolean; preset?: { toId?: string } }) => {
+    if (o.open && !composer.open) setComposerFrom(screen)
+    setComposerRaw(o)
+    if (o.open) setScreenRaw('compose')
+  }
+  const closeComposer = () => { setComposerRaw({ open: false }); setScreen(composerFrom) }
 
-  const value: Ctx = { balance, postGesture, posts, sendPraise, react, addComment, notifications, markAllRead, redeem, openComposer: composer, setComposer, openAi: ai, setAi, toasts, toast, screen, setScreen, screenParam, profileId, openProfile }
+  const value: Ctx = { balance, postGesture, posts, sendPraise, react, addComment, notifications, markAllRead, redeem, openComposer: composer, setComposer, composerFrom, closeComposer, openAi: ai, setAi, toasts, toast, screen, setScreen, screenParam, profileId, openProfile }
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>
 }
 
