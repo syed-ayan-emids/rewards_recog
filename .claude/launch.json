@@ -6,6 +6,11 @@
       "runtimeExecutable": "wsl",
       "runtimeArgs": ["--cd", "C:\\Users\\syeda2\\Desktop\\recognition_portal", "npm", "run", "dev"],
       "port": 5173
+    },
+    {
+      "name": "portal-live",
+      "url": "http://localhost:5173",
+      "port": 5173
     }
   ]
 }

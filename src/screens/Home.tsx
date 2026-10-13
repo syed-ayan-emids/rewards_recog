@@ -1,12 +1,12 @@
 import React from 'react'
-import { CalendarClock, HeartHandshake, Sparkles, Users } from 'lucide-react'
-import { Btn, Card } from '../ui'
+import { CalendarClock, HeartHandshake, Sparkles, Trophy } from 'lucide-react'
+import { Avatar, Btn, Card } from '../ui'
 import Mascot from '../components/Mascot'
-import { CORE_VALUES, TOP_VALUES, DASH_STATS, ORG_STATS } from '../data'
+import { person, TEAM_LEADERBOARD, DASH_STATS, ORG_STATS } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
 
 export default function HomeScreen() {
-  const { setScreen, setComposer, balance } = useStore()
+  const { setScreen, setComposer, balance, openProfile } = useStore()
   const orgCount = useCountUp(ORG_STATS.recognitions, 1100)
   const givenCount = useCountUp(DASH_STATS.given, 1100)
   const gotCount = useCountUp(DASH_STATS.got, 1100)
@@ -37,7 +37,7 @@ export default function HomeScreen() {
 
       {/* Count cards */}
       <p className="mb-2.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted">Stats</p>
-      <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mb-8 grid gap-4 md:grid-cols-3">
         {/* Org data */}
         <Card className="border-brand/15 bg-brand-soft/70 p-5">
           <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0a675c]">
@@ -102,7 +102,7 @@ export default function HomeScreen() {
       </div>
 
       {/* Quick cards */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         <Card className="hero-room relative overflow-hidden p-0 text-white">
           <div className="dotgrid relative p-5">
             <div className="flex items-center justify-between">
@@ -118,22 +118,24 @@ export default function HomeScreen() {
           </div>
         </Card>
 
-        <Card className="p-5">
-          <p className="flex items-center gap-2 text-[14px] font-extrabold text-navy"><Users size={16} className="text-brand" /> Values lived this quarter</p>
-          <div className="mt-3.5 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
-            {TOP_VALUES.map((tv, i) => {
-              const v = CORE_VALUES[tv.key]
-              const pct = (tv.count / TOP_VALUES[0].count) * 100
-              return (
-                <div key={tv.key} className="grid grid-cols-[1fr_auto] items-center gap-x-2">
-                  <p className="flex items-center gap-1.5 text-[12.5px] font-bold"><span className="tnum text-[10.5px] font-bold text-muted">{i + 1}</span> <span className={v.ink}>{v.label}</span></p>
-                  <div className="flex items-center gap-2">
-                    <div className="h-1.5 w-16 overflow-hidden rounded-full bg-[#E9EEF7]"><div className="h-full rounded-full" style={{ width: `${pct}%`, background: v.solid }} /></div>
-                    <span className="tnum text-[11px] font-bold text-muted">{tv.count}</span>
-                  </div>
-                </div>
-              )
-            })}
+        <Card className="flex flex-col p-5 min-h-[200px] md:col-span-2">
+          <p className="flex items-center gap-2 text-[14px] font-extrabold text-navy"><Trophy size={16} className="text-gold-ink" /> Team leaderboard</p>
+          <div className="mt-3 grid flex-1 gap-x-8 gap-y-1 md:grid-rows-3 md:grid-flow-col md:grid-cols-3">
+            {TEAM_LEADERBOARD.map((r, i) => (
+              <button
+                key={r.id}
+                onClick={() => openProfile(r.id)}
+                className={`flex items-center gap-2.5 rounded-xl px-2 py-2 text-left transition hover:bg-slate-50 ${r.id === 'me' ? 'bg-brand-soft/50' : ''}`}
+              >
+                <span className={`tnum flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-extrabold ${['bg-gold-soft text-gold-ink', 'bg-slate-200 text-slate-600', 'bg-warn-soft text-warn'][i] ?? 'bg-slate-100 text-muted'}`}>{i + 1}</span>
+                <Avatar id={r.id} size={28} />
+                <span className="min-w-0 flex-1 truncate text-[12.5px] font-bold text-navy">
+                  {(() => { const parts = person(r.id).name.split(' '); return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0]}.` : parts[0] })()}
+                  {r.id === 'me' && <span className="ml-1.5 rounded-full bg-brand px-1.5 py-0.5 text-[9px] font-extrabold text-white">You</span>}
+                </span>
+                <span className="tnum text-[12.5px] font-extrabold text-ink">{fmtNum(r.pts)}</span>
+              </button>
+            ))}
           </div>
         </Card>
       </div>
