@@ -235,7 +235,7 @@ function MobileTab({ k, icon, label, badge }: { k: Screen; icon: React.ReactNode
 }
 
 function ProfileMenu({ close }: { close: () => void }) {
-  const { setScreen, setComposer, setAi } = useStore()
+  const { setScreen, setComposer, toast } = useStore()
   const go = (s: Screen) => { setScreen(s); close() }
   return (
     <div className="absolute right-0 top-12 z-40 w-60 animate-rise overflow-hidden rounded-2xl border border-line bg-white p-1.5 shadow-lift">
@@ -247,10 +247,9 @@ function ProfileMenu({ close }: { close: () => void }) {
         </div>
       </div>
       <div className="my-1 h-px bg-line" />
-      <div className="my-1 h-px bg-line" />
       {[
         { l: 'My profile', fn: () => go('profile') },
-        { l: 'AI assistant', fn: () => { setAi(true); close() } },
+        { l: 'Log out', fn: () => { toast('You are logged out'); close() } },
       ].map((i) => (
         <button key={i.l} onClick={i.fn} className="block w-full rounded-xl px-3 py-2 text-left text-sm font-semibold text-ink transition hover:bg-slate-50">{i.l}</button>
       ))}
