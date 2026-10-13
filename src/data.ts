@@ -39,6 +39,8 @@ export const PEOPLE: Record<string, Person> = {
   p10: { id: 'p10', name: 'Nia Thomas', title: 'Sr. Analyst', dept: 'Analytics', office: 'Kochi', managerId: 'me', tenure: '3 yrs', joined: 'Jan 2023', badges: ['Spotlight Star', 'Value Champion'], status: 'online' },
   p11: { id: 'p11', name: 'David Park', title: 'Cloud Architect', dept: 'Data Engineering', office: 'Chicago', managerId: 'vp', tenure: '5 yrs', joined: 'Feb 2021', badges: ['Cloud Craft'], status: 'offline' },
   p12: { id: 'p12', name: 'Anjali Gupta', title: 'EA, Engineering', dept: 'Operations', office: 'Bengaluru', managerId: 'vp', tenure: '2 yrs', joined: 'Jul 2024', badges: [], status: 'online' },
+  p13: { id: 'p13', name: 'Ishaan Verma', title: 'Cloud Engineer II', dept: 'Data Engineering', office: 'Pune', managerId: 'me', tenure: '1 yr', joined: 'Aug 2025', badges: [], status: 'online' },
+  p14: { id: 'p14', name: 'Grace Mathew', title: 'QA Lead', dept: 'Quality', office: 'Kochi', managerId: 'me', tenure: '2 yrs', joined: 'May 2024', badges: [], status: 'offline' },
 }
 export const PEOPLE_LIST = Object.values(PEOPLE)
 export const person = (id: string): Person => PEOPLE[id] ?? PEOPLE.me
@@ -210,9 +212,15 @@ export const PENDING_APPROVALS: ApprovalItem[] = [
 ]
 
 export type TeamMemberStat = { id: string; given: number; received: number; lastRecognized: string; valuesTop: ValueKey }
+export type TeamId = 'humana' | 'dev'
 
-export const TEAM_STATS: TeamMemberStat[] = [
-  { id: 'p1', given: 14, received: 9, lastRecognized: 'Today', valuesTop: 'ownership' },
+export const TEAMS: { id: TeamId; name: string }[] = [
+  { id: 'humana', name: 'Humana Team' },
+  { id: 'dev', name: 'Development Team' },
+]
+
+export const TEAM_STATS: Record<TeamId, TeamMemberStat[]> = {
+  humana: [  { id: 'p1', given: 14, received: 9, lastRecognized: 'Today', valuesTop: 'ownership' },
   { id: 'p3', given: 11, received: 12, lastRecognized: 'Yesterday', valuesTop: 'customerFirst' },
   { id: 'p10', given: 9, received: 8, lastRecognized: '2 d ago', valuesTop: 'collaboration' },
   { id: 'p5', given: 8, received: 10, lastRecognized: '3 d ago', valuesTop: 'winningMindset' },
@@ -220,7 +228,15 @@ export const TEAM_STATS: TeamMemberStat[] = [
   { id: 'p2', given: 7, received: 17, lastRecognized: 'Today', valuesTop: 'innovation' },
   { id: 'p9', given: 0, received: 2, lastRecognized: '— 21 days', valuesTop: 'collaboration' },
   { id: 'p4', given: 3, received: 4, lastRecognized: '— 16 days', valuesTop: 'ownership' },
-]
+  ],
+  dev: [
+    { id: 'p7', given: 10, received: 13, lastRecognized: 'Today', valuesTop: 'customerFirst' },
+    { id: 'p11', given: 4, received: 9, lastRecognized: '3 d ago', valuesTop: 'ownership' },
+    { id: 'p12', given: 2, received: 3, lastRecognized: '6 d ago', valuesTop: 'winningMindset' },
+    { id: 'p13', given: 5, received: 6, lastRecognized: '2 d ago', valuesTop: 'innovation' },
+    { id: 'p14', given: 7, received: 5, lastRecognized: '5 d ago', valuesTop: 'collaboration' },
+  ],
+}
 
 export type LeaderRow = { id: string; pts: number }
 
@@ -315,14 +331,14 @@ export const ORG_TREE: TreeNode = {
     { id: 'cto', children: [
       { id: 'vp', children: [
         { id: 'p11' }, { id: 'p12' },
-        { id: 'me', children: [ { id: 'p1' }, { id: 'p2' }, { id: 'p3' }, { id: 'p4' }, { id: 'p5' }, { id: 'p6' }, { id: 'p9' }, { id: 'p10' } ] },
+        { id: 'me', children: [ { id: 'p1' }, { id: 'p2' }, { id: 'p3' }, { id: 'p4' }, { id: 'p5' }, { id: 'p6' }, { id: 'p9' }, { id: 'p10' }, { id: 'p13' }, { id: 'p14' } ] },
       ] },
     ] },
     { id: 'p8' },
   ],
 }
 
-export const RECOGNITION_HEAT: Record<string, number> = { ceo: 12, cto: 9, vp: 31, me: 44, p1: 18, p2: 29, p3: 21, p4: 5, p5: 14, p6: 19, p9: 2, p10: 15, p11: 8, p12: 4, p8: 16, p7: 11 }
+export const RECOGNITION_HEAT: Record<string, number> = { ceo: 12, cto: 9, vp: 31, me: 44, p1: 18, p2: 29, p3: 21, p4: 5, p5: 14, p6: 19, p9: 2, p10: 15, p11: 8, p12: 4, p8: 16, p7: 11, p13: 3, p14: 4 }
 
 export const AI_PROMPTS = [
   'Draft a nomination for Daniel Cho — Innovator',

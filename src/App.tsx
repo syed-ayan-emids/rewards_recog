@@ -122,7 +122,7 @@ function Shell() {
         <div className="mx-auto flex h-16 max-w-[1560px] items-stretch gap-2 px-5 lg:px-10">
           <div className="mr-5 flex items-center gap-2.5">
             <img src="/emids-icon.png" alt="emids" className="h-9 w-9 object-contain" />
-            <p className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Recognition &amp; Rewards</span></p>
+            <p className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Rewards and Recognition</span></p>
           </div>
 
           <nav ref={navRef} className="rail-scroll relative hidden flex-1 items-stretch gap-1 overflow-x-auto lg:flex" aria-label="Primary">

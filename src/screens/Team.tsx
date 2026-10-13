@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import { Bell, Check, GitBranch, PartyPopper, CalendarCheck, Send, ShieldAlert, TrendingUp, Users } from 'lucide-react'
-import { Avatar, Btn, Card, Chip, Ring } from '../ui'
-import { CORE_VALUES, TEAM_STATS, person } from '../data'
+import React, { useRef, useState } from 'react'
+import { Check, ChevronDown, GitBranch, CalendarCheck, Send, Users, PartyPopper, Eye } from 'lucide-react'
+import { Avatar, Btn, Card, Chip, Modal, CloseX, useOutside } from '../ui'
+import { CORE_VALUES, TEAMS, TEAM_STATS, person } from '../data'
+import type { TeamId } from '../data'
 import { useStore, fmtNum } from '../store'
 import OrgTreeScreen from './OrgTree'
 import ApprovalsScreen from './Approvals'
 
-type TeamTab = 'team' | 'org' | 'approvals'
+type TeamTab = 'team' | 'approvals'
 
 export default function MyTeamScreen() {
   const { screenParam, notifications } = useStore()
@@ -14,8 +15,7 @@ export default function MyTeamScreen() {
   const approvalsCount = notifications.filter((n) => n.unread && n.group === 'approval').length
 
   const TABS: { key: TeamTab; label: string; icon: React.ReactNode; badge?: number }[] = [
-    { key: 'team', label: 'Pod overview', icon: <Users size={16} /> },
-    { key: 'org', label: 'Org tree', icon: <GitBranch size={16} /> },
+    { key: 'team', label: 'My team overview', icon: <Users size={16} /> },
     { key: 'approvals', label: 'Approvals', icon: <CalendarCheck size={16} />, badge: approvalsCount },
   ]
 
@@ -36,139 +36,171 @@ export default function MyTeamScreen() {
       </div>
 
       {tab === 'team' && <TeamScreen />}
-      {tab === 'org' && <OrgTreeScreen />}
       {tab === 'approvals' && <ApprovalsScreen />}
     </div>
   )
 }
 
 function TeamScreen() {
-  const { setComposer, openProfile, toast } = useStore()
-  const [nudged, setNudged] = useState<string[]>([])
+  const { setComposer, openProfile } = useStore()
+  const [team, setTeam] = useState<TeamId>('humana')
+  const [ddOpen, setDdOpen] = useState(false)
+  const ddRef = useOutside<HTMLDivElement>(() => setDdOpen(false))
+  const [viewId, setViewId] = useState<string | null>(null)
+  const headRef = useRef<HTMLDivElement>(null)
+  const bodyRef = useRef<HTMLDivElement>(null)
+  const onScrollX = () => {
+    if (headRef.current && bodyRef.current) headRef.current.scrollLeft = bodyRef.current.scrollLeft
+  }
 
-  const totalGiven = TEAM_STATS.reduce((s, t) => s + t.given, 0)
-  const totalReceived = TEAM_STATS.reduce((s, t) => s + t.received, 0)
-  const covered = TEAM_STATS.filter((t) => t.received > 0).length
-  const participation = Math.round((covered / TEAM_STATS.length) * 100)
-  const poolTotal = 5000, poolLeft = 945
+  const teamMeta = TEAMS.find((t) => t.id === team) ?? TEAMS[0]
+  const rows = TEAM_STATS[team]
+  const total = rows.reduce((s, t) => s + t.given + t.received, 0)
+  const viewRow = viewId ? TEAM_STATS[team].find((t) => t.id === viewId) : null
+  const viewPerson = viewRow ? person(viewRow.id) : null
+  const viewValue = viewRow ? CORE_VALUES[viewRow.valuesTop] : null
 
   return (
     <div>
-      <div className="mb-6">
-        <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-muted">People manager · Data Engineering pod</p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">My team</h1>
-      </div>
-
-      {/* KPI row */}
-      <div className="mb-7 grid gap-4 md:grid-cols-3">
-        <Card className="flex items-center gap-4 p-5">
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10 text-brand"><PartyPopper size={22} /></span>
-          <div className="flex-1">
-            <p className="text-[26px] font-extrabold text-navy tnum">{totalGiven + totalReceived}</p>
-            <p className="text-[12.5px] text-muted">Recognitions this quarter · ↑ 22% vs Q3</p>
+      {/* Header + team dropdown + small stat */}
+      <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
+          <div>
+            <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-muted">People manager</p>
+            <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">My team</h1>
           </div>
-          <TrendingUp size={18} className="text-mint" />
-        </Card>
-
-        <Card className="flex items-center gap-4 p-5">
-          <Ring pct={participation} size={64} stroke={7} color={participation < 90 ? 'var(--color-warn)' : 'var(--color-mint)'}>
-            <span className="tnum text-[12px] font-extrabold text-navy">{participation}%</span>
-          </Ring>
-          <div className="flex-1">
-            <p className="text-[14px] font-extrabold text-navy">Recognition coverage</p>
-            <p className="mt-0.5 text-[12.5px] text-muted">2 teammates unreached in 3 weeks — nudge below</p>
-          </div>
-        </Card>
-
-        <Card className="flex items-center gap-4 p-5">
-          <Ring pct={((poolTotal - poolLeft) / poolTotal) * 100} size={64} stroke={7} color={poolLeft < 1000 ? 'var(--color-coral)' : 'var(--color-brand)'}>
-            <span className="tnum text-[12px] font-extrabold text-navy">81%</span>
-          </Ring>
-          <div className="flex-1">
-            <p className="text-[14px] font-extrabold text-navy">Q4 award pool</p>
-            <p className="tnum mt-0.5 text-[12.5px] text-muted">{fmtNum(poolLeft)} pts left of {fmtNum(poolTotal)} · guardrail at 85%</p>
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        {/* Team cards */}
-        <section>
-          <h2 className="mb-3 flex items-center gap-2 text-xl font-extrabold tracking-tight text-navy"><Users size={19} className="text-brand" /> Pod · 8 people</h2>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {TEAM_STATS.map((t, i) => {
-              const p = person(t.id)
-              const cold = t.received <= 4
-              const v = CORE_VALUES[t.valuesTop]
-              const nudgedAlready = nudged.includes(t.id)
-              return (
-                <Card key={t.id} className={`p-4 transition hover:shadow-lift ${cold ? 'border-l-4 border-l-coral' : ''}`} style={{ animation: `rise .4s ${i * 50}ms both` }}>
-                  <button className="flex w-full items-center gap-3 text-left" onClick={() => openProfile(t.id)}>
-                    <Avatar id={t.id} size={42} />
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-[14px] font-extrabold text-navy">{p.name}</p>
-                      <p className="truncate text-[11.5px] text-muted">{p.title}</p>
-                    </div>
-                    <Chip className={`${v.soft} ${v.ink}`}>{v.label}</Chip>
+          <div ref={ddRef} className="relative">
+            <button
+              onClick={() => setDdOpen(!ddOpen)}
+              aria-label="Select team"
+              aria-expanded={ddOpen}
+              className={`flex items-center gap-2 rounded-xl border bg-white pl-4 pr-3 py-2.5 text-[14px] font-bold text-navy shadow-card transition hover:border-brand/40 ${ddOpen ? 'border-brand' : 'border-line'}`}
+            >
+              {teamMeta.name}
+              <ChevronDown size={15} className={`text-muted transition-transform duration-200 ${ddOpen ? 'rotate-180 text-brand' : ''}`} />
+            </button>
+            {ddOpen && (
+              <div className="absolute left-0 top-13 z-30 mt-1 w-60 animate-rise overflow-hidden rounded-2xl border border-line bg-white p-1.5 shadow-lift">
+                {TEAMS.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => { setTeam(t.id); setDdOpen(false) }}
+                    className={`flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-left text-[13.5px] font-semibold transition ${team === t.id ? 'bg-brand-soft text-navy' : 'text-ink hover:bg-slate-50'}`}
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <span className={`flex h-7 w-7 items-center justify-center rounded-lg text-[11px] font-extrabold ${team === t.id ? 'bg-brand text-white' : 'bg-slate-100 text-muted'}`}>
+                        {t.name.charAt(0).toUpperCase()}
+                      </span>
+                      {t.name}
+                    </span>
+                    {team === t.id && <Check size={14} className="text-brand" />}
                   </button>
-                  <div className="mt-3.5 grid grid-cols-3 gap-2 text-center">
-                    <div className="rounded-lg bg-slate-50 py-2">
-                      <p className="tnum text-[15px] font-extrabold text-navy">{t.given}</p>
-                      <p className="text-[9.5px] font-bold uppercase tracking-wide text-muted">Given</p>
-                    </div>
-                    <div className="rounded-lg bg-slate-50 py-2">
-                      <p className="tnum text-[15px] font-extrabold text-navy">{t.received}</p>
-                      <p className="text-[9.5px] font-bold uppercase tracking-wide text-muted">Received</p>
-                    </div>
-                    <div className="rounded-lg bg-slate-50 py-2">
-                      <p className={`tnum text-[12px] font-extrabold ${cold ? 'text-coral' : 'text-navy'}`}>{t.lastRecognized}</p>
-                      <p className="text-[9.5px] font-bold uppercase tracking-wide text-muted">Last</p>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex gap-2">
-                    <Btn size="sm" variant="gold" className="flex-1" onClick={() => setComposer({ open: true, preset: { toId: t.id } })}>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Mini recognitions stat */}
+        <div className="flex items-center gap-3 self-start rounded-2xl border border-line bg-white px-4 py-2.5 shadow-card sm:mb-1">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-soft text-brand"><PartyPopper size={15} /></span>
+          <div className="leading-tight">
+            <p className="tnum text-[18px] font-extrabold text-navy">{fmtNum(total)}</p>
+            <p className="text-[10.5px] font-bold uppercase tracking-wide text-muted">Recognitions · this quarter</p>
+          </div>
+        </div>
+      </div>
+
+      {/* People table */}
+      <Card className="p-0">
+        <div ref={headRef} className="sticky top-16 z-10 rounded-t-2xl border-b border-line bg-slate-50/95 backdrop-blur-sm">
+          <div className="grid min-w-[780px] grid-cols-[56px_minmax(230px,1.35fr)_minmax(200px,1fr)_170px_210px] items-center gap-4 px-5 py-3 text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
+            <span>S.no</span>
+            <span>Name</span>
+            <span>Designation</span>
+            <span>Primary value</span>
+            <span className="text-center">Actions</span>
+          </div>
+        </div>
+        <div ref={bodyRef} onScroll={onScrollX} className="rail-scroll rounded-b-2xl overflow-x-auto">
+          <div className="min-w-[780px]">
+            {rows.map((t, i) => {
+              const p = person(t.id)
+              const v = CORE_VALUES[t.valuesTop]
+              return (
+                <div
+                  key={t.id}
+                  className={`grid grid-cols-[56px_minmax(230px,1.35fr)_minmax(200px,1fr)_170px_210px] items-center gap-4 border-b border-line px-5 py-3.5 transition hover:bg-brand-soft/25 ${i === rows.length - 1 ? 'rounded-b-2xl border-b-0' : ''}`}
+                  style={{ animation: `rise .35s ${i * 40}ms both` }}
+                >
+                  <span className="tnum text-[13px] font-extrabold text-muted">{String(i + 1).padStart(2, '0')}</span>
+                  <button onClick={() => openProfile(t.id)} className="group flex min-w-0 items-center gap-3 text-left">
+                    <Avatar id={t.id} size={36} />
+                    <span className="min-w-0">
+                      <span className="block truncate text-[13.5px] font-extrabold text-navy group-hover:text-brand group-hover:underline">{p.name}</span>
+                    </span>
+                  </button>
+                  <span className="truncate text-[13px] font-medium text-muted">{p.title}</span>
+                  <span><Chip className={`${v.soft} ${v.ink}`}>{v.label}</Chip></span>
+                  <span className="flex items-center justify-center gap-2.5">
+                    <Btn size="sm" variant="primary" className="!h-8 !px-3" onClick={() => setComposer({ open: true, preset: { toId: t.id } })}>
                       <Send size={12} /> Praise
                     </Btn>
-                    {cold && (
-                      <Btn size="sm" variant="outline" onClick={() => { setNudged((n) => [...n, t.id]); toast(`Nudge queued — ${p.name}'s peers get a gentle reminder`, 'gold') }} disabled={nudgedAlready}>
-                        {nudgedAlready ? <Check size={13} /> : <Bell size={13} />} {nudgedAlready ? 'Nudged' : 'Nudge'}
-                      </Btn>
-                    )}
-                  </div>
-                </Card>
+                    <Btn size="sm" variant="outline" className="!border-brand/25 !px-3 font-bold text-[#0a675c] hover:bg-brand-soft/50" onClick={() => setViewId(t.id)}>
+                      <Eye size={13} /> View info
+                    </Btn>
+                  </span>
+                </div>
               )
             })}
           </div>
-        </section>
+        </div>
+      </Card>
 
-        {/* Guardrails */}
-        <aside className="space-y-4">
-          <h2 className="mb-3 flex items-center gap-2 text-xl font-extrabold tracking-tight text-navy"><ShieldAlert size={18} className="text-coral" /> Fair-distribution watch</h2>
-          <Card className="p-5">
-            <p className="text-[12.5px] text-muted">Spotlight called out — keep the quarter healthy:</p>
-            <div className="mt-3.5 space-y-3">
-              <WatchRow label="Same-few-givers pattern" note="Top 3 givers produce 61% of kudos — rotational nudges queued" pct={61} color="bg-warn" />
-              <WatchRow label="Customer First dominance" note="38% of recognition lands on one value — diversify" pct={38} color="bg-brand" />
-              <WatchRow label="Milestone auto-posts" note="2 anniversaries this week proceed automatically" pct={100} color="bg-mint" />
+      {/* Org tree */}
+      <section className="mt-10">
+        <h2 className="mb-3 flex items-center gap-2 text-xl font-extrabold tracking-tight text-navy"><GitBranch size={19} className="text-brand" /> Org tree</h2>
+        <OrgTreeScreen />
+      </section>
+
+      {/* Member info modal */}
+      <Modal open={!!viewId} onClose={() => setViewId(null)} label="Team member info">
+        {viewRow && viewPerson ? (
+          <div className="p-6">
+            <CloseX onClick={() => setViewId(null)} />
+            <div className="flex items-center gap-4">
+              <Avatar id={viewRow.id} size={62} />
+              <div className="min-w-0">
+                <p className="text-[19px] font-extrabold tracking-tight text-navy">{viewPerson.name}</p>
+                <p className="text-[13.5px] text-muted">{viewPerson.title} · {viewPerson.office}</p>
+                {viewValue && <Chip className={`mt-1.5 ${viewValue.soft} ${viewValue.ink}`}>{viewValue.label}</Chip>}
+              </div>
             </div>
-          </Card>
-        </aside>
-      </div>
-    </div>
-  )
-}
-
-function WatchRow({ label, note, pct, color }: { label: string; note: string; pct: number; color: string }) {
-  return (
-    <div>
-      <div className="flex items-center justify-between">
-        <p className="text-[13px] font-bold text-navy">{label}</p>
-        <span className="tnum text-[12px] font-extrabold text-muted">{pct}%</span>
-      </div>
-      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[#E9EEF7]">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
-      </div>
-      <p className="mt-1 text-[11.5px] text-muted">{note}</p>
+            <p className="mb-1.5 mt-6 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-muted">This quarter</p>
+            <Card className="grid grid-cols-2 divide-x divide-line">
+              <div className="px-4 py-3.5">
+                <p className="tnum text-[22px] font-extrabold text-navy">{viewRow.received}</p>
+                <p className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-muted">Recognitions received</p>
+              </div>
+              <div className="px-4 py-3.5">
+                <p className="tnum text-[22px] font-extrabold text-navy">{viewRow.given}</p>
+                <p className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-muted">Recognitions given</p>
+              </div>
+            </Card>
+            <div className="mt-3 space-y-2.5 rounded-2xl border border-line bg-slate-50 px-4 py-3.5">
+              <p className="flex items-center justify-between text-[13px]"><span className="font-semibold text-muted">Last recognition</span><span className="tnum font-extrabold text-navy">{viewRow.lastRecognized}</span></p>
+              <p className="flex items-center justify-between text-[13px]"><span className="font-semibold text-muted">Primary value</span><span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${viewValue?.soft} ${viewValue?.ink}`}>{viewValue?.label}</span></p>
+              <p className="flex items-center justify-between text-[13px]"><span className="font-semibold text-muted">Office</span><span className="font-extrabold text-navy">{viewPerson.office}</span></p>
+            </div>
+            <div className="mt-5 flex justify-end gap-2">
+              <Btn variant="ghost" onClick={() => { setViewId(null); openProfile(viewRow.id) }}>Full profile</Btn>
+              <Btn variant="primary" onClick={() => { setViewId(null); setComposer({ open: true, preset: { toId: viewRow.id } }) }}>
+                <Send size={14} /> Recognize
+              </Btn>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
     </div>
   )
 }
