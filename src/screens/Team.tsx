@@ -143,9 +143,9 @@ function TeamScreen() {
 
         {/* Guardrails */}
         <aside className="space-y-4">
+          <h2 className="mb-3 flex items-center gap-2 text-xl font-extrabold tracking-tight text-navy"><ShieldAlert size={18} className="text-coral" /> Fair-distribution watch</h2>
           <Card className="p-5">
-            <p className="flex items-center gap-2 text-[15px] font-extrabold text-navy"><ShieldAlert size={17} className="text-coral" /> Fair-distribution watch</p>
-            <p className="mt-1 text-[12.5px] text-muted">Spotlight called out — keep the quarter healthy:</p>
+            <p className="text-[12.5px] text-muted">Spotlight called out — keep the quarter healthy:</p>
             <div className="mt-3.5 space-y-3">
               <WatchRow label="Same-few-givers pattern" note="Top 3 givers produce 61% of kudos — rotational nudges queued" pct={61} color="bg-warn" />
               <WatchRow label="Customer First dominance" note="38% of recognition lands on one value — diversify" pct={38} color="bg-brand" />

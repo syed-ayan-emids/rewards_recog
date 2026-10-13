@@ -1,6 +1,7 @@
 import React from 'react'
-import { CalendarClock, HeartHandshake, Sparkles, Users } from 'lucide-react'
+import { HeartHandshake, Sparkles, Users } from 'lucide-react'
 import { Btn, Card } from '../ui'
+import EoQShowcase from '../components/EoQShowcase'
 import Mascot from '../components/Mascot'
 import { CORE_VALUES, TOP_VALUES, DASH_STATS, ORG_STATS } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
@@ -103,22 +104,9 @@ export default function HomeScreen() {
 
       {/* Quick cards */}
       <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="hero-room relative overflow-hidden p-0 text-white">
-          <div className="dotgrid relative p-5">
-            <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.16em] text-gold"><CalendarClock size={13} /> EoQ window · Q4</span>
-              <Sparkles size={15} className="text-gold" />
-            </div>
-            <p className="mt-3 max-w-[290px] text-[23px] font-extrabold leading-snug">Nominations close in <span className="tnum text-gold">19 days</span></p>
-            <p className="mt-1 text-[12.5px] text-white/70">4 categories open · jury voting starts Nov 3</p>
-            <div className="mt-4 flex gap-2">
-              <button onClick={() => setScreen('awards')} className="rounded-xl bg-gold px-4 py-2.5 text-[13px] font-extrabold text-[#3d2b00] transition hover:brightness-105">Nominate now</button>
-              <button onClick={() => setScreen('awards')} className="rounded-xl bg-white/12 px-4 py-2.5 text-[13px] font-bold text-white transition hover:bg-white/20">See categories</button>
-            </div>
-          </div>
-        </Card>
+        <EoQShowcase />
 
-        <Card className="p-5">
+        <Card className="min-h-[248px] p-5">
           <p className="flex items-center gap-2 text-[14px] font-extrabold text-navy"><Users size={16} className="text-brand" /> Values lived this quarter</p>
           <div className="mt-3.5 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
             {TOP_VALUES.map((tv, i) => {

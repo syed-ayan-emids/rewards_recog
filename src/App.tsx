@@ -205,6 +205,16 @@ function Shell() {
         </div>
       </nav>
 
+      {/* Floating AI assistant */}
+      <button
+        onClick={() => setAi(true)}
+        aria-label="Open AI assistant"
+        className={`fixed bottom-24 right-4 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-violet text-white shadow-[0_10px_26px_rgba(122,90,248,0.5)] ring-2 ring-white/70 transition-all duration-300 hover:scale-105 lg:bottom-7 lg:right-7 lg:h-14 lg:w-14 ${aiOpen ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
+      >
+        <Sparkles size={20} />
+        <span className="absolute -left-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-mint" aria-hidden />
+      </button>
+
       <Composer open={openComposer.open} preset={openComposer.preset} />
       <AiDrawer />
       <Toasts />
@@ -240,8 +250,6 @@ function ProfileMenu({ close }: { close: () => void }) {
       <div className="my-1 h-px bg-line" />
       {[
         { l: 'My profile', fn: () => go('profile') },
-        { l: 'Quarterly awards', fn: () => go('awards') },
-        { l: 'Jury dashboard', fn: () => go('jury') },
         { l: 'AI assistant', fn: () => { setAi(true); close() } },
       ].map((i) => (
         <button key={i.l} onClick={i.fn} className="block w-full rounded-xl px-3 py-2 text-left text-sm font-semibold text-ink transition hover:bg-slate-50">{i.l}</button>
