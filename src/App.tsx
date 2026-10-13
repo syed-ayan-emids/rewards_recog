@@ -183,6 +183,7 @@ function Shell() {
           {screen === 'jury' && <JuryScreen />}
           {screen === 'team' && <MyTeamScreen />}
           {screen === 'profile' && <ProfileScreen />}
+          {screen === 'compose' && <Composer open preset={openComposer.preset} />}
         </div>
       </main>
 
@@ -215,7 +216,6 @@ function Shell() {
         <span className="absolute -left-0.5 -top-0.5 h-3 w-3 rounded-full border-2 border-white bg-mint" aria-hidden />
       </button>
 
-      <Composer open={openComposer.open} preset={openComposer.preset} />
       <AiDrawer />
       <Toasts />
     </div>

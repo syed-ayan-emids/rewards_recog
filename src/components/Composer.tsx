@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, Eye, Send, Sparkles, Users, X } from 'lucide-react'
+import { ArrowLeft, Send, Sparkles, Users, X } from 'lucide-react'
 import { Avatar, Btn } from '../ui'
 import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE } from '../data'
 import type { ValueKey } from '../data'
@@ -54,16 +54,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
 
   const ccManagers = useMemo(() => [...new Set(toSel.map((id) => PEOPLE[id]?.managerId).filter(Boolean))] as string[], [toSel])
 
-  const spec = useMemo(() => {
-    let s = 0
-    if (msg.length > 40) s += 30
-    if (/\bdeliver|\bship|\bfix|\bclient|\brelease|\bqbr|\bdeadline/i.test(msg)) s += 25
-    if (msg.length > 120) s += 20
-    if (/\d/.test(msg)) s += 15
-    if (valueKey) s += 10
-    return Math.min(100, s)
-  }, [msg, valueKey])
-
   const canSend = toSel.length > 0 && valueKey && msg.trim().length > 8
 
   const tpl = valueKey ? VALUE_TEMPLATES[valueKey]?.find((t) => t.id === tplId) ?? null : null
@@ -101,15 +91,12 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-page">
-      {/* Header */}
-      <header className="border-b border-line bg-white">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-3.5 sm:px-6 sm:py-4">
+    <div className="flex flex-col">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 pt-6">
+          <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">Recognize a teammate</h1>
           <Btn variant="ghost" size="sm" onClick={closeComposer}><ArrowLeft size={16} /> Back</Btn>
         </div>
-      </header>
-
-        <div className="rail-scroll mx-auto grid w-full max-w-6xl flex-1 overflow-y-auto lg:grid-cols-[1.55fr_1fr]">
+        <div className="mx-auto grid w-full max-w-6xl lg:grid-cols-[1.55fr_1fr]">
           {/* Left: compose */}
           <div className="px-6 py-5">
             {/* To */}
@@ -201,12 +188,18 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
                     key={k}
                     onClick={() => {
                       const t = VALUE_TEMPLATES[k]?.[0] ?? null
-                      setValueKey(k)
+                      const prev = valueKey ? VALUE_TEMPLATES[valueKey]?.find((x) => x.id === tplId) : null
                       setTplId(t?.id ?? null)
-                      if (t?.prefill && !msg.trim()) {
-                        const first = toSel[0] ? PEOPLE[toSel[0]]?.name.split(' ')[0] : 'them'
-                        setMsg(t.prefill.replace(/\{recipient\}/g, first))
-                      }
+                      setValueKey(k)
+                      const first = toSel[0] ? PEOPLE[toSel[0]]?.name.split(' ')[0] : null
+                      setMsg((m) => {
+                        if (prev?.prefill && m.trimEnd().endsWith(prev.prefill)) {
+                          const prefix = m.slice(0, m.length - prev.prefill.length)
+                          return t?.prefill ? prefix + t.prefill : m
+                        }
+                        if (t?.prefill && !m.trim()) return first ? `${first} — ${t.prefill}` : t.prefill
+                        return m
+                      })
                     }}
                     className={`rounded-xl border px-3.5 py-2 text-[13px] font-bold transition active:scale-95 ${v.soft} ${v.ink} ${on ? 'border-current' : 'border-transparent opacity-75 hover:opacity-100'}`}
                   >
@@ -225,7 +218,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
                 value={msg}
                 onChange={(e) => setMsg(e.target.value)}
                 rows={4}
-                placeholder="Name what they did and what it changed. Specific beats generic — every time."
+                placeholder="Name what they did and what it changed."
                 className="w-full resize-none bg-transparent px-4 pt-3 text-[14.5px] leading-relaxed outline-none placeholder:text-muted"
               />
               <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-3 py-2.5">
@@ -239,11 +232,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
                 </div>
                 <div className="flex items-center gap-2">
                   {assisted && <span className="flex items-center gap-1 rounded-full bg-violet-soft px-2 py-0.5 text-[10.5px] font-bold text-violet"><Sparkles size={10} /> Assisted — review</span>}
-                  <div className="flex items-center gap-1.5">
-                    <div className="tnum text-[10.5px] font-bold text-muted">Specificity</div>
-                    <div className="h-1.5 w-14 overflow-hidden rounded-full bg-[#E9EEF7]"><div className="h-full rounded-full transition-[width] duration-500" style={{ width: `${spec}%`, background: spec >= 60 ? 'var(--color-mint)' : 'var(--color-gold)' }} /></div>
-                    <span className="tnum text-[10.5px] font-extrabold text-muted">{spec}</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -251,7 +239,6 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
 
           {/* Right: preview + points + delivery */}
           <aside className="border-t border-line bg-slate-50/70 px-5 py-5 lg:border-l lg:border-t-0">
-            <label className="mb-2 flex items-center gap-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted"><Eye size={13} /> How it lands in the feed</label>
             {tpl && valueKey ? (
               <div className="rounded-2xl overflow-hidden border border-transparent p-3.5 text-white shadow-card" style={tpl.bg}>
                 <div className="flex items-start justify-between gap-2">

@@ -11,24 +11,24 @@ export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: s
 }
 export const VALUE_KEYS = Object.keys(CORE_VALUES) as ValueKey[]
 
-/* Per-value recognition templates. `{recipient}` in prefill is swapped with the receiver's name. */
+/* Per-value recognition templates. Composer prepends the recipient's first name to prefill when one is selected. */
 export type PraiseTemplate = { id: string; name: string; emoji: string; bg: CSSProperties; prefill?: string }
 
 export const VALUE_TEMPLATES: Record<ValueKey, PraiseTemplate[]> = {
   customerFirst: [
-    { id: 'cf-star', name: 'Service Star', emoji: '⭐', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #2ec9c6 0%, #0f7f86 75%)' }, prefill: 'Every client thread {recipient} touched came back a little happier. Small moves, big trust — thank you.' },
+    { id: 'cf-star', name: 'Service Star', emoji: '⭐', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #2ec9c6 0%, #0f7f86 75%)' }, prefill: 'Thank you for putting the client first this week — every request you took got a quick, clear reply.' },
   ],
   innovation: [
-    { id: 'in-spark', name: 'Fresh Spark', emoji: '💡', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #a98cff 0%, #6547e0 75%)' }, prefill: '{recipient} questioned the default, tested the idea, and made it real before anyone could call it impossible.' },
+    { id: 'in-spark', name: 'Fresh Spark', emoji: '💡', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #a98cff 0%, #6547e0 75%)' }, prefill: 'The simpler way you found is saving all of us real time now — great catch, and thank you.' },
   ],
   collaboration: [
-    { id: 'co-team', name: 'One Team', emoji: '🤝', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #6cbaff 0%, #2a80e0 75%)' }, prefill: 'No silos today: {recipient} pulled people together, split the load, and we shipped as one team.' },
+    { id: 'co-team', name: 'One Team', emoji: '🤝', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #6cbaff 0%, #2a80e0 75%)' }, prefill: 'Thanks for jumping in to help another team this week — we all noticed, and they did too.' },
   ],
   ownership: [
-    { id: 'ow-done', name: 'Done & Done', emoji: '✅', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ffb066 0%, #e5701f 75%)' }, prefill: 'Assigned Friday, shipped Monday: {recipient} carried it across the line with zero supervision.' },
+    { id: 'ow-done', name: 'Done & Done', emoji: '✅', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ffb066 0%, #e5701f 75%)' }, prefill: 'Nobody wanted that job — you took it, finished it well, and never needed reminders. Thank you.' },
   ],
   winningMindset: [
-    { id: 'wm-champion', name: "Champion's Push", emoji: '🔥', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ff8f92 0%, #e84349 75%)' }, prefill: 'Nobody expected that comeback. {recipient} pushed when it mattered and carried the whole thing.' },
+    { id: 'wm-champion', name: "Champion's Push", emoji: '🔥', bg: { background: 'radial-gradient(130% 120% at 85% 12%, #ff8f92 0%, #e84349 75%)' }, prefill: 'Rough week, and you still kept everyone moving — you made the hard part look easy. Thank you.' },
   ],
 }
 

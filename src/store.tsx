@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useRef, useState } from 'r
 import { POSTS, NOTIFICATIONS, PEOPLE } from './data'
 import type { Post, ReactionKey } from './data'
 
-export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile'
+export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile' | 'compose'
 
 export type Toast = { id: number; msg: string; kind?: 'gold' | 'mint' | 'navy' }
 
@@ -88,11 +88,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const redeem = (pts: number) => setBalance((b) => Math.max(0, b - pts))
 
-  const setScreen = (s: Screen, param?: string) => { setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 }) }
-  const openProfile = (id: string) => { setProfileId(id); setScreenRaw('profile'); window.scrollTo({ top: 0 }) }
+  const setScreen = (s: Screen, param?: string) => { setComposerRaw({ open: false }); setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 }) }
+  const openProfile = (id: string) => { setComposerRaw({ open: false }); setProfileId(id); setScreenRaw('profile'); window.scrollTo({ top: 0 }) }
   const setComposer = (o: { open: boolean; preset?: { toId?: string } }) => {
     if (o.open && !composer.open) setComposerFrom(screen)
     setComposerRaw(o)
+    if (o.open) setScreenRaw('compose')
   }
   const closeComposer = () => { setComposerRaw({ open: false }); setScreen(composerFrom) }
 
