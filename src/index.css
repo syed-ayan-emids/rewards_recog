@@ -67,6 +67,14 @@
 
 html { scroll-behavior: smooth; }
 
+/* Custom page scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(14, 147, 132, 0.3); border-radius: 9999px; border: 3px solid var(--color-page); }
+::-webkit-scrollbar-thumb:hover { background: rgba(14, 147, 132, 0.48); }
+::-webkit-scrollbar-corner { background: transparent; }
+html { scrollbar-width: thin; scrollbar-color: rgba(14, 147, 132, 0.35) transparent; }
+
 body {
   font-family: var(--font-sans);
   background: var(--color-page);
@@ -157,6 +165,35 @@ body {
   animation: shimmer-pan 7s linear infinite;
 }
 
+/* Hero mascot (spark character) */
+.mascot-bob { animation: mascot-bob 5.5s ease-in-out infinite; transform-origin: 50% 60%; }
+@keyframes mascot-bob {
+  0%, 100% { transform: translateY(2px) rotate(-2deg); }
+  50% { transform: translateY(-7px) rotate(2.5deg); }
+}
+.mascot-wave { transform-origin: 92px 34px; animation: mascot-wave 3.2s ease-in-out infinite; }
+@keyframes mascot-wave {
+  0%, 60%, 100% { transform: rotate(0deg); }
+  72% { transform: rotate(-16deg); }
+  84% { transform: rotate(6deg); }
+}
+.mascot-face { transform-origin: 60px 44px; animation: mascot-blink 4.4s linear infinite; }
+@keyframes mascot-blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  96.5%, 98% { transform: scaleY(0.12); }
+}
+.mascot-halo { animation: mascot-breathe 6s ease-in-out infinite; transform-origin: 60px 64px; }
+@keyframes mascot-breathe {
+  0%, 100% { opacity: 0.75; transform: scale(0.97); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+.mascot-twinkle { animation: mascot-twinkle 3.6s ease-in-out infinite; transform-origin: 22px 26px; }
+.mascot-twinkle-2 { animation-delay: 1.7s; }
+@keyframes mascot-twinkle {
+  0%, 100% { opacity: 0.18; transform: scale(0.8); }
+  50% { opacity: 0.85; transform: scale(1.15); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-shine, .say-shimmer { animation: none !important; }
+  .mascot-bob, .mascot-wave, .mascot-face, .mascot-halo, .mascot-twinkle, .hero-shine, .say-shimmer { animation: none !important; }
 }

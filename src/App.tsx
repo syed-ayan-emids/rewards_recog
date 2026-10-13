@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Bell, Check, ChevronDown, Home, Gift, CalendarCheck,
   Sparkles, Trophy, MessageSquare, Cake, PartyPopper, Users,
@@ -87,18 +87,45 @@ function Shell() {
   const [profileMenu, setProfileMenu] = useState(false)
   const menuRef = useOutside<HTMLDivElement>(() => setProfileMenu(false))
   const approvalsCount = notifications.filter((n) => n.unread && n.group === 'approval').length
+  const [scrolled, setScrolled] = useState(false)
+  const [underline, setUnderline] = useState({ left: -100, width: 0 })
+  const navRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const h = () => setScrolled(window.scrollY > 8)
+    window.addEventListener('scroll', h, { passive: true })
+    h()
+    return () => window.removeEventListener('scroll', h)
+  }, [])
+
+  const glideTo = () => {
+    const nav = navRef.current
+    const active = nav?.querySelector('[aria-current="page"]') as HTMLElement | null
+    if (active) setUnderline({ left: active.offsetLeft + 12, width: active.offsetWidth - 24 })
+  }
+  useEffect(() => {
+    glideTo()
+    const ro = navRef.current ? new ResizeObserver(() => glideTo()) : null
+    if (ro && navRef.current) ro.observe(navRef.current)
+    window.addEventListener('resize', glideTo)
+    return () => {
+      ro?.disconnect()
+      window.removeEventListener('resize', glideTo)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen])
 
   return (
     <div className="min-h-dvh bg-page-art">
       {/* Top bar */}
-      <header className="sticky top-0 z-20 border-b border-line bg-white/88 backdrop-blur-md">
+      <header className={`sticky top-0 z-20 border-b border-line bg-white/88 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_18px_rgba(10,31,68,0.07)]' : ''}`}>
         <div className="mx-auto flex h-16 max-w-[1560px] items-stretch gap-2 px-5 lg:px-10">
           <div className="mr-5 flex items-center gap-2.5">
             <img src="/emids-icon.png" alt="emids" className="h-9 w-9 object-contain" />
-            <p className="text-[16px] font-extrabold tracking-tight text-navy">emids <span className="hidden font-bold text-muted sm:inline">· Recognition &amp; Rewards</span></p>
+            <p className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Recognition &amp; Rewards</span></p>
           </div>
 
-          <nav className="rail-scroll hidden flex-1 items-stretch gap-1 overflow-x-auto lg:flex" aria-label="Primary">
+          <nav ref={navRef} className="rail-scroll relative hidden flex-1 items-stretch gap-1 overflow-x-auto lg:flex" aria-label="Primary">
             {NAV.map((n) => {
               const active = screen === n.key
               return (
@@ -106,7 +133,7 @@ function Shell() {
                   key={n.key}
                   onClick={() => setScreen(n.key)}
                   aria-current={active ? 'page' : undefined}
-                  className={`relative flex shrink-0 items-center gap-1.5 border-b-2 px-3.5 text-[13px] font-semibold transition ${active ? 'border-brand text-navy' : 'border-transparent text-muted hover:border-line hover:text-ink'}`}
+                  className={`relative flex shrink-0 items-center gap-1.5 px-3.5 text-[13px] font-semibold transition ${active ? 'text-navy' : 'text-muted hover:text-ink'}`}
                 >
                   {n.icon}
                   {n.label}
@@ -116,6 +143,7 @@ function Shell() {
                 </button>
               )
             })}
+            <span aria-hidden className="absolute bottom-0 hidden h-[2.5px] rounded-full bg-brand transition-all duration-300 ease-out lg:block" style={{ left: underline.left, width: underline.width }} />
           </nav>
 
           <div className="ml-auto flex items-center gap-1.5">

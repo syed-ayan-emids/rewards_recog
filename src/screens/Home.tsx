@@ -1,17 +1,24 @@
 import React from 'react'
 import { CalendarClock, HeartHandshake, Sparkles, Users } from 'lucide-react'
 import { Btn, Card } from '../ui'
+import Mascot from '../components/Mascot'
 import { CORE_VALUES, TOP_VALUES, DASH_STATS, ORG_STATS } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
 
 export default function HomeScreen() {
   const { setScreen, setComposer, balance } = useStore()
+  const orgCount = useCountUp(ORG_STATS.recognitions, 1100)
+  const givenCount = useCountUp(DASH_STATS.given, 1100)
+  const gotCount = useCountUp(DASH_STATS.got, 1100)
+  const lifeGiven = useCountUp(96, 1100)
+  const lifeGot = useCountUp(118, 1100)
 
   return (
     <div>
       {/* Dominating hero */}
       <div className="relative isolate mb-16">
         <HeroBackdrop />
+        <Mascot />
         <div className="relative z-10 flex flex-col items-start justify-between gap-6 xl:flex-row xl:items-center">
           <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-navy">
             Hello Ayan — someone had a great week.{' '}
@@ -36,7 +43,7 @@ export default function HomeScreen() {
           <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0a675c]">
             Org data
           </div>
-          <p className="tnum mt-4 text-[58px] font-extrabold leading-[0.95] tracking-[-0.03em] text-navy">{fmtNum(ORG_STATS.recognitions)}</p>
+          <p className="tnum mt-4 text-[58px] font-extrabold leading-[0.95] tracking-[-0.03em] text-navy">{fmtNum(orgCount)}</p>
           <p className="mt-2 text-[12.5px] font-semibold text-muted">Total recognitions at EMIDS</p>
         </Card>
 
@@ -47,21 +54,21 @@ export default function HomeScreen() {
           </div>
           <div className="mt-3.5 grid grid-cols-2">
             <div className="border-r border-mint/25 pr-4">
-              <p className="tnum text-[30px] font-extrabold leading-none text-navy">{DASH_STATS.given}</p>
+              <p className="tnum text-[30px] font-extrabold leading-none text-navy">{givenCount}</p>
               <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions given</p>
             </div>
             <div className="pl-4">
-              <p className="tnum text-[30px] font-extrabold leading-none text-navy">{DASH_STATS.got}</p>
+              <p className="tnum text-[30px] font-extrabold leading-none text-navy">{gotCount}</p>
               <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions received</p>
             </div>
           </div>
           <div className="mt-4 grid grid-cols-2 border-t border-mint/25 pt-3.5">
             <div>
-              <p className="tnum text-[15px] font-extrabold text-navy">96</p>
+              <p className="tnum text-[15px] font-extrabold text-navy">{lifeGiven}</p>
               <p className="text-[10.5px] font-bold uppercase tracking-wide text-muted">Lifetime given</p>
             </div>
             <div>
-              <p className="tnum text-[15px] font-extrabold text-navy">118</p>
+              <p className="tnum text-[15px] font-extrabold text-navy">{lifeGot}</p>
               <p className="text-[10.5px] font-bold uppercase tracking-wide text-muted">Lifetime received</p>
             </div>
           </div>
