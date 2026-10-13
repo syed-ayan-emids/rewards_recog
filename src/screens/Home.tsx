@@ -1,6 +1,6 @@
 import React from 'react'
 import { CalendarClock, HeartHandshake, Sparkles, Trophy } from 'lucide-react'
-import { Avatar, Btn, Card, Chip } from '../ui'
+import { Avatar, Btn, Card } from '../ui'
 import Mascot from '../components/Mascot'
 import { person, TEAM_LEADERBOARD, DASH_STATS, ORG_STATS } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
@@ -37,7 +37,7 @@ export default function HomeScreen() {
 
       {/* Count cards */}
       <p className="mb-2.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted">Stats</p>
-      <div className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mb-8 grid gap-4 md:grid-cols-3">
         {/* Org data */}
         <Card className="border-brand/15 bg-brand-soft/70 p-5">
           <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0a675c]">
@@ -102,7 +102,7 @@ export default function HomeScreen() {
       </div>
 
       {/* Quick cards */}
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         <Card className="hero-room relative overflow-hidden p-0 text-white">
           <div className="dotgrid relative p-5">
             <div className="flex items-center justify-between">
@@ -118,12 +118,9 @@ export default function HomeScreen() {
           </div>
         </Card>
 
-        <Card className="flex flex-col p-5 min-h-[200px]">
-          <div className="flex items-center justify-between">
-            <p className="flex items-center gap-2 text-[14px] font-extrabold text-navy"><Trophy size={16} className="text-gold-ink" /> Team leaderboard</p>
-            <Chip className="bg-slate-100 text-muted">Points · this quarter</Chip>
-          </div>
-          <div className="mt-3 grid flex-1 gap-x-8 sm:grid-cols-2">
+        <Card className="flex flex-col p-5 min-h-[200px] md:col-span-2">
+          <p className="flex items-center gap-2 text-[14px] font-extrabold text-navy"><Trophy size={16} className="text-gold-ink" /> Team leaderboard</p>
+          <div className="mt-3 grid flex-1 gap-x-8 gap-y-1 md:grid-rows-3 md:grid-flow-col md:grid-cols-3">
             {TEAM_LEADERBOARD.map((r, i) => (
               <button
                 key={r.id}
@@ -133,14 +130,13 @@ export default function HomeScreen() {
                 <span className={`tnum flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-extrabold ${['bg-gold-soft text-gold-ink', 'bg-slate-200 text-slate-600', 'bg-warn-soft text-warn'][i] ?? 'bg-slate-100 text-muted'}`}>{i + 1}</span>
                 <Avatar id={r.id} size={28} />
                 <span className="min-w-0 flex-1 truncate text-[12.5px] font-bold text-navy">
-                  {person(r.id).name}
+                  {(() => { const parts = person(r.id).name.split(' '); return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0]}.` : parts[0] })()}
                   {r.id === 'me' && <span className="ml-1.5 rounded-full bg-brand px-1.5 py-0.5 text-[9px] font-extrabold text-white">You</span>}
                 </span>
                 <span className="tnum text-[12.5px] font-extrabold text-ink">{fmtNum(r.pts)}</span>
               </button>
             ))}
           </div>
-          <p className="mt-3 border-t border-line pt-2.5 text-[11px] text-muted">Top performers this quarter</p>
         </Card>
       </div>
     </div>
