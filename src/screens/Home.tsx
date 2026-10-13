@@ -1,5 +1,5 @@
 import React from 'react'
-import { CalendarClock, HeartHandshake, Sparkles, Trophy, Users } from 'lucide-react'
+import { CalendarClock, Sparkles, Trophy, Users } from 'lucide-react'
 import { Avatar, Btn, Card } from '../ui'
 import EoQShowcase from '../components/EoQShowcase'
 import Mascot from '../components/Mascot'
@@ -11,8 +11,6 @@ export default function HomeScreen() {
   const orgCount = useCountUp(ORG_STATS.recognitions, 1100)
   const givenCount = useCountUp(DASH_STATS.given, 1100)
   const gotCount = useCountUp(DASH_STATS.got, 1100)
-  const lifeGiven = useCountUp(96, 1100)
-  const lifeGot = useCountUp(118, 1100)
 
   return (
     <div>
@@ -31,25 +29,25 @@ export default function HomeScreen() {
             </span>
           </h1>
           <Btn variant="primary" size="lg" className="shrink-0 shadow-[0_10px_24px_rgba(14,147,132,0.35)] xl:mr-[26px]" onClick={() => setComposer({ open: true })}>
-            <HeartHandshake size={18} /> Recognize a teammate
+            Recognize a teammate
           </Btn>
         </div>
       </div>
 
       {/* Count cards */}
       <p className="mb-2.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-muted">Stats</p>
-      <div className="mb-8 grid gap-4 md:grid-cols-3">
+      <div className="mb-8 grid gap-4 md:grid-cols-3 xl:grid-cols-[0.78fr_1fr_1.22fr]">
         {/* Org data */}
-        <Card className="border-brand/15 bg-brand-soft/70 p-5">
-          <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0a675c]">
+        <Card className="card-org p-5">
+          <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-white/70">
             Org data
           </div>
-          <p className="tnum mt-4 text-[58px] font-extrabold leading-[0.95] tracking-[-0.03em] text-navy">{fmtNum(orgCount)}</p>
-          <p className="mt-2 text-[12.5px] font-semibold text-muted">Total recognitions at EMIDS</p>
+          <p className="tnum mt-4 text-[58px] font-extrabold leading-[0.95] tracking-[-0.03em] text-white">{fmtNum(orgCount)}</p>
+          <p className="mt-2 text-[12.5px] font-semibold text-white/70">Total recognitions at EMIDS</p>
         </Card>
 
         {/* My data — one card, two halves */}
-        <Card className="border-mint/25 bg-mint-soft/40 p-5">
+        <Card className="card-my p-5">
           <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0f7a4d]">
             My data
           </div>
@@ -63,43 +61,25 @@ export default function HomeScreen() {
               <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions received</p>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-2 border-t border-mint/25 pt-3.5">
-            <div>
-              <p className="tnum text-[15px] font-extrabold text-navy">{lifeGiven}</p>
-              <p className="text-[10.5px] font-bold uppercase tracking-wide text-muted">Lifetime given</p>
-            </div>
-            <div>
-              <p className="tnum text-[15px] font-extrabold text-navy">{lifeGot}</p>
-              <p className="text-[10.5px] font-bold uppercase tracking-wide text-muted">Lifetime received</p>
-            </div>
-          </div>
         </Card>
 
         {/* Total reward balance — bank card */}
-        <div className="bg-white p-3" style={{ borderRadius: 16 }}>
-          <div className="hero-room relative h-full overflow-hidden" style={{ borderRadius: 16 }}>
-            <div className="dotgrid relative flex h-full flex-col p-4">
-              <Sparkles size={42} className="absolute -right-2 -top-3 text-gold/25" aria-hidden />
-              <Sparkles size={22} className="absolute right-10 top-8 text-gold/15" aria-hidden />
+        <Card className="bank-aurora relative h-full overflow-hidden">
+            <div className="relative flex h-full flex-col p-4">
+              <Sparkles size={42} className="absolute -right-2 -top-3 text-violet/30" aria-hidden />
+              <Sparkles size={22} className="absolute right-10 top-8 text-violet/20" aria-hidden />
               <div className="flex items-start justify-between gap-2">
                 <img src="/emids-logo-tight.png" alt="emids" className="mt-0.5 h-4 w-auto shrink-0" />
-                <span className="relative mt-0.5 h-5 w-7 shrink-0 overflow-hidden rounded-md bg-gradient-to-br from-gold to-[#F5A10E]">
-                  <span className="absolute inset-x-1 top-1/2 h-px bg-[#3d2b00]/35" />
-                  <span className="absolute inset-y-1 left-1/2 w-px bg-[#3d2b00]/20" />
-                </span>
               </div>
-              <p className="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-gold/90">Total reward balance</p>
+              <p className="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-violet-ink">Total reward balance</p>
               <div className="mt-auto flex items-end justify-between gap-2 pt-3">
-                <p className="tnum text-[25px] font-extrabold leading-none tracking-[0.04em] text-white">
+                <p className="tnum text-[25px] font-extrabold leading-none tracking-[0.04em] text-navy">
                   {fmtNum(useCountUp(balance))}
-                  <span className="ml-1.5 text-[12px] font-bold tracking-normal text-white/60">pts</span>
+                  <span className="ml-1.5 text-[12px] font-bold tracking-normal text-muted">pts</span>
                 </p>
-                <span className="tnum shrink-0 rounded-full bg-white/10 px-2 py-1 text-[10px] font-bold text-gold">🔥 6-week streak</span>
               </div>
-              <p className="mt-1.5 text-[10.5px] text-white/55">1 point = ₹1 · never expires · redeem in My Rewards</p>
             </div>
-          </div>
-        </div>
+        </Card>
       </div>
 
       {/* Quick cards */}
