@@ -46,6 +46,24 @@ port 5173, start yours with `npm run dev -- --port <free-port>`.
   navy/brand/gold/violet/mint/coral/warn + per-value colors). Reuse these
   tokens; don't invent new palette slots.
 
+## Props conventions
+
+- **`PROPS.MD` (repo root) is the props catalog** — 12 patterns every component
+  outside the atoms layer must follow. They are checked by `npm run check`
+  (`tsc --noEmit`) and reviewed in PRs. Read it before adding or changing any
+  component.
+- Quick rules: named, **exported** `interface XxxProps` with JSDoc above each
+  component (never inline `{ … }` types); optional props get destructured
+  defaults; variant props are literal unions; callbacks are named `onX` and
+  return void; node-ish props are `ReactNode` via `import type { ReactNode }`;
+  no `React.FC`; no default `React` import just for types.
+- **Shared shapes live once in `src/store.tsx`** (`ComposerPreset`,
+  `ComposerState`, `SendPraisePayload`) — import them, don't re-declare.
+- The **atoms layer (`src/components/atoms/`) is owned by the atomic-structure
+  team** — do not retype its props in a props pass; keep that boundary.
+- Extend native React attribute interfaces (`ButtonHTMLAttributes`,
+  `HTMLAttributes`) when a component just wraps a DOM element.
+
 ## Design and content conventions
 
 - **No gratuitous decoration**: no small icons, badges, numbers-of-record
