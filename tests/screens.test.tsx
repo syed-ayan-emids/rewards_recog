@@ -52,6 +52,23 @@ describe('Composer page', () => {
     expect(screen.getByText('Post it')).toBeInTheDocument()
   })
 
+  it('matches directory people by their email address', () => {
+    const { container } = renderWithStore(<Composer open />)
+    const input = container.querySelector('#composer-to-input') as HTMLInputElement
+    fireEvent.change(input, { target: { value: 'priya.menon@emids.com' } })
+    fireEvent.click(screen.getByText('Priya Menon'))
+    // the chip shows what was typed — the email — in the To field and the preview card
+    expect(screen.getAllByText('priya.menon@emids.com').length).toBeGreaterThan(0)
+  })
+
+  it('accepts a recipient typed as an email address that is not in the directory', () => {
+    const { container } = renderWithStore(<Composer open />)
+    const input = container.querySelector('#composer-to-input') as HTMLInputElement
+    fireEvent.change(input, { target: { value: 'tony.stark@emids.com' } })
+    fireEvent.click(screen.getByText('Add tony.stark@emids.com'))
+    expect(screen.getAllByText('tony.stark@emids.com').length).toBeGreaterThan(0)
+  })
+
   it('prefills the message from the picked value template', async () => {
     const { container } = renderWithStore(<Composer open />)
     fireEvent.click(screen.getByText('Customer First'))
