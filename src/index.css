@@ -118,6 +118,63 @@ body {
 .rail-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* Balance bank card — violet tint of the same family */
+/* Premium dark stat cards (emids.com style) */
+.stat-dark {
+  background: linear-gradient(160deg, #16233a 0%, #0d1526 60%, #090e1a 100%);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 18px 38px -16px rgba(3, 10, 22, 0.55);
+}
+
+/* Deep blue→teal sweep cards with curved cyan accents (recognitions + wallet) */
+.stat-sweep {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(130% 170% at 100% 0%, rgba(70, 214, 187, 0.16) 0%, rgba(21, 94, 116, 0.20) 40%, transparent 66%),
+    linear-gradient(150deg, #102c46 0%, #0b1c30 55%, #0e3040 100%);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 18px 38px -16px rgba(3, 10, 22, 0.55);
+}
+.stat-sweep::before {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 9999px;
+  border: 2px solid rgba(102, 224, 224, 0.20);
+  right: -150px;
+  top: -170px;
+  box-shadow: 0 0 0 36px rgba(102, 224, 224, 0.05), 0 0 0 74px rgba(102, 224, 224, 0.03);
+}
+/* arc-free variant of the sweep cards */
+.stat-sweep.stat-sweep-plain::before, .stat-sweep.stat-sweep-plain::after {
+  content: none;
+}
+
+/* subtle dot-grid pattern for the sweep cards */
+.stat-dots {
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: radial-gradient(rgba(214, 244, 248, 0.95) 1px, transparent 1.35px);
+  background-size: 18px 18px;
+}
+.stat-sweep > .stat-dots {
+  position: absolute;
+  inset: 0;
+}
+
+.stat-sweep::after {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 9999px;
+  border: 2px solid rgba(157, 220, 255, 0.14);
+  right: -110px;
+  bottom: -200px;
+  box-shadow: 0 0 0 32px rgba(157, 220, 255, 0.05);
+}
+
 /* Balance bank card — dark wallet */
 .bank-aurora {
   background:
