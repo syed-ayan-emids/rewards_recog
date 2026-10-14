@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Building2, Landmark, MapPin, Send } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, Segmented, SectionTitle } from '../components/atoms'
 import { CORE_VALUES, POSTS, person } from '../data'

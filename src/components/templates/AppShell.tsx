@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { ChevronDown, Home, Gift, Sparkles, PartyPopper, Users } from 'lucide-react'
 import { useStore, type Screen } from '../../store'
 import { Avatar, useOutside } from '../atoms'
@@ -14,7 +15,7 @@ import MyTeamScreen from '../../pages/Team'
 import JuryScreen from '../../pages/Jury'
 import ProfileScreen from '../../pages/Profile'
 
-const NAV: { key: Screen; label: string; icon: React.ReactNode }[] = [
+const NAV: { key: Screen; label: string; icon: ReactNode }[] = [
   { key: 'home', label: 'Dashboard', icon: <Home size={17} /> },
   { key: 'team', label: 'My Team', icon: <Users size={17} /> },
   { key: 'rewards', label: 'My Rewards', icon: <Gift size={17} /> },
@@ -170,7 +171,14 @@ export default function AppShell() {
   )
 }
 
-function MobileTab({ k, icon, label, badge }: { k: Screen; icon: React.ReactNode; label: string; badge?: number }) {
+export interface MobileTabProps {
+  k: Screen
+  icon: ReactNode
+  label: string
+  badge?: number
+}
+
+function MobileTab({ k, icon, label, badge }: MobileTabProps) {
   const { screen, setScreen } = useStore()
   const active = screen === k
   return (

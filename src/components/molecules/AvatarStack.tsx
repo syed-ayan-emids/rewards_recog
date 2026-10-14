@@ -1,7 +1,14 @@
-import React from 'react'
 import { Avatar } from '../atoms'
 
-export function AvatarStack({ ids, max = 4, size = 30 }: { ids: string[]; max?: number; size?: number }) {
+/** Row of overlapping avatars with a "+N" overflow badge. */
+export interface AvatarStackProps {
+  ids: string[]
+  /** How many avatars to show before collapsing into "+N". */
+  max?: number
+  size?: number
+}
+
+export function AvatarStack({ ids, max = 4, size = 30 }: AvatarStackProps) {
   const shown = ids.slice(0, max)
   const rest = ids.length - shown.length
   return (

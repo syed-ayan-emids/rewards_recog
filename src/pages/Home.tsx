@@ -1,4 +1,3 @@
-import React from 'react'
 import { CalendarClock, Trophy, Users } from 'lucide-react'
 import { Avatar, Btn, Card } from '../components/atoms'
 import EoQShowcase from '../components/organisms/EoQShowcase'

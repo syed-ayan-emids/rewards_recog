@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { CalendarClock, CheckCircle2, CircleDashed, Search, ShieldCheck, Sparkles, Trophy, Users } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, Modal, SectionTitle, Segmented, CloseX, confettiBurst } from '../components/atoms'
 import { AWARD_CATEGORIES, CORE_VALUES, MY_NOMINATIONS, PEOPLE_LIST, person } from '../data'
@@ -84,7 +84,14 @@ export default function AwardsScreen() {
   )
 }
 
-function NominationsList({ onNew, onStartPraise }: { onNew: () => void; onStartPraise: () => void }) {
+export interface NominationsListProps {
+  /** Opens the award nomination flow. */
+  onNew: () => void
+  /** Jumps straight into the praise composer. */
+  onStartPraise: () => void
+}
+
+function NominationsList({ onNew, onStartPraise }: NominationsListProps) {
   const steps = ['Submitted', 'Manager endorsed', 'Jury review', 'Result']
   return (
     <div className="space-y-4">
@@ -131,7 +138,17 @@ function NominationsList({ onNew, onStartPraise }: { onNew: () => void; onStartP
   )
 }
 
-function NominationModal({ category, onClose, onDone, onOpenJury }: { category: string | null; onClose: () => void; onDone: () => void; onOpenJury: () => void }) {
+export type NominationCategory = string | null
+
+export interface NominationModalProps {
+  /** Currently open category, or null when the modal starts blank. */
+  category: NominationCategory
+  onClose: () => void
+  onDone: () => void
+  onOpenJury: () => void
+}
+
+function NominationModal({ category, onClose, onDone, onOpenJury }: NominationModalProps) {
   const { toast } = useStore()
   const [cat, setCat] = useState(category)
   const [personId, setPersonId] = useState('')
@@ -141,7 +158,7 @@ function NominationModal({ category, onClose, onDone, onOpenJury }: { category: 
   const [busy, setBusy] = useState(false)
   const [stage, setStage] = useState<NomState>('detail')
 
-  React.useEffect(() => { setCat(category); if (category) { setStage('detail'); setPersonId(''); setText(''); setChecks({ outcome: false, metrics: false, systems: false }) } }, [category])
+  useEffect(() => { setCat(category); if (category) { setStage('detail'); setPersonId(''); setText(''); setChecks({ outcome: false, metrics: false, systems: false }) } }, [category])
 
   const results = useMemo(() => {
     if (!q.trim()) return []
