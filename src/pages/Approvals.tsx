@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { CheckCircle2, UserCheck } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, EmptyState } from '../components/atoms'
 import { PENDING_APPROVALS, person } from '../data'
@@ -94,7 +94,7 @@ export default function ApprovalsScreen() {
   )
 }
 
-interface ListItemProps {
+export interface ListItemProps {
   a: ApprovalItem
   /** Whether this item is the currently selected one. */
   on: boolean
@@ -117,7 +117,7 @@ function ListItem({ a, on, onSelect }: ListItemProps) {
 
 export type ApprovalVerdict = 'approved' | 'returned' | 'declined'
 
-interface ApprovalDetailProps {
+export interface ApprovalDetailProps {
   item: ApprovalItem
   onResolve: (a: ApprovalItem, v: ApprovalVerdict) => void
   /** Present once the item has been resolved by the manager. */

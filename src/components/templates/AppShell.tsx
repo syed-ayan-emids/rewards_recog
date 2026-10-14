@@ -171,7 +171,7 @@ export default function AppShell() {
   )
 }
 
-interface MobileTabProps {
+export interface MobileTabProps {
   k: Screen
   icon: ReactNode
   label: string

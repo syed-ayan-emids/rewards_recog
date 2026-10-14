@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { MessageCircle, Send, Heart, Sparkles, Trophy } from 'lucide-react'
 import { Avatar, Card } from '../atoms'
 import { AvatarStack } from '../molecules'

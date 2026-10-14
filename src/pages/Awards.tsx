@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import { CalendarClock, CheckCircle2, CircleDashed, Search, ShieldCheck, Sparkles, Trophy, Users } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, Modal, SectionTitle, Segmented, CloseX, confettiBurst } from '../components/atoms'
 import { AWARD_CATEGORIES, CORE_VALUES, MY_NOMINATIONS, PEOPLE_LIST, person } from '../data'
@@ -84,7 +84,7 @@ export default function AwardsScreen() {
   )
 }
 
-interface NominationsListProps {
+export interface NominationsListProps {
   /** Opens the award nomination flow. */
   onNew: () => void
   /** Jumps straight into the praise composer. */
@@ -140,7 +140,7 @@ function NominationsList({ onNew, onStartPraise }: NominationsListProps) {
 
 export type NominationCategory = string | null
 
-interface NominationModalProps {
+export interface NominationModalProps {
   /** Currently open category, or null when the modal starts blank. */
   category: NominationCategory
   onClose: () => void
@@ -158,7 +158,7 @@ function NominationModal({ category, onClose, onDone, onOpenJury }: NominationMo
   const [busy, setBusy] = useState(false)
   const [stage, setStage] = useState<NomState>('detail')
 
-  React.useEffect(() => { setCat(category); if (category) { setStage('detail'); setPersonId(''); setText(''); setChecks({ outcome: false, metrics: false, systems: false }) } }, [category])
+  useEffect(() => { setCat(category); if (category) { setStage('detail'); setPersonId(''); setText(''); setChecks({ outcome: false, metrics: false, systems: false }) } }, [category])
 
   const results = useMemo(() => {
     if (!q.trim()) return []

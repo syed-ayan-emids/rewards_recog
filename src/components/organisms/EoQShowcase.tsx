@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CalendarClock, ChevronLeft, ChevronRight, Users } from 'lucide-react'
 import { Card } from '../atoms'
 import { useStore } from '../../store'

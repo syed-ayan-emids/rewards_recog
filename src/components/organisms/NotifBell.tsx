@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { Bell, Check, CalendarCheck, Trophy, MessageSquare, Cake } from 'lucide-react'
 import { useOutside } from '../atoms'
 import { useStore } from '../../store'
 
-const GROUP_META: Record<string, { icon: React.ReactNode; label: string; bg: string; fg: string }> = {
+const GROUP_META: Record<string, { icon: ReactNode; label: string; bg: string; fg: string }> = {
   praise: { icon: <MessageSquare size={15} />, label: 'New praises', bg: 'bg-gold-soft', fg: 'text-gold-ink' },
   approval: { icon: <CalendarCheck size={15} />, label: 'Approvals waiting', bg: 'bg-brand-soft', fg: 'text-brand' },
   window: { icon: <Trophy size={15} />, label: 'EoQ windows', bg: 'bg-violet-soft', fg: 'text-violet' },

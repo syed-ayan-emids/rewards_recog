@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Send, Sparkles, Users, X } from 'lucide-react'
 import { Avatar, Btn } from '../atoms'
 import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE } from '../../data'

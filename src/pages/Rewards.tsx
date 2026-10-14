@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import type { ReactNode } from 'react'
 import { ArrowDownLeft, ArrowRight, ArrowUpRight, Award, BadgeCheck, Gift, Landmark, ShoppingBag, Sparkles, Trophy } from 'lucide-react'
 import { Avatar, Bar, Btn, Card, Chip } from '../components/atoms'
 import { CORE_VALUES, LEDGER, MY_NOMINATIONS, TOP_VALUES, person } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
 
-const BADGE_ICONS: Record<string, React.ReactNode> = {
+const BADGE_ICONS: Record<string, ReactNode> = {
   'Value Champion ×3': <Sparkles size={16} />,
   'Top Giver — Q1': <Award size={16} />,
   '5-Year Milestone': <Landmark size={16} />,
 }
 
-const KIND: Record<string, { icon: React.ReactNode; tint: string; color: string }> = {
+const KIND: Record<string, { icon: ReactNode; tint: string; color: string }> = {
   award: { icon: <Trophy size={16} />, tint: 'bg-violet-soft', color: 'text-violet' },
   grant: { icon: <ArrowDownLeft size={16} />, tint: 'bg-mint-soft', color: 'text-mint' },
   earning: { icon: <ArrowUpRight size={16} />, tint: 'bg-gold-soft', color: 'text-gold-ink' },

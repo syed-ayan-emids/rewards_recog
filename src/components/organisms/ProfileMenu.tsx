@@ -1,4 +1,3 @@
-import React from 'react'
 import { Avatar } from '../atoms'
 import { useStore, type Screen } from '../../store'
 

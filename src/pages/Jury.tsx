@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Award, CheckCircle2, Flag, Sparkles, Star, Trophy, X } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { Avatar, Btn, Card, Chip, SectionTitle } from '../components/atoms'
@@ -138,7 +138,7 @@ export default function JuryScreen() {
   )
 }
 
-interface RevealOverlayProps {
+export interface RevealOverlayProps {
   winners: typeof JURY_NOMINEES
   onClose: () => void
 }

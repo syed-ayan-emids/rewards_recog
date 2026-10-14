@@ -1,9 +1,14 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import { Avatar, Card } from '../components/atoms'
 import { ORG_TREE, person } from '../data'
 import type { TreeNode } from '../data'
 import { useStore } from '../store'
+
+export interface NodeProps {
+  id: string
+  depth?: number
+}
 
 export default function OrgTreeScreen() {
   const { openProfile } = useStore()
@@ -21,11 +26,6 @@ export default function OrgTreeScreen() {
       return null
     }
     return walk(ORG_TREE)
-  }
-
-  interface NodeProps {
-    id: string
-    depth?: number
   }
 
   function Node({ id, depth = 0 }: NodeProps) {
