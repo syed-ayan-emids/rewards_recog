@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { ArrowLeft, Send, Sparkles, Users, X } from 'lucide-react'
-import { Avatar, Btn } from '../atoms'
-import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE } from '../../data'
+import { ArrowLeft, Check, Maximize2, Send, Sparkles, Users, X } from 'lucide-react'
+import { Avatar, Btn, Modal } from '../atoms'
+import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE, EMAIL_RE, ensurePersonFromEmail } from '../../data'
 import type { ValueKey } from '../../data'
 import { useStore } from '../../store'
 
@@ -25,17 +25,20 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
   const [points, setPoints] = useState(0)
   const [visibility] = useState<'public' | 'private'>('public')
   const [aiBusy, setAiBusy] = useState(false)
-  const [assisted, setAssisted] = useState(false)
   const [tplId, setTplId] = useState<string | null>(null)
   const [ccSel, setCcSel] = useState<string[]>([])
   const [ccq, setCcq] = useState('')
   const [ccPickerOpen, setCcPickerOpen] = useState(false)
+  /* Chip label per recipient id — shows what was typed when that was a full email address, otherwise the name. */
+  const [labels, setLabels] = useState<Record<string, string>>({})
+  const [variantIdx, setVariantIdx] = useState(0)
+  const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
     if (open) {
       setToSel(preset?.toId ? [preset.toId] : [])
-      setQ(''); setValueKey(null); setMsg(''); setPoints(0); setAssisted(false)
-      setTplId(null); setCcSel([]); setCcq('')
+      setQ(''); setValueKey(null); setMsg(''); setPoints(0)
+      setTplId(null); setCcSel([]); setCcq(''); setLabels({}); setVariantIdx(0); setExpanded(false)
       setTimeout(() => document.getElementById('composer-to-input')?.focus(), 60)
     }
   }, [open, preset])
@@ -43,13 +46,18 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
   const pickResults = useMemo(() => {
     if (!q.trim()) return []
     const s = q.toLowerCase()
-    return PEOPLE_LIST.filter((p) => p.id !== 'me' && (p.name.toLowerCase().includes(s) || p.title.toLowerCase().includes(s))).slice(0, 6)
+    return PEOPLE_LIST.filter((p) => p.id !== 'me' && (p.name.toLowerCase().includes(s) || p.title.toLowerCase().includes(s) || p.email.toLowerCase().includes(s))).slice(0, 6)
+  }, [q])
+
+  const emailCandidate = useMemo(() => {
+    const value = q.trim().toLowerCase()
+    return EMAIL_RE.test(value) && !PEOPLE_LIST.some((p) => p.email === value) ? value : null
   }, [q])
 
   const ccResults = useMemo(() => {
     if (!ccq.trim()) return []
     const s = ccq.toLowerCase()
-    return PEOPLE_LIST.filter((p) => p.id !== 'me' && !toSel.includes(p.id) && !ccSel.includes(p.id) && (p.name.toLowerCase().includes(s) || p.title.toLowerCase().includes(s))).slice(0, 6)
+    return PEOPLE_LIST.filter((p) => p.id !== 'me' && !toSel.includes(p.id) && !ccSel.includes(p.id) && (p.name.toLowerCase().includes(s) || p.title.toLowerCase().includes(s) || p.email.toLowerCase().includes(s))).slice(0, 6)
   }, [ccq, toSel, ccSel])
 
   const ccManagers = useMemo(() => [...new Set(toSel.map((id) => PEOPLE[id]?.managerId).filter(Boolean))] as string[], [toSel])
@@ -64,7 +72,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
     setTimeout(() => {
       const names = toSel.map((id) => PEOPLE[id].name.split(' ')[0]).join(' and ')
       setMsg(`${names} ${AI_DRAFTS[valueKey ?? 'ownership']} Keep it in your own words if you can.`)
-      setAssisted(true); setAiBusy(false)
+      setAiBusy(false)
     }, 800)
   }
 
@@ -73,7 +81,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
     setAiBusy(true)
     setTimeout(() => {
       setMsg((m) => m.trim().replace(/\s+/g, ' ').replace(/\.?$/, '. This made a real difference — thank you for setting the standard.'))
-      setAssisted(true); setAiBusy(false)
+      setAiBusy(false)
     }, 650)
   }
 
@@ -87,6 +95,8 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
   }
 
   const previewValue = valueKey ? CORE_VALUES[valueKey] : null
+  const activeTpl = tpl && valueKey ? tpl : VALUE_TEMPLATES.customerFirst[0]
+  const recipients = toSel.map((id) => ({ id, label: labels[id] ?? PEOPLE[id].name.split(' ')[0] }))
 
   if (!open) return null
 
@@ -96,9 +106,9 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
           <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">Recognize a teammate</h1>
           <Btn variant="ghost" size="sm" onClick={closeComposer}><ArrowLeft size={16} /> Back</Btn>
         </div>
-        <div className="mx-auto grid w-full max-w-6xl lg:grid-cols-[1.55fr_1fr]">
+        <div className="mx-auto grid w-full max-w-6xl gap-x-8 gap-y-6 px-6 py-5 lg:grid-cols-[1fr_1.4fr]">
           {/* Left: compose */}
-          <div className="px-6 py-5">
+          <div>
             {/* To */}
             <label className="mb-1.5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
               <span>To</span>
@@ -110,7 +120,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
               {toSel.map((id) => (
                 <span key={id} className="flex items-center gap-1.5 rounded-full bg-white py-0.5 pl-1 pr-1.5 shadow-card border border-line">
                   <Avatar id={id} size={22} />
-                  <button onClick={() => setToSel(toSel.filter((x) => x !== id))} className="max-w-[110px] truncate text-[13px] font-semibold text-navy">{PEOPLE[id].name.split(' ')[0]}</button>
+                  <button onClick={() => setToSel(toSel.filter((x) => x !== id))} className="max-w-[110px] truncate text-[13px] font-semibold text-navy">{labels[id] ?? PEOPLE[id].name.split(' ')[0]}</button>
                   <button aria-label={`Remove ${PEOPLE[id].name}`} onClick={() => setToSel(toSel.filter((x) => x !== id))} className="text-muted hover:text-coral"><X size={12} /></button>
                 </span>
               ))}
@@ -118,15 +128,32 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
                 id="composer-to-input"
                 value={q}
                 onChange={(e) => { setQ(e.target.value); setPickerOpen(true) }}
-                placeholder={toSel.length ? 'Add more…' : 'Type a name'}
+                placeholder={toSel.length ? 'Add more…' : 'Whom do you want to recognise?'}
                 className="h-8 min-w-[170px] flex-1 bg-transparent text-sm outline-none placeholder:text-muted"
               />
             </div>
             {pickerOpen && q.trim() && (
               <div className="rail-scroll mt-1.5 max-h-44 overflow-y-auto rounded-xl border border-line bg-white p-1 shadow-card">
-                {pickResults.length === 0 && <p className="px-3 py-2 text-[13px] text-muted">No match — anyone at emids is eligible.</p>}
+                {emailCandidate && (
+                  <button
+                    onClick={() => {
+                      const p = ensurePersonFromEmail(emailCandidate)
+                      if (!toSel.includes(p.id)) {
+                        setToSel([...toSel, p.id])
+                        setLabels((l) => ({ ...l, [p.id]: emailCandidate }))
+                      }
+                      setQ('')
+                    }}
+                    className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition hover:bg-slate-50"
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[11px] font-bold text-muted">@</span>
+                    <span className="text-[13px] font-semibold text-navy">Add {emailCandidate}</span>
+                    <span className="ml-auto text-[11px] text-muted">not in the directory</span>
+                  </button>
+                )}
+                {(pickResults.length === 0 && !emailCandidate) && <p className="px-3 py-2 text-[13px] text-muted">No match — anyone at emids is eligible.</p>}
                 {pickResults.map((p) => (
-                  <button key={p.id} onClick={() => { if (!toSel.includes(p.id)) setToSel([...toSel, p.id]); setQ(''); }} className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition hover:bg-slate-50">
+                  <button key={p.id} onClick={() => { if (!toSel.includes(p.id)) { setToSel([...toSel, p.id]); const typed = q.trim(); setLabels((l) => ({ ...l, [p.id]: EMAIL_RE.test(typed) ? typed.toLowerCase() : PEOPLE[p.id].name.split(' ')[0] })) } setQ(''); }} className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition hover:bg-slate-50">
                     <Avatar id={p.id} size={28} />
                     <span className="text-[13px] font-semibold text-navy">{p.name}</span>
                     <span className="text-[12px] text-muted">{p.title}</span>
@@ -150,22 +177,47 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
               {ccSel.map((id) => (
                 <span key={id} className="flex items-center gap-1.5 rounded-full bg-white py-0.5 pl-1 pr-1.5 shadow-card border border-line">
                   <Avatar id={id} size={22} />
-                  <button className="max-w-[110px] truncate text-[13px] font-semibold text-navy">{PEOPLE[id]?.name.split(' ')[0]}</button>
-                  <button aria-label={`Remove ${PEOPLE[id]?.name} from CC`} onClick={() => setCcSel(ccSel.filter((x) => x !== id))} className="text-muted hover:text-coral"><X size={12} /></button>
+                  <button className="max-w-[110px] truncate text-[13px] font-semibold text-navy">{labels[id] ?? PEOPLE[id]?.name.split(' ')[0]}</button>
+                  <button aria-label={`Remove ${labels[id] ?? PEOPLE[id]?.name} from CC`} onClick={() => setCcSel(ccSel.filter((x) => x !== id))} className="text-muted hover:text-coral"><X size={12} /></button>
                 </span>
               ))}
               <input
                 value={ccq}
                 onChange={(e) => { setCcq(e.target.value); setCcPickerOpen(true) }}
-                placeholder={ccSel.length || ccManagers.length ? 'Add more CC…' : 'Add CC'}
+                placeholder={ccSel.length || ccManagers.length ? 'Add more CC…' : 'Share Recognition With'}
                 className="h-7 min-w-[150px] flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted"
               />
             </div>
             {ccPickerOpen && ccq.trim() && (
               <div className="rail-scroll mt-1.5 max-h-40 overflow-y-auto rounded-xl border border-line bg-white p-1 shadow-card">
-                {ccResults.length === 0 && <p className="px-3 py-2 text-[13px] text-muted">No match — or already added.</p>}
+                {(() => {
+                  const value = ccq.trim().toLowerCase()
+                  const candidate = EMAIL_RE.test(value) && !PEOPLE_LIST.some((p) => p.email === value) ? value : null
+                  return (
+                    <>
+                      {candidate && (
+                        <button
+                          onClick={() => {
+                            const p = ensurePersonFromEmail(candidate)
+                            if (!ccSel.includes(p.id)) {
+                              setCcSel([...ccSel, p.id])
+                              setLabels((l) => ({ ...l, [p.id]: candidate }))
+                            }
+                            setCcq('')
+                          }}
+                          className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition hover:bg-slate-50"
+                        >
+                          <span className="flex h-6.5 w-6.5 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[11px] font-bold text-muted">@</span>
+                          <span className="text-[13px] font-semibold text-navy">Add {candidate}</span>
+                          <span className="ml-auto text-[11px] text-muted">not in the directory</span>
+                        </button>
+                      )}
+                      {(ccResults.length === 0 && !candidate) && <p className="px-3 py-2 text-[13px] text-muted">No match — or already added.</p>}
+                    </>
+                  )
+                })()}
                 {ccResults.map((p) => (
-                  <button key={p.id} onClick={() => { setCcSel([...ccSel, p.id]); setCcq('') }} className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition hover:bg-slate-50">
+                  <button key={p.id} onClick={() => { if (!ccSel.includes(p.id)) { setCcSel([...ccSel, p.id]); const typed = ccq.trim(); setLabels((l) => ({ ...l, [p.id]: EMAIL_RE.test(typed) ? typed.toLowerCase() : p.name.split(' ')[0] })) } setCcq('') }} className="flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left transition hover:bg-slate-50">
                     <Avatar id={p.id} size={26} />
                     <span className="text-[13px] font-semibold text-navy">{p.name}</span>
                     <span className="text-[12px] text-muted">{p.title}</span>
@@ -177,7 +229,7 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
 
             {/* Value */}
             <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
-              <span>Which emids value did they live?</span>
+              <span>Which emids value did they demonstrate?</span>
             </label>
             <div className="flex flex-wrap gap-2">
               {VALUE_KEYS.map((k) => {
@@ -211,100 +263,25 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
 
             {/* Message */}
             <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
-              <span>What exactly did they do?</span>
+              <span>Describe Their Contribution</span>
             </label>
             <div className="rounded-xl border border-line bg-slate-50 transition focus-within:border-brand/40 focus-within:bg-white">
               <textarea
                 value={msg}
                 onChange={(e) => setMsg(e.target.value)}
                 rows={4}
-                placeholder="Name what they did and what it changed."
+                placeholder="What made them stand out?"
                 className="w-full resize-none bg-transparent px-4 pt-3 text-[14.5px] leading-relaxed outline-none placeholder:text-muted"
               />
-              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-3 py-2.5">
-                <div className="flex gap-1.5">
-                  <Btn size="sm" variant="violet" onClick={aiDraft} disabled={aiBusy}>
-                    <Sparkles size={14} /> {aiBusy ? 'Thinking…' : 'Draft for me'}
-                  </Btn>
-                  <Btn size="sm" variant="outline" onClick={aiPolish} disabled={aiBusy || msg.trim().length < 10}>
-                    <Sparkles size={14} /> Polish
-                  </Btn>
-                </div>
-                <div className="flex items-center gap-2">
-                  {assisted && <span className="flex items-center gap-1 rounded-full bg-violet-soft px-2 py-0.5 text-[10.5px] font-bold text-violet"><Sparkles size={10} /> Assisted — review</span>}
-                </div>
+              <div className="flex flex-wrap items-center gap-2 border-t border-line px-3 py-2.5">
+                <Btn size="sm" variant="violet" onClick={aiDraft} disabled={aiBusy}>
+                  <Sparkles size={14} /> {aiBusy ? 'Thinking…' : 'Draft for me'}
+                </Btn>
+                <Btn size="sm" variant="outline" onClick={aiPolish} disabled={aiBusy || msg.trim().length < 10}>
+                  <Sparkles size={14} /> Polish
+                </Btn>
               </div>
             </div>
-          </div>
-
-          {/* Right: preview + points + delivery */}
-          <aside className="border-t border-line bg-slate-50/70 px-5 py-5 lg:border-l lg:border-t-0">
-            {tpl && valueKey ? (
-              <div className="rounded-2xl overflow-hidden border border-transparent p-3.5 text-white shadow-card" style={tpl.bg}>
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="truncate text-[13.5px] font-extrabold leading-tight">{tpl.name}</p>
-                    <p className="text-[9.5px] font-semibold text-white/70">emids · {CORE_VALUES[valueKey].label} template</p>
-                  </div>
-                  <span className="text-lg leading-none">{tpl.emoji}</span>
-                </div>
-                <div className="mt-3 flex items-center gap-2">
-                  <Avatar id="me" size={30} />
-                  <div className="min-w-0">
-                    <p className="truncate text-[12px] font-bold text-white">Ayan</p>
-                    <p className="text-[10.5px] text-white/70">{canSend ? 'will post in a moment' : 'just now · emids feed'}</p>
-                  </div>
-                  {points > 0 && <span className="tnum ml-auto rounded-full bg-gold px-2 py-0.5 text-[10.5px] font-extrabold text-[#3d2b00]">+{points} pts</span>}
-                </div>
-                <p className="mt-2 line-clamp-4 text-[12.5px] leading-relaxed text-white">
-                  {msg.trim()
-                    ? msg
-                    : <span className="italic text-white/60">Your praise shows up here live as you type…</span>}
-                </p>
-                <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-white/25 pt-2.5">
-                  {toSel.length > 0 ? (
-                    <>
-                      <div className="flex -space-x-2">
-                        {toSel.slice(0, 3).map((id) => <span key={id} className="rounded-full ring-2 ring-white"><Avatar id={id} size={20} /></span>)}
-                      </div>
-                      <span className="text-[11px] font-bold text-white/90">{toSel.map((id) => PEOPLE[id].name.split(' ')[0]).join(', ')}</span>
-                    </>
-                  ) : (
-                    <span className="text-[11px] text-white/60">pick someone →</span>
-                  )}
-                  {previewValue && <span className="ml-auto rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold text-white">{previewValue.label}</span>}
-                </div>
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-line bg-white p-3.5 shadow-card">
-                <div className="flex items-center gap-2">
-                  <Avatar id="me" size={30} />
-                  <div className="min-w-0">
-                    <p className="truncate text-[12px] font-bold text-navy">Ayan</p>
-                    <p className="text-[10.5px] text-muted">{canSend ? 'will post in a moment' : 'just now · emids feed'}</p>
-                  </div>
-                  {points > 0 && <span className="tnum ml-auto rounded-full bg-gold px-2 py-0.5 text-[10.5px] font-extrabold text-[#3d2b00]">+{points} pts</span>}
-                </div>
-                <p className="mt-2 text-[12.5px] leading-relaxed text-ink line-clamp-4">
-                  {msg.trim()
-                    ? (visibility === 'public' ? msg : msg)
-                    : <span className="text-muted italic">Your praise shows up here live as you type…</span>}
-                </p>
-                <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-line pt-2.5">
-                  {toSel.length > 0 ? (
-                    <>
-                      <div className="flex -space-x-2">
-                        {toSel.slice(0, 3).map((id) => <span key={id} className="rounded-full ring-2 ring-white"><Avatar id={id} size={20} /></span>)}
-                      </div>
-                      <span className="text-[11px] font-bold text-navy">{toSel.map((id) => PEOPLE[id].name.split(' ')[0]).join(', ')}</span>
-                    </>
-                  ) : (
-                    <span className="text-[11px] text-muted">pick someone →</span>
-                  )}
-                  {previewValue && <span className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-bold ${previewValue.soft} ${previewValue.ink}`}>{previewValue.label}</span>}
-                </div>
-              </div>
-            )}
 
             {/* Points */}
             <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
@@ -322,21 +299,120 @@ export default function Composer({ open, preset }: { open: boolean; preset?: { t
                 </button>
               ))}
             </div>
+          </div>
 
-          </aside>
-        </div>
-
-      {/* Footer */}
-      <footer className="border-t border-line bg-white">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-end gap-3 px-4 py-3.5 sm:px-6">
-          <div className="flex gap-2">
-            <Btn variant="ghost" onClick={closeComposer}>Cancel</Btn>
-            <Btn variant="primary" onClick={submit} disabled={!canSend} className="px-5">
-              <Send size={15} /> Post it
-            </Btn>
+          {/* Right: template chooser */}
+          <div className="flex h-full flex-col lg:sticky lg:top-20">
+            <p className="mb-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">Templates</p>
+            <div className="grid grid-cols-3 gap-1.5">
+              {activeTpl.urls.map((u, idx) => (
+                <button
+                  key={u}
+                  onClick={() => setVariantIdx(idx)}
+                  aria-current={variantIdx === idx}
+                  aria-label={`Choose template ${idx + 1}`}
+                  className={`block w-full relative overflow-hidden rounded-lg border transition ${variantIdx === idx ? 'border-transparent ring-2 ring-brand shadow-lift' : 'border-line bg-brand-soft/40 hover:border-brand/40'}`}
+                  style={{ backgroundImage: `url(${u})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                >
+                  <div className="aspect-[1100/314] w-full" />
+                  <span className="absolute bottom-1 left-1 rounded-full bg-white/85 px-1.5 py-0.5 text-[9px] font-bold text-navy">{activeTpl.emoji} {idx + 1}</span>
+                  {variantIdx === idx && (
+                    <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-brand text-white shadow-card"><Check size={10} /></span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <p className="mb-1.5 mt-5 text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">Preview</p>
+            <div className="relative flex flex-1 flex-col">
+              <TemplateCard
+                tpl={activeTpl}
+                url={activeTpl.urls[variantIdx] ?? activeTpl.urls[0]}
+                previewValue={previewValue}
+                recipients={recipients}
+                points={points}
+                msg={msg}
+              />
+              {canSend && (
+                <button
+                  onClick={() => setExpanded(true)}
+                  aria-label="Expand preview"
+                  className="absolute right-2.5 top-2.5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/85 text-navy shadow-card transition hover:bg-white"
+                >
+                  <Maximize2 size={15} />
+                </button>
+              )}
+            </div>
+            <div className="mt-auto flex items-center justify-end gap-2">
+              <Btn variant="ghost" onClick={closeComposer}>Cancel</Btn>
+              <Btn variant="primary" onClick={submit} disabled={!canSend} className="px-5">
+                <Send size={15} /> Post it
+              </Btn>
+            </div>
           </div>
         </div>
-      </footer>
+
+      {/* Expanded final preview */}
+      <Modal open={expanded && !!tpl && !!valueKey} onClose={() => setExpanded(false)} wide label="Template preview">
+        {tpl && valueKey && (
+          <div className="p-4 sm:p-6">
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-[13px] font-extrabold text-navy">Final preview · {tpl.name}</p>
+              <button onClick={() => setExpanded(false)} aria-label="Close preview" className="rounded-full p-1.5 text-muted transition hover:bg-slate-100 hover:text-ink"><X size={18} /></button>
+            </div>
+            <TemplateCard
+              big
+              tpl={tpl}
+              url={tpl.urls[variantIdx] ?? tpl.urls[0]}
+              previewValue={previewValue}
+              recipients={recipients}
+              points={points}
+              msg={msg}
+            />
+          </div>
+        )}
+      </Modal>
+    </div>
+  )
+}
+
+function TemplateCard({ tpl, url, previewValue, recipients, points, msg, big }: {
+  tpl: { name: string; emoji: string }
+  url: string
+  previewValue: { label: string; soft: string; ink: string } | null
+  recipients: { id: string; label: string }[]
+  points: number
+  msg: string
+  big?: boolean
+}) {
+  const pad = big ? 'px-5' : 'px-3.5'
+  return (
+    <div className={`flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card ${big ? 'rounded-3xl' : ''}`}>
+      <div className={`flex items-center gap-2 ${pad} ${big ? 'py-3.5' : 'py-3'}`}>
+        <span className="text-lg leading-none">{tpl.emoji}</span>
+        <p className="min-w-0 flex-1 truncate text-[13px] font-extrabold leading-tight text-navy">{tpl.name}</p>
+      </div>
+      <div className="border-y border-line bg-brand-soft/30">
+        <img src={url} alt="" className="block min-h-[150px] w-full object-cover" />
+      </div>
+      <div className={`${pad} ${big ? 'py-5' : 'py-4'}`}>
+        <p className={`leading-relaxed text-ink ${big ? 'text-[15px]' : 'text-[13px]'}`}>
+          {msg.trim()
+            ? msg
+            : <span className="italic text-muted">Your praise shows up here live as you type…</span>}
+        </p>
+      </div>
+      <div className={`mt-auto flex flex-wrap items-center gap-2 border-y border-line ${pad} ${big ? 'py-3.5' : 'py-3'}`}>
+        {recipients.length > 0 && (
+          <>
+            <div className="flex -space-x-2">
+              {recipients.slice(0, 3).map((r) => <span key={r.id} className="rounded-full ring-2 ring-white"><Avatar id={r.id} size={20} /></span>)}
+            </div>
+            <span className="truncate text-[11px] font-bold text-navy">{recipients.map((r) => r.label).join(', ')}</span>
+          </>
+        )}
+        {points > 0 && <span className="tnum rounded-full bg-gold px-2 py-0.5 text-[10px] font-extrabold text-[#3d2b00]">+{points} pts</span>}
+        {previewValue && <span className={`ml-auto rounded-full px-2 py-0.5 text-[10px] font-bold ${previewValue.soft} ${previewValue.ink}`}>{previewValue.label}</span>}
+      </div>
     </div>
   )
 }

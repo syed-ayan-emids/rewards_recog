@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import {
-  PEOPLE, PEOPLE_LIST, person, initials,
+  PEOPLE, PEOPLE_LIST, person, initials, EMAIL_RE,
   CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES,
   POSTS, PENDING_APPROVALS, AWARD_CATEGORIES, JURY_NOMINEES,
   TEAM_LEADERBOARD, TEAM_STATS, TEAMS, TOP_VALUES, ORG_TREE,
@@ -13,6 +13,10 @@ describe('people', () => {
     expect(PEOPLE.me).toBeDefined()
     const ids = PEOPLE_LIST.map((p) => p.id)
     expect(new Set(ids).size).toBe(ids.length)
+  })
+
+  it('gives every person a valid email address', () => {
+    for (const p of PEOPLE_LIST) expect(EMAIL_RE.test(p.email)).toBe(true)
   })
 
   it('gives every person a name and title', () => {
