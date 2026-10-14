@@ -122,23 +122,25 @@ export default function MyTree({ open, onClose }: MyTreeProps) {
           </div>
 
           {/* Ranked members */}
-          <div className="relative z-0 ml-6 mt-1.5 space-y-1 border-l-2 border-[#c9d8ee] pl-7">
+          <div className="relative z-0 ml-6 mt-3 flex flex-col items-start gap-3 border-l-2 border-[#c9d8ee] pl-7">
             {visible.map((k, i) => {
               const p = person(k.id)
               const tm = teamOf(k.id)
               const teamName = tm === 'humana' ? 'Humana' : 'Development'
               return (
                 <div key={k.id} className="relative" style={{ animation: `rise .4s cubic-bezier(.22,1,.36,1) ${Math.min(i * 40, 360)}ms both` }}>
-                  <span className="absolute -left-[29px] top-[24px] h-px w-7 bg-[#c9d8ee]" aria-hidden />
-                  <div className="group flex items-center gap-3 rounded-xl border border-line bg-white px-4 py-1.5 shadow-card transition hover:border-brand/30 hover:shadow-lift">
-                    <span className="tnum w-6 shrink-0 text-right text-[12px] font-extrabold text-muted">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="absolute -left-[29px] top-[20px] h-px w-7 bg-[#c9d8ee]" aria-hidden />
+                  <div className="group inline-flex w-fit max-w-[440px] items-center gap-3 rounded-xl border border-line bg-white pl-2.5 pr-2.5 py-2 shadow-card transition hover:border-brand/30 hover:shadow-lift">
+                    <span className="tnum w-5 shrink-0 text-right text-[11.5px] font-extrabold text-muted">{String(i + 1).padStart(2, '0')}</span>
                     <Avatar id={k.id} size={30} />
-                    <button onClick={() => { onClose(); openProfile(k.id) }} className="min-w-0 text-left">
-                      <span className="block max-w-[220px] truncate text-[13.5px] font-extrabold text-navy group-hover:text-brand group-hover:underline">{p.name}</span>
-                      <span className="block truncate text-[11px] text-muted">{p.title}</span>
+                    <button onClick={() => { onClose(); openProfile(k.id) }} title={`${p.name} · ${p.title}`} className="min-w-0 text-left">
+                      <span className="flex max-w-[240px] items-baseline gap-1.5 truncate text-[13px]">
+                        <span className="shrink-0 font-extrabold text-navy group-hover:text-brand group-hover:underline">{p.name}</span>
+                        <span className="truncate text-[11px] font-medium text-muted">{p.title}</span>
+                      </span>
                     </button>
-                    <span className={`ml-auto hidden shrink-0 rounded-full px-2.5 py-1 text-[10.5px] font-extrabold sm:inline-flex ${TEAM_CHIP[tm]}`}>{teamName}</span>
-                    <span className="tnum shrink-0 rounded-full bg-gold-soft px-3 py-1 text-[12px] font-extrabold text-gold-ink">{ptsOf(k.id)} pts</span>
+                    <span className={`hidden shrink-0 rounded-full px-2.5 py-1 text-[10.5px] font-extrabold sm:inline-flex ${TEAM_CHIP[tm]}`}>{teamName}</span>
+                    <span className="tnum shrink-0 rounded-full bg-gold-soft px-2.5 py-0.5 text-[11.5px] font-extrabold text-gold-ink">{ptsOf(k.id)} pts</span>
                   </div>
                 </div>
               )
