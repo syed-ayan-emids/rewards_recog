@@ -1,10 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { ArrowUp, Sparkles, X } from 'lucide-react'
 import { Btn, useOutside, confettiBurst } from '../atoms'
 import { AI_PROMPTS, PEOPLE, TEAMS, TEAM_STATS } from '../../data'
 import { useStore } from '../../store'
 
-type Msg = { id: number; who: 'ai' | 'me'; text: React.ReactNode; actions?: { label: string; fn: () => void }[] }
+export interface MsgAction {
+  label: string
+  fn: () => void
+}
+
+export interface Msg {
+  id: number
+  who: 'ai' | 'me'
+  text: ReactNode
+  actions?: MsgAction[]
+}
 
 export default function AiDrawer() {
   const { openAi, setAi, setComposer, setScreen, toast } = useStore()

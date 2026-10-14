@@ -5,7 +5,14 @@ import { AvatarStack } from '../molecules'
 import { CORE_VALUES, REACTIONS, person, type Post } from '../../data'
 import { useStore } from '../../store'
 
-export function PraiseCard({ post, index }: { post: Post; index: number }) {
+export interface PraiseCardProps {
+  /** The recognition post to render. */
+  post: Post
+  /** Post position in the feed — drives the staggered entrance animation. */
+  index: number
+}
+
+export function PraiseCard({ post, index }: PraiseCardProps) {
   const { react, addComment } = useStore()
   const [showComments, setShowComments] = useState(false)
   const [draft, setDraft] = useState('')

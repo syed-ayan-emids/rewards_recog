@@ -138,7 +138,12 @@ export default function JuryScreen() {
   )
 }
 
-function RevealOverlay({ winners, onClose }: { winners: typeof JURY_NOMINEES; onClose: () => void }) {
+interface RevealOverlayProps {
+  winners: typeof JURY_NOMINEES
+  onClose: () => void
+}
+
+function RevealOverlay({ winners, onClose }: RevealOverlayProps) {
   const [leave, setLeave] = useState(false)
   const doClose = () => { setLeave(true); setTimeout(onClose, 260) }
   return (

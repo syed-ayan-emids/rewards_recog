@@ -94,7 +94,14 @@ export default function ApprovalsScreen() {
   )
 }
 
-function ListItem({ a, on, onSelect }: { a: ApprovalItem; on: boolean; onSelect: () => void }) {
+interface ListItemProps {
+  a: ApprovalItem
+  /** Whether this item is the currently selected one. */
+  on: boolean
+  onSelect: () => void
+}
+
+function ListItem({ a, on, onSelect }: ListItemProps) {
   return (
     <button onClick={onSelect} className={`w-full rounded-2xl border p-3.5 text-left transition ${on ? 'border-brand shadow-lift ring-1 ring-brand/30' : 'border-line bg-white hover:border-brand/40 hover:bg-slate-50/60'}`}>
       <div className="flex items-start gap-3">
@@ -108,7 +115,16 @@ function ListItem({ a, on, onSelect }: { a: ApprovalItem; on: boolean; onSelect:
   )
 }
 
-function ApprovalDetail({ item, onResolve, verdict }: { item: ApprovalItem; onResolve: (a: ApprovalItem, v: 'approved' | 'returned' | 'declined') => void; verdict?: 'approved' | 'returned' | 'declined' }) {
+export type ApprovalVerdict = 'approved' | 'returned' | 'declined'
+
+interface ApprovalDetailProps {
+  item: ApprovalItem
+  onResolve: (a: ApprovalItem, v: ApprovalVerdict) => void
+  /** Present once the item has been resolved by the manager. */
+  verdict?: ApprovalVerdict
+}
+
+function ApprovalDetail({ item, onResolve, verdict }: ApprovalDetailProps) {
   const [comment, setComment] = useState('')
   return (
     <div>

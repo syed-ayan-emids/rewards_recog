@@ -84,7 +84,14 @@ export default function AwardsScreen() {
   )
 }
 
-function NominationsList({ onNew, onStartPraise }: { onNew: () => void; onStartPraise: () => void }) {
+interface NominationsListProps {
+  /** Opens the award nomination flow. */
+  onNew: () => void
+  /** Jumps straight into the praise composer. */
+  onStartPraise: () => void
+}
+
+function NominationsList({ onNew, onStartPraise }: NominationsListProps) {
   const steps = ['Submitted', 'Manager endorsed', 'Jury review', 'Result']
   return (
     <div className="space-y-4">
@@ -131,7 +138,17 @@ function NominationsList({ onNew, onStartPraise }: { onNew: () => void; onStartP
   )
 }
 
-function NominationModal({ category, onClose, onDone, onOpenJury }: { category: string | null; onClose: () => void; onDone: () => void; onOpenJury: () => void }) {
+export type NominationCategory = string | null
+
+interface NominationModalProps {
+  /** Currently open category, or null when the modal starts blank. */
+  category: NominationCategory
+  onClose: () => void
+  onDone: () => void
+  onOpenJury: () => void
+}
+
+function NominationModal({ category, onClose, onDone, onOpenJury }: NominationModalProps) {
   const { toast } = useStore()
   const [cat, setCat] = useState(category)
   const [personId, setPersonId] = useState('')

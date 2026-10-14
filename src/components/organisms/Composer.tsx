@@ -15,7 +15,19 @@ const AI_DRAFTS: Record<ValueKey, string> = {
   winningMindset: 'brought real momentum at the most critical moment of the sprint — late nights, calm head, and a shipped result to show for it.',
 }
 
-export default function Composer({ open, preset }: { open: boolean; preset?: { toId?: string } }) {
+/** Optional pre-selection applied when the composer opens. */
+export type { ComposerPreset, ComposerState } from '../../store'
+
+import type { ComposerPreset } from '../../store'
+
+export interface ComposerProps {
+  /** Whether the composer screen is shown. */
+  open: boolean
+  /** Optional pre-selection applied when the composer opens. */
+  preset?: ComposerPreset
+}
+
+export default function Composer({ open, preset }: ComposerProps) {
   const { setComposer, closeComposer, sendPraise, toast } = useStore()
   const [toSel, setToSel] = useState<string[]>(preset?.toId ? [preset.toId] : [])
   const [q, setQ] = useState('')

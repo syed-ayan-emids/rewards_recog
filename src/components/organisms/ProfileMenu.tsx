@@ -2,7 +2,12 @@ import React from 'react'
 import { Avatar } from '../atoms'
 import { useStore, type Screen } from '../../store'
 
-export default function ProfileMenu({ close }: { close: () => void }) {
+export interface ProfileMenuProps {
+  /** Called when the menu should close (item picked or click outside). */
+  close: () => void
+}
+
+export default function ProfileMenu({ close }: ProfileMenuProps) {
   const { setScreen, toast } = useStore()
   const go = (s: Screen) => { setScreen(s); close() }
   return (

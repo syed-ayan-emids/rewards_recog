@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Check, ChevronDown, GitBranch, CalendarCheck, Send, Users, PartyPopper, Eye } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, Modal, CloseX, useOutside } from '../components/atoms'
 import { CORE_VALUES, TEAMS, TEAM_STATS, person } from '../data'
@@ -14,7 +15,7 @@ export default function MyTeamScreen() {
   const [tab, setTab] = useState<TeamTab>((screenParam as TeamTab) || 'team')
   const approvalsCount = notifications.filter((n) => n.unread && n.group === 'approval').length
 
-  const TABS: { key: TeamTab; label: string; icon: React.ReactNode; badge?: number }[] = [
+  const TABS: { key: TeamTab; label: string; icon: ReactNode; badge?: number }[] = [
     { key: 'team', label: 'My team overview', icon: <Users size={16} /> },
     { key: 'approvals', label: 'Approvals', icon: <CalendarCheck size={16} />, badge: approvalsCount },
   ]

@@ -1,8 +1,28 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { POSTS, NOTIFICATIONS, PEOPLE } from './data'
 import type { Post, ReactionKey } from './data'
 
 export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile' | 'compose'
+
+export interface ComposerPreset {
+  /** Person pre-selected in the "To" field of the composer. */
+  toId?: string
+}
+
+export interface ComposerState {
+  open: boolean
+  preset?: ComposerPreset
+}
+
+export interface SendPraisePayload {
+  toIds: string[]
+  valueKey: string
+  message: string
+  points: number
+  /** Optional template id that prefilled the message. */
+  tpl?: string
+}
 
 export type Toast = { id: number; msg: string; kind?: 'gold' | 'mint' | 'navy' }
 
@@ -10,14 +30,14 @@ type Ctx = {
   balance: number
   postGesture: (n: number) => void
   posts: Post[]
-  sendPraise: (p: { toIds: string[]; valueKey: string; message: string; points: number; tpl?: string }) => void
+  sendPraise: (p: SendPraisePayload) => void
   react: (postId: string, key: ReactionKey | 'none') => void
   addComment: (postId: string, text: string) => void
   notifications: typeof NOTIFICATIONS
   markAllRead: () => void
   redeem: (pts: number) => void
-  openComposer: { open: boolean; preset?: { toId?: string } }
-  setComposer: (o: { open: boolean; preset?: { toId?: string } }) => void
+  openComposer: ComposerState
+  setComposer: (o: ComposerState) => void
   composerFrom: Screen
   closeComposer: () => void
   openAi: boolean
@@ -34,11 +54,15 @@ type Ctx = {
 const StoreCtx = createContext<Ctx>(null as unknown as Ctx)
 export const useStore = () => useContext(StoreCtx)
 
-export function StoreProvider({ children }: { children: React.ReactNode }) {
+export interface StoreProviderProps {
+  children: ReactNode
+}
+
+export function StoreProvider({ children }: StoreProviderProps) {
   const [balance, setBalance] = useState(1240)
   const [posts, setPosts] = useState<Post[]>(POSTS)
   const [notifications, setNotifications] = useState(NOTIFICATIONS)
-  const [composer, setComposerRaw] = useState<{ open: boolean; preset?: { toId?: string } }>({ open: false })
+  const [composer, setComposerRaw] = useState<ComposerState>({ open: false })
   const [composerFrom, setComposerFrom] = useState<Screen>('home')
   const [ai, setAi] = useState(false)
   const [toasts, setToasts] = useState<Toast[]>([])
@@ -55,7 +79,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const postGesture = (n: number) => setBalance((b) => b + n)
 
-  const sendPraise = ({ toIds, valueKey, message, points, tpl }: { toIds: string[]; valueKey: string; message: string; points: number; tpl?: string }) => {
+  const sendPraise = ({ toIds, valueKey, message, points, tpl }: SendPraisePayload) => {
     const p: Post = {
       id: 'u' + Date.now(), kind: 'praise', fromId: 'me', toIds, valueKey: valueKey as Post['valueKey'],
       tpl, message, points, when: 'Just now', comments: [], counts: {},
@@ -90,7 +114,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const setScreen = (s: Screen, param?: string) => { setComposerRaw({ open: false }); setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 }) }
   const openProfile = (id: string) => { setComposerRaw({ open: false }); setProfileId(id); setScreenRaw('profile'); window.scrollTo({ top: 0 }) }
-  const setComposer = (o: { open: boolean; preset?: { toId?: string } }) => {
+  const setComposer = (o: ComposerState) => {
     if (o.open && !composer.open) setComposerFrom(screen)
     setComposerRaw(o)
     if (o.open) setScreenRaw('compose')

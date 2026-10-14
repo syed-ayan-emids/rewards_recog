@@ -23,7 +23,12 @@ export default function OrgTreeScreen() {
     return walk(ORG_TREE)
   }
 
-  function Node({ id, depth = 0 }: { id: string; depth?: number }) {
+  interface NodeProps {
+    id: string
+    depth?: number
+  }
+
+  function Node({ id, depth = 0 }: NodeProps) {
     const node = findNode(id)
     const p = person(id)
     const kids = node?.children ?? []
