@@ -1,14 +1,8 @@
 import React, { useState } from 'react'
-import { ArrowDownLeft, ArrowRight, ArrowUpRight, Award, BadgeCheck, Gift, Landmark, ShoppingBag, Sparkles, Trophy } from 'lucide-react'
+import { ArrowDownLeft, ArrowRight, ArrowUpRight, Gift, ShoppingBag, Sparkles, Trophy } from 'lucide-react'
 import { Avatar, Bar, Btn, Card, Chip } from '../components/atoms'
 import { CORE_VALUES, LEDGER, MY_NOMINATIONS, TOP_VALUES, person } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
-
-const BADGE_ICONS: Record<string, React.ReactNode> = {
-  'Value Champion ×3': <Sparkles size={16} />,
-  'Top Giver — Q1': <Award size={16} />,
-  '5-Year Milestone': <Landmark size={16} />,
-}
 
 const KIND: Record<string, { icon: React.ReactNode; tint: string; color: string }> = {
   award: { icon: <Trophy size={16} />, tint: 'bg-violet-soft', color: 'text-violet' },
@@ -19,7 +13,6 @@ const KIND: Record<string, { icon: React.ReactNode; tint: string; color: string 
 
 export default function RewardsScreen() {
   const { balance, posts } = useStore()
-  const me = person('me')
   const received = posts.filter((p) => p.toIds.includes('me'))
   const earnedThisQuarter = received.reduce((s, p) => s + (p.points ?? 0), 0)
   const n = useCountUp(balance)
@@ -119,23 +112,8 @@ export default function RewardsScreen() {
           </div>
         </section>
 
-        <aside className="space-y-6">
-          <Card className="p-5">
-            <p className="flex items-center gap-2 text-[15px] font-extrabold text-navy"><BadgeCheck size={17} className="text-brand" /> Badge wall</p>
-            <div className="mt-3.5 grid gap-2.5 sm:grid-cols-3">
-              {me.badges.map((b) => (
-                <div key={b} className="flex flex-col items-center rounded-2xl border border-line bg-gradient-to-b from-white to-brand-soft/40 px-3 py-4 text-center">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-card text-brand">{BADGE_ICONS[b] ?? <BadgeCheck size={18} />}</span>
-                  <p className="mt-2 text-[11.5px] font-extrabold leading-tight text-navy">{b}</p>
-                </div>
-              ))}
-              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-line px-3 py-4 text-center">
-                <p className="text-[11px] font-bold text-muted">+9 more to unlock</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="p-5">
+        <aside className="lg:flex lg:flex-col">
+          <Card className="p-5 lg:flex-1">
             <p className="flex items-center gap-2 text-[15px] font-extrabold text-navy"><Sparkles size={16} className="text-gold-ink" /> Values you live</p>
             <div className="mt-4 space-y-3">
               {TOP_VALUES.map((tv) => {
