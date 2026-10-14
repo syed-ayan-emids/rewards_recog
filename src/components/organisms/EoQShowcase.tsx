@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { CalendarClock, ChevronLeft, ChevronRight, Trophy, Users } from 'lucide-react'
-import { Card } from '../ui'
-import { useStore } from '../store'
+import { CalendarClock, ChevronLeft, ChevronRight, Users } from 'lucide-react'
+import { Card } from '../atoms'
+import { useStore } from '../../store'
 
 const SLIDES: { key: string; img: string; title: string; blurb: string; cta: string; cta2?: string; go: 'awards' | 'jury' }[] = [
   {

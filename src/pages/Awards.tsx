@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { CalendarClock, CheckCircle2, CircleDashed, Search, ShieldCheck, Sparkles, Trophy, Users } from 'lucide-react'
-import { Avatar, Btn, Card, Chip, Modal, SectionTitle, Segmented, CloseX, confettiBurst } from '../ui'
+import { Avatar, Btn, Card, Chip, Modal, SectionTitle, Segmented, CloseX, confettiBurst } from '../components/atoms'
 import { AWARD_CATEGORIES, CORE_VALUES, MY_NOMINATIONS, PEOPLE_LIST, person } from '../data'
 import { useStore } from '../store'
 

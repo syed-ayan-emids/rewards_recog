@@ -1,8 +1,8 @@
 import React from 'react'
 import { CalendarClock, Trophy, Users } from 'lucide-react'
-import { Avatar, Btn, Card } from '../ui'
-import EoQShowcase from '../components/EoQShowcase'
-import Mascot from '../components/Mascot'
+import { Avatar, Btn, Card } from '../components/atoms'
+import EoQShowcase from '../components/organisms/EoQShowcase'
+import Mascot from '../components/atoms/Mascot'
 import { person, TEAM_LEADERBOARD, DASH_STATS, ORG_STATS, CORE_VALUES, TOP_VALUES } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
 

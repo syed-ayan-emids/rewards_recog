@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { MessageCircle, Send, Heart, Sparkles, Trophy } from 'lucide-react'
-import { Avatar, AvatarStack, Card } from '../ui'
-import { CORE_VALUES, REACTIONS, person, type Post, type ReactionKey } from '../data'
-import { useStore } from '../store'
+import { Avatar, Card } from '../atoms'
+import { AvatarStack } from '../molecules'
+import { CORE_VALUES, REACTIONS, person, type Post } from '../../data'
+import { useStore } from '../../store'
 
 export function PraiseCard({ post, index }: { post: Post; index: number }) {
   const { react, addComment } = useStore()

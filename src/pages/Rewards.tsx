@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ArrowDownLeft, ArrowRight, ArrowUpRight, Award, BadgeCheck, Gift, Landmark, ShoppingBag, Sparkles, Trophy } from 'lucide-react'
-import { Avatar, Bar, Btn, Card, Chip } from '../ui'
+import { Avatar, Bar, Btn, Card, Chip } from '../components/atoms'
 import { CORE_VALUES, LEDGER, MY_NOMINATIONS, TOP_VALUES, person } from '../data'
 import { useStore, fmtNum, useCountUp } from '../store'
 

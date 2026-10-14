@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { CheckCircle2, UserCheck } from 'lucide-react'
-import { Avatar, Btn, Card, Chip, EmptyState } from '../ui'
+import { Avatar, Btn, Card, Chip, EmptyState } from '../components/atoms'
 import { PENDING_APPROVALS, person } from '../data'
 import { useStore, fmtNum } from '../store'
 import type { ApprovalItem } from '../data'

@@ -1,5 +1,5 @@
 import { CheckCircle2 } from 'lucide-react'
-import { useStore } from '../store'
+import { useStore } from '../../store'
 
 export default function Toasts() {
   const { toasts } = useStore()

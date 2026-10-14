@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChevronDown, ChevronRight } from 'lucide-react'
-import { Avatar, Card } from '../ui'
+import { Avatar, Card } from '../components/atoms'
 import { ORG_TREE, person } from '../data'
 import type { TreeNode } from '../data'
 import { useStore } from '../store'

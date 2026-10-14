@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Building2, Landmark, MapPin, Send } from 'lucide-react'
-import { Avatar, Btn, Card, Chip, Segmented, SectionTitle } from '../ui'
+import { Avatar, Btn, Card, Chip, Segmented, SectionTitle } from '../components/atoms'
 import { CORE_VALUES, POSTS, person } from '../data'
 import { useStore, fmtNum } from '../store'
 

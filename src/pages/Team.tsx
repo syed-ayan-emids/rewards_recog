@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Check, ChevronDown, GitBranch, CalendarCheck, Send, Users, PartyPopper, Eye } from 'lucide-react'
-import { Avatar, Btn, Card, Chip, Modal, CloseX, useOutside } from '../ui'
+import { Avatar, Btn, Card, Chip, Modal, CloseX, useOutside } from '../components/atoms'
 import { CORE_VALUES, TEAMS, TEAM_STATS, person } from '../data'
 import type { TeamId } from '../data'
 import { useStore, fmtNum } from '../store'

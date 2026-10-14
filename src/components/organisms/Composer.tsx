@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Send, Sparkles, Users, X } from 'lucide-react'
-import { Avatar, Btn } from '../ui'
-import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE } from '../data'
-import type { ValueKey } from '../data'
-import { useStore } from '../store'
+import { Avatar, Btn } from '../atoms'
+import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE } from '../../data'
+import type { ValueKey } from '../../data'
+import { useStore } from '../../store'
 
 const POINT_PRESETS = [0, 25, 50, 100]
 
