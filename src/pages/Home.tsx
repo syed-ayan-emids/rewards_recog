@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { ArrowRight, CalendarClock, Trophy, Users } from 'lucide-react'
+import { ArrowRight, CalendarClock, PartyPopper, Trophy, Users } from 'lucide-react'
+
+/** Side panel design next to the hero video — 'teal' striped gradient (design 1) or 'dark' glass (design 2) */
+const RECOGNIZE_VARIANT: 'teal' | 'dark' = 'teal'
 import { Avatar, Btn, Card } from '../components/atoms'
 import EoQShowcase from '../components/organisms/EoQShowcase'
 import { person, TEAM_LEADERBOARD, DASH_STATS, ORG_STATS, CORE_VALUES, TOP_VALUES } from '../data'
@@ -13,85 +16,147 @@ export default function HomeScreen() {
 
   return (
     <div>
-      {/* Dominating hero — curved panel, starts below the navbar */}
-      <div className="relative isolate mb-16 flex min-h-[360px] items-center overflow-hidden rounded-[28px] shadow-[0_18px_44px_-20px_rgba(3,13,28,0.55)] -mx-2 lg:-mx-7">
-        <HeroBackdrop />
-        <div className="relative z-10 flex w-full flex-col items-start justify-between gap-6 px-7 py-8 sm:px-9 xl:flex-row xl:items-center xl:px-10 xl:py-10">
-          <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em]">
-            <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>Hello Ayan — someone had a great week.</span>{' '}
-            <span className="relative inline-block">
-              <span className="say-shimmer">Say so.</span>
-              <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden>
-                <path d="M2 6 C 30 1, 90 1, 118 5" fill="none" stroke="var(--color-gold)" strokeWidth="3" strokeLinecap="round" opacity="0.75" />
-              </svg>
-            </span>
-          </h1>
-          {/* Recognize a teammate — solid flat tile like the site's action buttons */}
+      {/* Dominating hero — curved video panel with the recognize panel separated on the right */}
+      <div className="relative isolate mb-16 grid gap-5 xs:mx-3 md:mx-3 sm:mx-3 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-stretch">
+        <div className="relative isolate flex min-h-[360px] items-center overflow-hidden rounded-[28px] shadow-[0_18px_44px_-20px_rgba(3,13,28,0.55)]">
+          <HeroBackdrop />
+          <div className="relative z-10 flex w-full flex-col items-start justify-between gap-6 px-7 py-8 sm:px-9 xl:px-10 xl:py-10">
+            <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em]">
+              <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>Hello Ayan — someone had a great week.</span>{' '}
+              <span className="relative inline-block">
+                <span className="say-shimmer">Say so.</span>
+                <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden>
+                  <path d="M2 6 C 30 1, 90 1, 118 5" fill="none" stroke="var(--color-gold)" strokeWidth="3" strokeLinecap="round" opacity="0.75" />
+                </svg>
+              </span>
+            </h1>
+          </div>
+        </div>
+
+        {/* Recognize a teammate — separate side panel, two drop-in designs */}
+        {RECOGNIZE_VARIANT === 'teal' ? (
           <button
             onClick={() => setComposer({ open: true })}
-            className="w-full shrink-0 cursor-pointer rounded-lg bg-bp-teal px-7 py-5 text-center shadow-[0_12px_28px_rgba(20,60,58,0.35)] transition hover:brightness-110 xl:w-[300px] xl:py-6"
+            className="relative flex min-h-[240px] cursor-pointer flex-col justify-between overflow-hidden rounded-[28px] p-6 text-left shadow-[0_22px_50px_-20px_rgba(10,80,70,0.6)] transition hover:brightness-105"
+            style={{ background: 'radial-gradient(340px 340px at 60% 55%, rgba(71,162,176,0.20) 0%, rgba(22,35,58,0.10) 55%, transparent 75%), linear-gradient(165deg, #1b2c46 0%, #13293b 55%, #0e2130 100%)' }}
           >
-            <span className="text-[16px] font-extrabold uppercase tracking-[0.06em] text-[#0E2E33]">Recognize a teammate</span>
+            <PartyPopper size={36} className="emoji-pop text-gold drop-shadow-[0_0_14px_rgba(255,178,36,0.55)]" aria-hidden />
+            <span aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 flex -translate-y-1/2 -translate-x-1/2 items-center opacity-95">
+              <span className="absolute left-1/2 top-1/2 h-[190px] w-[190px] -translate-y-1/2 -translate-x-1/2 rounded-full bg-white/15 blur-2xl" />
+              <span className="absolute left-1/2 top-1/2 h-[130px] w-[130px] -translate-y-1/2 -translate-x-1/2 rounded-full bg-white/25 blur-md" />
+              <span className="absolute left-8 top-0 h-1.5 w-1.5 rounded-full bg-amber-300 drop-shadow-[0_0_6px_rgba(255,178,36,0.9)]" />
+              <span className="absolute right-6 bottom-2 h-1 w-1 rounded-full bg-amber-200 opacity-80" />
+              <span className="absolute left-2 bottom-6 h-1.5 w-1.5 rounded-full bg-white/70" />
+              <svg width="104" height="104" viewBox="0 0 120 120" fill="none" className="mascot-bob drop-shadow-[0_8px_18px_rgba(3,60,52,0.5)]">
+                <defs>
+                  <linearGradient id="mascotSideBlob" x1="20" y1="22" x2="100" y2="105" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#0f7f74" />
+                    <stop offset="55%" stopColor="#0AA393" />
+                    <stop offset="100%" stopColor="#19c9b3" />
+                  </linearGradient>
+                </defs>
+                <ellipse className="mascot-breathe" cx="60" cy="106" rx="24" ry="4.5" fill="rgba(10,32,56,0.28)" />
+                <path d="M28 92 C20 60, 26 28, 60 26 C94 28, 100 60, 92 92 C86 102, 34 102, 28 92 Z" fill="url(#mascotSideBlob)" />
+                <path d="M34 84 C30 62, 36 40, 58 37 C52 52, 46 68, 34 84 Z" fill="#fff" opacity="0.12" />
+                <g className="mascot-wave" style={{ transformOrigin: '94px 58px' }}>
+                  <path d="M96 62 C104 56, 110 48, 108 42" stroke="#0a675c" strokeWidth="9" strokeLinecap="round" fill="none" />
+                  <circle cx="107" cy="41" r="4.5" fill="#FFB224" />
+                </g>
+                <circle cx="23" cy="66" r="6.5" fill="#0a675c" />
+                <g className="mascot-face" style={{ transformOrigin: '60px 48px' }}>
+                  <circle cx="49" cy="52" r="4.4" fill="#0a2038" /><circle cx="71" cy="52" r="4.4" fill="#0a2038" />
+                  <circle cx="50.5" cy="50.6" r="1.4" fill="#fff" /><circle cx="72.5" cy="50.6" r="1.4" fill="#fff" />
+                  <circle cx="43" cy="60" r="3.2" fill="#fff" opacity="0.35" /><circle cx="77" cy="60" r="3.2" fill="#fff" opacity="0.35" />
+                  <path d="M51 63 C57 69, 63 69, 69 63" stroke="#0a2038" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+                  <circle cx="46" cy="66" r="2.6" fill="#0a2038" opacity="0.25" />
+                </g>
+                <text x="60" y="90" textAnchor="middle" fontSize="11" fontWeight="800" fill="#fff" opacity="0.85">e</text>
+                <path d="M14 16 L16 22 L22 24 L16 26 L14 32 L12 26 L6 24 L12 22 Z" fill="#FFD66B" opacity="0.9" className="mascot-twinkle" style={{ transformOrigin: '14px 24px' }} />
+              </svg>
+            </span>
+            <span className="relative z-10 text-[19px] font-extrabold leading-snug text-white drop-shadow-[0_2px_10px_rgba(3,60,52,0.35)]">Recognize a teammate</span>
           </button>
-        </div>
+        ) : (
+          <button
+            onClick={() => setComposer({ open: true })}
+            className="stat-dark relative flex min-h-[300px] cursor-pointer flex-col justify-between overflow-hidden rounded-[28px] p-6 text-left"
+          >
+            <span className="h-1 w-10 rounded-full bg-bp-teal" />
+            <span className="text-[18px] font-extrabold leading-snug text-white">Recognize a teammate</span>
+            <span className="flex items-center gap-2 text-[12px] font-semibold text-white/70">Start now <ArrowRight size={14} /></span>
+          </button>
+        )}
       </div>
 
       {/* Count cards */}
       <div className="mb-5 flex items-end justify-between gap-4">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-brand">Stats</p>
       </div>
-      <div className="mb-5 grid gap-5 md:grid-cols-2 xl:grid-cols-[1.8fr_1fr]">
-        {/* Org data — full-height tile on the left */}
-        <Card className="card-org stat-tile row-span-2 flex flex-col p-6">
+      <div className="mb-5 grid gap-5 md:grid-cols-2 xl:grid-cols-2 xl:items-stretch">
+        {/* Org data — premium dark tile, photo on top-right, blue arcs bottom-right */}
+        <Card
+          className="stat-dark stat-tile relative flex flex-col overflow-hidden p-6"
+          style={{
+            backgroundImage: 'linear-gradient(118deg, rgba(10,22,38,0.98) 0%, rgba(11,24,42,0.94) 42%, rgba(13,28,48,0.62) 70%, rgba(16,36,58,0.14) 100%), url(/xoxo/collaboration_01.jpg)',
+            backgroundSize: 'cover, cover',
+            backgroundPosition: 'left center, center',
+            backgroundRepeat: 'no-repeat, no-repeat',
+          }}
+        >
+          {/* soft blue glow — bottom-right */}
+          <span aria-hidden className="pointer-events-none absolute -bottom-4 right-4 h-32 w-32 rounded-full bg-sky-500/10 blur-xl" />
 
-          <p className="tnum stat-num mt-4 text-[72px] font-extrabold leading-[0.95] tracking-[-0.03em]">{fmtNum(orgCount)}</p>
-          <p className="text-[13px] font-semibold text-muted">Total recognitions at EMIDS</p>
-          <div className="mt-auto">
-            <div className="h-px w-full bg-[#0E0E0E]/12" />
-            <div className="mt-4 flex items-end justify-between gap-3">
-              <p className="text-[12.5px] font-semibold text-muted">Recognitions given and received across the org this quarter</p>
-              <button onClick={() => setScreen('awards')} aria-label="See quarterly awards" className="shrink-0 text-muted transition hover:translate-x-0.5 hover:text-navy"><ArrowRight size={18} /></button>
+          <p className="tnum mt-16 text-[48px] font-extrabold leading-none tracking-[-0.03em] bg-gradient-to-r from-white to-[#8fc3ef] bg-clip-text text-transparent">{fmtNum(orgCount)}</p>
+          <p className="mt-1.5 text-[14px] font-bold text-white/90">Total recognitions at EMIDS</p>
+        </Card>
+
+        {/* Right column — split card + wallet, together as tall as the Org card */}
+        <div className="flex h-full min-h-0 flex-col gap-4">
+          {/* My data — dark split card */}
+          <Card className="stat-sweep stat-tile relative min-h-0 flex-1 p-5">
+            <div className="grid h-full grid-cols-2 gap-4">
+              <div className="flex h-full flex-col justify-center border-r border-white/12 pr-4">
+                <p className="tnum text-[40px] font-extrabold leading-none text-white">{givenCount}</p>
+                <p className="mt-1.5 text-[12px] font-semibold text-white/65">Recognitions given</p>
+                <span className="mt-2.5 h-px w-8 bg-cyan-300/70" />
+              </div>
+              <div className="flex h-full flex-col justify-center pl-4">
+                <p className="tnum text-[40px] font-extrabold leading-none text-cyan-300">{gotCount}</p>
+                <p className="mt-1.5 text-[12px] font-semibold text-white/65">Recognitions received</p>
+                <span className="mt-2.5 h-px w-8 bg-teal-300/80" />
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
 
-        {/* My data — two smaller rectangles stacked on the right */}
-        <Card className="card-my stat-tile p-5">
-
-          <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{givenCount}</p>
-          <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions given</p>
-        </Card>
-
-        <Card className="card-blue stat-tile p-5">
-
-          <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{gotCount}</p>
-          <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions received</p>
-        </Card>
-      </div>
-
-      {/* Total reward balance — wide dark wallet banner */}
-      <Card className="bank-aurora stat-tile relative mb-10 overflow-hidden">
-        <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          <div className="flex items-center gap-5">
-            <span className="rounded-xl bg-white/10 py-2 pl-2 pr-3">
-              <img src="/emids-icon.png" alt="" className="h-7 w-7 object-contain" />
-            </span>
-            <div>
-              <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/55">Total balance</p>
-              <p className="tnum mt-0.5 text-[32px] font-extrabold leading-none tracking-[-0.02em] text-white">
-                {fmtNum(useCountUp(balance))}
-                <span className="ml-1.5 text-[14px] font-bold tracking-normal text-sky-300">PTS</span>
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setScreen('rewards')}
-            className="flex items-center justify-between gap-8 rounded-full bg-white/10 px-5 py-3 text-[13px] font-bold text-white/90 transition hover:bg-white/15 sm:pr-4"
+          {/* Total reward balance — compact dark wallet with photo wash on the left */}
+          <Card
+            className="stat-sweep stat-sweep-plain stat-tile relative flex shrink-0 items-center justify-between p-5 pl-44 sm:p-6 sm:pl-52"
+            style={{
+              backgroundImage: 'linear-gradient(100deg, rgba(10,18,32,0.20) 0%, rgba(11,20,36,0.88) 48%, rgba(13,24,44,0.97) 78%), url(/xoxo/ownership_01.jpg)',
+              backgroundSize: 'cover, cover',
+              backgroundPosition: 'left center, center',
+              backgroundRepeat: 'no-repeat, no-repeat',
+            }}
           >
-            Redeem points <ArrowRight size={14} />
-          </button>
+            <div className="flex items-center">
+              <div>
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/55">Total balance</p>
+                <p className="tnum mt-0.5 text-[28px] font-extrabold leading-none tracking-[-0.02em] text-white">
+                  {fmtNum(useCountUp(balance))}
+                  <span className="ml-1.5 text-[13px] font-bold tracking-normal text-sky-300">PTS</span>
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setScreen('rewards')}
+              aria-label="Redeem points"
+              className="shrink-0 rounded-full bg-white/10 p-3 text-white/90 transition hover:bg-white/15"
+            >
+              <ArrowRight size={16} />
+            </button>
+          </Card>
         </div>
-      </Card>
+      </div>
 
       {/* Quick cards */}
       <div className="grid gap-4 lg:grid-cols-2">
