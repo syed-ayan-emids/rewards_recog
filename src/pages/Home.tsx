@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarClock, PartyPopper, Trophy, Users } from 'lucide-react'
+import { ArrowRight, CalendarClock, Trophy, Users } from 'lucide-react'
 import { Avatar, Btn, Card } from '../components/atoms'
 import EoQShowcase from '../components/organisms/EoQShowcase'
 import { person, TEAM_LEADERBOARD, DASH_STATS, ORG_STATS, CORE_VALUES, TOP_VALUES } from '../data'
@@ -13,12 +13,12 @@ export default function HomeScreen() {
 
   return (
     <div>
-      {/* Dominating hero */}
-      <div className="relative isolate mb-16 flex min-h-[236px] items-center">
+      {/* Dominating hero — curved panel, starts below the navbar */}
+      <div className="relative isolate mb-16 flex min-h-[360px] items-center overflow-hidden rounded-[28px] shadow-[0_18px_44px_-20px_rgba(3,13,28,0.55)] -mx-2 lg:-mx-7">
         <HeroBackdrop />
-        <div className="relative z-10 flex w-full flex-col items-start justify-between gap-6 xl:flex-row xl:items-center">
-          <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-white">
-            Hello Ayan — someone had a great week.{' '}
+        <div className="relative z-10 flex w-full flex-col items-start justify-between gap-6 px-7 py-8 sm:px-9 xl:flex-row xl:items-center xl:px-10 xl:py-10">
+          <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em]">
+            <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>Hello Ayan — someone had a great week.</span>{' '}
             <span className="relative inline-block">
               <span className="say-shimmer">Say so.</span>
               <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden>
@@ -26,13 +26,12 @@ export default function HomeScreen() {
               </svg>
             </span>
           </h1>
-          {/* Recognize a teammate — ~25% of the hero's right side */}
+          {/* Recognize a teammate — solid flat tile like the site's action buttons */}
           <button
             onClick={() => setComposer({ open: true })}
-            className="tile-stripes group relative flex w-full shrink-0 cursor-pointer flex-col items-start gap-1.5 overflow-hidden rounded-2xl bg-brand px-5 py-5 text-left shadow-[0_12px_28px_rgba(14,147,132,0.35)] transition-colors hover:bg-brand-deep xl:w-[24.5%]"
+            className="w-full shrink-0 cursor-pointer rounded-lg bg-bp-teal px-7 py-5 text-center shadow-[0_12px_28px_rgba(20,60,58,0.35)] transition hover:brightness-110 xl:w-[300px] xl:py-6"
           >
-            <PartyPopper size={30} className="emoji-pop text-gold" aria-hidden />
-            <span className="text-[16.5px] font-extrabold text-white">Recognize a teammate</span>
+            <span className="text-[16px] font-extrabold uppercase tracking-[0.06em] text-[#0E2E33]">Recognize a teammate</span>
           </button>
         </div>
       </div>
@@ -41,50 +40,58 @@ export default function HomeScreen() {
       <div className="mb-5 flex items-end justify-between gap-4">
         <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-brand">Stats</p>
       </div>
-      <div className="mb-10 grid gap-5 md:grid-cols-2 xl:grid-cols-[1.5fr_1fr_1fr_1.35fr]">
-        {/* Org data */}
-        <Card className="card-org stat-tile p-5">
-          <div className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[#0E0E0E]">
-            Org data
-          </div>
-          <p className="tnum stat-num mt-4 text-[58px] font-extrabold leading-[0.95] tracking-[-0.03em]">{fmtNum(orgCount)}</p>
-          <p className="mt-2 text-[12.5px] font-semibold text-muted">Total recognitions at EMIDS</p>
-        </Card>
+      <div className="mb-5 grid gap-5 md:grid-cols-2 xl:grid-cols-[1.8fr_1fr]">
+        {/* Org data — full-height tile on the left */}
+        <Card className="card-org stat-tile row-span-2 flex flex-col p-6">
 
-        {/* My data — two smaller rectangles */}
-        <Card className="card-my stat-tile h-full p-5">
-          <div className="flex h-full flex-col justify-end">
-            <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{givenCount}</p>
-            <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions given</p>
-          </div>
-        </Card>
-
-        <Card className="card-my stat-tile h-full p-5">
-          <div className="flex h-full flex-col justify-end">
-            <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{gotCount}</p>
-            <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions received</p>
-          </div>
-        </Card>
-
-        {/* Total reward balance — bank card */}
-        <Card className="bank-aurora stat-tile relative h-full overflow-hidden">
-            <div className="relative flex h-full flex-col p-4">
-              <div className="flex items-start justify-between gap-2">
-                <span className="flex items-center gap-2">
-                  <img src="/emids-icon.png" alt="" className="h-6 w-6 object-contain" />
-                  <span className="text-[15px] font-extrabold tracking-tight text-navy">EMIDS</span>
-                </span>
-              </div>
-              <p className="mt-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-[#0E0E0E]">Total reward balance</p>
-              <div className="mt-auto flex items-end justify-between gap-2 pt-3">
-                <p className="tnum text-[25px] font-extrabold leading-none tracking-[0.04em] text-[#0E0E0E]">
-                  {fmtNum(useCountUp(balance))}
-                  <span className="ml-1.5 text-[12px] font-bold tracking-normal text-muted">pts</span>
-                </p>
-              </div>
+          <p className="tnum stat-num mt-4 text-[72px] font-extrabold leading-[0.95] tracking-[-0.03em]">{fmtNum(orgCount)}</p>
+          <p className="text-[13px] font-semibold text-muted">Total recognitions at EMIDS</p>
+          <div className="mt-auto">
+            <div className="h-px w-full bg-[#0E0E0E]/12" />
+            <div className="mt-4 flex items-end justify-between gap-3">
+              <p className="text-[12.5px] font-semibold text-muted">Recognitions given and received across the org this quarter</p>
+              <button onClick={() => setScreen('awards')} aria-label="See quarterly awards" className="shrink-0 text-muted transition hover:translate-x-0.5 hover:text-navy"><ArrowRight size={18} /></button>
             </div>
+          </div>
+        </Card>
+
+        {/* My data — two smaller rectangles stacked on the right */}
+        <Card className="card-my stat-tile p-5">
+
+          <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{givenCount}</p>
+          <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions given</p>
+        </Card>
+
+        <Card className="card-blue stat-tile p-5">
+
+          <p className="tnum text-[30px] font-extrabold leading-none text-[#0E0E0E]">{gotCount}</p>
+          <p className="mt-1.5 text-[12px] font-semibold text-muted">Recognitions received</p>
         </Card>
       </div>
+
+      {/* Total reward balance — wide dark wallet banner */}
+      <Card className="bank-aurora stat-tile relative mb-10 overflow-hidden">
+        <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div className="flex items-center gap-5">
+            <span className="rounded-xl bg-white/10 py-2 pl-2 pr-3">
+              <img src="/emids-icon.png" alt="" className="h-7 w-7 object-contain" />
+            </span>
+            <div>
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/55">Total balance</p>
+              <p className="tnum mt-0.5 text-[32px] font-extrabold leading-none tracking-[-0.02em] text-white">
+                {fmtNum(useCountUp(balance))}
+                <span className="ml-1.5 text-[14px] font-bold tracking-normal text-sky-300">PTS</span>
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setScreen('rewards')}
+            className="flex items-center justify-between gap-8 rounded-full bg-white/10 px-5 py-3 text-[13px] font-bold text-white/90 transition hover:bg-white/15 sm:pr-4"
+          >
+            Redeem points <ArrowRight size={14} />
+          </button>
+        </div>
+      </Card>
 
       {/* Quick cards */}
       <div className="grid gap-4 lg:grid-cols-2">
@@ -131,7 +138,7 @@ function HeroBackdrop() {
       ) : (
         <video
           className="absolute inset-0 h-full w-full object-cover"
-          src="/emids-hero.mp4"
+          src="/emids-site-hero.mp4"
           poster="/emids-hero.webp"
           autoPlay
           muted
@@ -140,7 +147,7 @@ function HeroBackdrop() {
           onError={() => setVideoMissing(true)}
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#030d1c]/65 via-[#030d1c]/30 to-[#030d1c]/45" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#030d1c]/80 via-[#030d1c]/60 to-[#030d1c]/55" />
     </div>
   )
 }

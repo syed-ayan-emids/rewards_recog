@@ -56,8 +56,8 @@ export default function AppShell() {
 
   return (
     <div className="min-h-dvh bg-page-art">
-      {/* Top bar */}
-      <header className={`sticky top-0 z-20 border-b border-line bg-white/88 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_18px_rgba(10,31,68,0.07)]' : ''}`}>
+      {/* Top bar — curved floating pill */}
+      <header className={`sticky top-2 z-20 mx-2.5 mt-2 rounded-[20px] border border-line bg-white/88 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_18px_rgba(10,31,68,0.07)]' : ''}`}>
         <div className="mx-auto flex h-16 max-w-[1560px] items-stretch gap-2 px-5 lg:px-10">
           <div className="mr-5 flex items-center gap-2.5">
             <button onClick={() => setScreen('home')} aria-label="Go to dashboard" title="Go to dashboard" className="flex cursor-pointer items-center gap-2.5 rounded-lg transition hover:opacity-80">
@@ -116,7 +116,7 @@ export default function AppShell() {
         </div>
       </header>
 
-      <main className="mx-auto mt-2.5 max-w-[1560px] px-5 pb-28 pt-8 lg:px-10 lg:pb-16 xl:pt-[72px]">
+      <main className="mx-auto mt-2 max-w-[1560px] px-5 pb-28 pt-3 lg:px-10 lg:pb-16">
         <div key={screen} className="page-fade">
           {screen === 'home' && <HomeScreen />}
           {screen === 'rewards' && <RewardsScreen />}
