@@ -118,12 +118,20 @@ body {
 .rail-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* Balance bank card — violet tint of the same family */
+/* Balance bank card — dark wallet */
 .bank-aurora {
   background:
-    radial-gradient(340px 170px at -10% 115%, rgba(184, 157, 203, 0.15), transparent 62%),
-    linear-gradient(160deg, #ffffff 0%, #f9f7fb 60%, #f3eff8 100%);
-  border-color: rgba(184, 157, 203, 0.30);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 18px 38px -16px rgba(10, 31, 68, 0.18);
+    radial-gradient(420px 220px at 108% -30%, rgba(122, 90, 248, 0.28), transparent 62%),
+    linear-gradient(160deg, #16233a 0%, #0d1526 60%, #090e1a 100%);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 18px 38px -16px rgba(3, 10, 22, 0.60);
+}
+.bank-aurora::before {
+  border-color: rgba(184, 157, 203, 0.28);
+  box-shadow: 0 0 0 24px rgba(184, 157, 203, 0.06), 0 0 0 50px rgba(184, 157, 203, 0.03);
+}
+.bank-aurora::after {
+  opacity: 0.35;
 }
 
 .hero-room {
@@ -202,8 +210,8 @@ body {
   box-shadow: 0 0 0 24px rgba(71, 162, 176, 0.045), 0 0 0 50px rgba(71, 162, 176, 0.025);
 }
 .card-my::before {
-  border-color: rgba(69, 189, 160, 0.20);
-  box-shadow: 0 0 0 24px rgba(69, 189, 160, 0.045), 0 0 0 50px rgba(69, 189, 160, 0.025);
+  border-color: rgba(71, 162, 176, 0.20);
+  box-shadow: 0 0 0 24px rgba(71, 162, 176, 0.045), 0 0 0 50px rgba(71, 162, 176, 0.025);
 }
 .bank-aurora::before {
   border-color: rgba(184, 157, 203, 0.25);
@@ -220,10 +228,22 @@ body {
 
 .card-my {
   background:
-    radial-gradient(340px 170px at -10% 115%, rgba(69, 189, 160, 0.13), transparent 62%),
-    linear-gradient(160deg, #ffffff 0%, #f5faf7 60%, #eef5f1 100%);
-  border-color: rgba(69, 189, 160, 0.28);
+    radial-gradient(340px 170px at -10% 115%, rgba(71, 162, 176, 0.13), transparent 62%),
+    linear-gradient(160deg, #ffffff 0%, #f5f8f8 60%, #eef4f4 100%);
+  border-color: rgba(71, 162, 176, 0.28);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 18px 38px -16px rgba(10, 31, 68, 0.16);
+}
+
+.card-blue {
+  background:
+    radial-gradient(340px 170px at -10% 115%, rgba(71, 162, 176, 0.13), transparent 62%),
+    linear-gradient(160deg, #ffffff 0%, #f5f8f8 60%, #eef4f4 100%);
+  border-color: rgba(71, 162, 176, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 18px 38px -16px rgba(10, 31, 68, 0.16);
+}
+.card-blue::before {
+  border-color: rgba(71, 162, 176, 0.20);
+  box-shadow: 0 0 0 24px rgba(71, 162, 176, 0.045), 0 0 0 50px rgba(71, 162, 176, 0.025);
 }
 
 /* Hero backdrop (static washes + neutral sweep) */
