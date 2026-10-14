@@ -120,10 +120,10 @@ body {
 /* Balance bank card — violet tint of the same family */
 .bank-aurora {
   background:
-    radial-gradient(500px 260px at 100% 0%, rgba(255, 255, 255, 0.66), transparent 62%),
-    linear-gradient(150deg, #f8f6fa 0%, #f1ebf5 50%, #e7ddee 100%);
-  border-color: rgba(184, 157, 203, 0.45);
-  box-shadow: 0 10px 24px rgba(184, 157, 203, 0.16);
+    radial-gradient(340px 170px at -10% 115%, rgba(184, 157, 203, 0.15), transparent 62%),
+    linear-gradient(160deg, #ffffff 0%, #f9f7fb 60%, #f3eff8 100%);
+  border-color: rgba(184, 157, 203, 0.30);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 18px 38px -16px rgba(10, 31, 68, 0.18);
 }
 
 .hero-room {
@@ -133,26 +133,97 @@ body {
     linear-gradient(140deg, #154071 0%, #0a2038 78%);
 }
 
+.tile-stripes {
+  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0 2px, transparent 2px 10px);
+}
+
+@keyframes emoji-pop {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50% { transform: translateY(-5px) rotate(8deg); }
+}
+.emoji-pop { animation: emoji-pop 2.4s ease-in-out infinite; transform-origin: 50% 80%; }
+
 .dotgrid {
   background-image: radial-gradient(rgba(255, 255, 255, 0.16) 1.1px, transparent 1.1px);
   background-size: 14px 14px;
 }
 
 /* Dashboard stat cards */
+/* Stat tiles — premium polish, artistic texture */
+.stat-tile {
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.stat-tile:hover {
+  transform: translateY(-3px);
+}
+
+.stat-num {
+  background: linear-gradient(135deg, #14293f 0%, #0E0E0E 52%, #24506b 110%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card-org, .card-my, .bank-aurora {
+  position: relative;
+  overflow: hidden;
+}
+.card-org > *, .card-my > *, .bank-aurora > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* film-grain texture over every stat tile */
+.card-org::after, .card-my::after, .bank-aurora::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.62;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.045 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* quiet aurora wash? integrated into each tile's background stack below */
+
+/* corner line-art rings — the tile's quiet identity tint */
+.card-org::before, .card-my::before, .bank-aurora::before {
+  content: "";
+  position: absolute;
+  right: -54px;
+  top: -54px;
+  width: 210px;
+  height: 210px;
+  border-radius: 9999px;
+  pointer-events: none;
+  border: 1px solid rgba(14, 14, 14, 0.08);
+}
+.card-org::before {
+  border-color: rgba(71, 162, 176, 0.20);
+  box-shadow: 0 0 0 24px rgba(71, 162, 176, 0.045), 0 0 0 50px rgba(71, 162, 176, 0.025);
+}
+.card-my::before {
+  border-color: rgba(69, 189, 160, 0.20);
+  box-shadow: 0 0 0 24px rgba(69, 189, 160, 0.045), 0 0 0 50px rgba(69, 189, 160, 0.025);
+}
+.bank-aurora::before {
+  border-color: rgba(184, 157, 203, 0.25);
+  box-shadow: 0 0 0 24px rgba(184, 157, 203, 0.05), 0 0 0 50px rgba(184, 157, 203, 0.028);
+}
+
 .card-org {
   background:
-    radial-gradient(420px 240px at 108% -30%, rgba(255, 255, 255, 0.70), transparent 62%),
-    linear-gradient(150deg, #f4fafa 0%, #e2f0f2 50%, #cde8eb 100%);
-  border-color: rgba(71, 162, 176, 0.40);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 10px 24px rgba(71, 162, 176, 0.14);
+    radial-gradient(340px 170px at -10% 115%, rgba(71, 162, 176, 0.13), transparent 62%),
+    linear-gradient(160deg, #ffffff 0%, #f5f8f8 60%, #eef4f4 100%);
+  border-color: rgba(71, 162, 176, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 18px 38px -16px rgba(10, 31, 68, 0.18);
 }
 
 .card-my {
   background:
-    radial-gradient(420px 240px at 108% -30%, rgba(255, 255, 255, 0.70), transparent 62%),
-    linear-gradient(150deg, #f3fbf8 0%, #e0f4ed 50%, #cceade 100%);
-  border-color: rgba(69, 189, 160, 0.40);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 10px 24px rgba(69, 189, 160, 0.14);
+    radial-gradient(340px 170px at -10% 115%, rgba(69, 189, 160, 0.13), transparent 62%),
+    linear-gradient(160deg, #ffffff 0%, #f5faf7 60%, #eef5f1 100%);
+  border-color: rgba(69, 189, 160, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 18px 38px -16px rgba(10, 31, 68, 0.16);
 }
 
 /* Hero backdrop (static washes + neutral sweep) */
