@@ -60,8 +60,10 @@ export default function AppShell() {
       <header className={`sticky top-0 z-20 border-b border-line bg-white/88 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_18px_rgba(10,31,68,0.07)]' : ''}`}>
         <div className="mx-auto flex h-16 max-w-[1560px] items-stretch gap-2 px-5 lg:px-10">
           <div className="mr-5 flex items-center gap-2.5">
-            <img src="/emids-icon.png" alt="emids" className="h-9 w-9 object-contain" />
-            <p className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Rewards and Recognition</span></p>
+            <button onClick={() => setScreen('home')} aria-label="Go to dashboard" title="Go to dashboard" className="flex cursor-pointer items-center gap-2.5 rounded-lg transition hover:opacity-80">
+              <img src="/emids-icon.png" alt="emids" className="h-9 w-9 object-contain" />
+              <span className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Rewards and Recognition</span></span>
+            </button>
           </div>
 
           <nav ref={navRef} className="rail-scroll relative hidden flex-1 items-stretch gap-1 overflow-x-auto lg:flex" aria-label="Primary">
@@ -130,8 +132,10 @@ export default function AppShell() {
       <footer className="border-t border-line bg-white pb-20 lg:pb-0">
         <div className="mx-auto flex max-w-[1560px] flex-col items-center justify-between gap-2 px-5 py-6 text-center sm:flex-row sm:px-10 sm:text-left">
           <div className="flex items-center gap-2">
-            <img src="/emids-icon.png" alt="emids" className="h-6 w-6 object-contain" />
-            <p className="text-[13px] font-extrabold tracking-tight text-navy">EMIDS <span className="font-bold text-muted">· Rewards and Recognition</span></p>
+            <button onClick={() => setScreen('home')} aria-label="Go to dashboard" title="Go to dashboard" className="flex cursor-pointer items-center gap-2 rounded-lg transition hover:opacity-80">
+              <img src="/emids-icon.png" alt="emids" className="h-6 w-6 object-contain" />
+              <span className="text-[13px] font-extrabold tracking-tight text-navy">EMIDS <span className="font-bold text-muted">· Rewards and Recognition</span></span>
+            </button>
           </div>
         </div>
       </footer>
