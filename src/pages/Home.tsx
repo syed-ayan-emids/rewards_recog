@@ -71,10 +71,7 @@ export default function HomeScreen() {
 
       {/* Count cards */}
       <div className="mb-5 flex items-end justify-between gap-4">
-        <div>
-          <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-brand">Stats</p>
-          <p className="mt-1 text-[15px] font-extrabold tracking-tight text-navy">Recognitions pulse</p>
-        </div>
+        <p className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-brand">Stats</p>
       </div>
       <div className="mb-10 grid gap-5 md:grid-cols-2 xl:grid-cols-[1.5fr_1fr_1fr_1.35fr]">
         {/* Org data */}
