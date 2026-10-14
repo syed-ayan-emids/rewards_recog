@@ -26,48 +26,16 @@ export default function HomeScreen() {
               </svg>
             </span>
           </h1>
+          {/* Recognize a teammate — ~25% of the hero's right side */}
+          <button
+            onClick={() => setComposer({ open: true })}
+            className="tile-stripes group relative flex w-full shrink-0 cursor-pointer flex-col items-start gap-1.5 overflow-hidden rounded-2xl bg-brand px-5 py-5 text-left shadow-[0_12px_28px_rgba(14,147,132,0.35)] transition-colors hover:bg-brand-deep xl:w-[24.5%]"
+          >
+            <PartyPopper size={30} className="emoji-pop text-gold" aria-hidden />
+            <span className="text-[16.5px] font-extrabold text-white">Recognize a teammate</span>
+          </button>
         </div>
       </div>
-
-      {/* Recognize a teammate — standalone tile section */}
-      <section className="mb-8">
-        <button
-          onClick={() => setComposer({ open: true })}
-          className="tile-stripes group relative flex w-full max-w-md cursor-pointer flex-col items-start gap-2 overflow-hidden rounded-3xl bg-brand px-6 py-6 text-left shadow-[0_12px_28px_rgba(14,147,132,0.35)] transition-colors hover:bg-brand-deep sm:pr-32"
-        >
-          <PartyPopper size={34} className="emoji-pop text-gold" aria-hidden />
-          <span className="text-[19px] font-extrabold text-white">Recognize a teammate</span>
-          <span className="pointer-events-none absolute inset-y-0 right-1 hidden items-center sm:flex" aria-hidden>
-            <span className="absolute right-0 top-1/2 h-[120px] w-[120px] -translate-y-1/2 rounded-full bg-white/15 blur-md" />
-            <svg width="110" height="110" viewBox="0 0 120 120" fill="none" className="mascot-bob drop-shadow-[0_6px_18px_rgba(3,60,52,0.45)]">
-              <defs>
-                <linearGradient id="mascotTileBlob" x1="20" y1="22" x2="100" y2="105" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#0f7f74" />
-                  <stop offset="55%" stopColor="#0AA393" />
-                  <stop offset="100%" stopColor="#16c2ac" />
-                </linearGradient>
-              </defs>
-              <ellipse className="mascot-breathe" cx="60" cy="106" rx="26" ry="5" fill="rgba(10,32,56,0.25)" />
-              <path d="M28 92 C20 60, 26 28, 60 26 C94 28, 100 60, 92 92 C86 102, 34 102, 28 92 Z" fill="url(#mascotTileBlob)" />
-              <path d="M34 84 C30 62, 36 40, 58 37 C52 52, 46 68, 34 84 Z" fill="#fff" opacity="0.10" />
-              <g className="mascot-wave" style={{ transformOrigin: '94px 58px' }}>
-                <path d="M96 62 C104 56, 110 48, 108 42" stroke="#0a675c" strokeWidth="9" strokeLinecap="round" fill="none" />
-                <circle cx="107" cy="41" r="4.5" fill="#FFB224" />
-              </g>
-              <circle cx="23" cy="66" r="6.5" fill="#0a675c" />
-              <g className="mascot-face" style={{ transformOrigin: '60px 48px' }}>
-                <circle cx="49" cy="52" r="4.4" fill="#0a2038" /><circle cx="71" cy="52" r="4.4" fill="#0a2038" />
-                <circle cx="50.5" cy="50.6" r="1.4" fill="#fff" /><circle cx="72.5" cy="50.6" r="1.4" fill="#fff" />
-                <circle cx="43" cy="60" r="3.2" fill="#fff" opacity="0.35" /><circle cx="77" cy="60" r="3.2" fill="#fff" opacity="0.35" />
-                <path d="M51 63 C57 69, 63 69, 69 63" stroke="#0a2038" strokeWidth="2.4" strokeLinecap="round" fill="none" />
-                <circle cx="46" cy="66" r="2.6" fill="#0a2038" opacity="0.25" />
-              </g>
-              <text x="60" y="90" textAnchor="middle" fontSize="11" fontWeight="800" fill="#fff" opacity="0.85">e</text>
-              <path d="M14 16 L16 22 L22 24 L16 26 L14 32 L12 26 L6 24 L12 22 Z" fill="#FFD66B" opacity="0.9" className="mascot-twinkle" style={{ transformOrigin: '14px 24px' }} />
-            </svg>
-          </span>
-        </button>
-      </section>
 
       {/* Count cards */}
       <div className="mb-5 flex items-end justify-between gap-4">
