@@ -239,8 +239,8 @@ export type TeamMemberStat = { id: string; given: number; received: number; last
 export type TeamId = 'humana' | 'dev'
 
 export const TEAMS: { id: TeamId; name: string }[] = [
-  { id: 'humana', name: 'Humana Team' },
-  { id: 'dev', name: 'Development Team' },
+  { id: 'humana', name: 'Humana' },
+  { id: 'dev', name: 'Development' },
 ]
 
 export const TEAM_STATS: Record<TeamId, TeamMemberStat[]> = {
@@ -274,6 +274,8 @@ export const TEAM_LEADERBOARD: LeaderRow[] = [
   { id: 'p10', pts: 190 },
   { id: 'p5', pts: 160 },
   { id: 'p4', pts: 90 },
+  { id: 'p13', pts: 60 },
+  { id: 'p14', pts: 45 },
   { id: 'p9', pts: 25 },
 ]
 

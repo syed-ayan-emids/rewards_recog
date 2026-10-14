@@ -5,7 +5,7 @@ import { Avatar, Btn, Card, Chip, Modal, CloseX, useOutside } from '../component
 import { CORE_VALUES, TEAMS, TEAM_STATS, person } from '../data'
 import type { TeamId } from '../data'
 import { useStore, fmtNum } from '../store'
-import OrgTreeScreen from './OrgTree'
+import MyTree from '../components/organisms/MyTree'
 import ApprovalsScreen from './Approvals'
 
 type TeamTab = 'team' | 'approvals'
@@ -48,6 +48,7 @@ function TeamScreen() {
   const [ddOpen, setDdOpen] = useState(false)
   const ddRef = useOutside<HTMLDivElement>(() => setDdOpen(false))
   const [viewId, setViewId] = useState<string | null>(null)
+  const [treeOpen, setTreeOpen] = useState(false)
   const headRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const onScrollX = () => {
@@ -67,7 +68,6 @@ function TeamScreen() {
       <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <div>
-            <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-muted">People manager</p>
             <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">My team</h1>
           </div>
           <div ref={ddRef} className="relative">
@@ -102,15 +102,25 @@ function TeamScreen() {
           </div>
         </div>
 
-        {/* Mini recognitions stat */}
-        <div className="flex items-center gap-3 self-start rounded-2xl border border-line bg-white px-4 py-2.5 shadow-card sm:mb-1">
+        {/* My tree + mini recognitions stat */}
+        <div className="flex flex-wrap items-center gap-3 self-start sm:mb-1">
+          <button
+            onClick={() => setTreeOpen(true)}
+            className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-[13.5px] font-bold text-white shadow-[0_1px_2px_rgba(10,31,68,.18)] transition hover:bg-brand-deep"
+          >
+            <GitBranch size={16} /> View my Tree
+          </button>
+          <div className="flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-2.5 shadow-card">
           <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-soft text-brand"><PartyPopper size={15} /></span>
           <div className="leading-tight">
             <p className="tnum text-[18px] font-extrabold text-navy">{fmtNum(total)}</p>
             <p className="text-[10.5px] font-bold uppercase tracking-wide text-muted">Recognitions · this quarter</p>
           </div>
         </div>
+        </div>
       </div>
+
+      <MyTree open={treeOpen} onClose={() => setTreeOpen(false)} />
 
       {/* People table */}
       <Card className="p-0">
@@ -157,12 +167,6 @@ function TeamScreen() {
           </div>
         </div>
       </Card>
-
-      {/* Org tree */}
-      <section className="mt-10">
-        <h2 className="mb-3 flex items-center gap-2 text-xl font-extrabold tracking-tight text-navy"><GitBranch size={19} className="text-brand" /> Org tree</h2>
-        <OrgTreeScreen />
-      </section>
 
       {/* Member info modal */}
       <Modal open={!!viewId} onClose={() => setViewId(null)} label="Team member info">
