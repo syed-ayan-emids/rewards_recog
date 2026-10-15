@@ -144,7 +144,7 @@ body {
 .stat-ice {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(150deg, #f4f8fa 0%, #e8f1f4 55%, #dfeaf0 100%);
+  background: linear-gradient(150deg, #e7f7f4 0%, #d2efeb 55%, #bfe4e0 100%);
   border-color: rgba(13, 71, 92, 0.10);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 18px 38px -16px rgba(13, 71, 92, 0.20);
 }
@@ -398,6 +398,16 @@ body {
   animation: shimmer-pan 7s linear infinite;
 }
 
+/* Running gradient for the mono kicker labels (eyebrow voice) */
+.kicker-shimmer {
+  background: linear-gradient(100deg, #0e4a5c 25%, #0aa393 42%, #ffb224 58%, #0e4a5c 78%);
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer-pan 6s linear infinite;
+}
+
 /* Hero mascot (spark character) */
 .mascot-bob { animation: mascot-bob 5.5s ease-in-out infinite; transform-origin: 50% 60%; }
 @keyframes mascot-bob {
@@ -442,5 +452,5 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mascot-bob, .mascot-wave, .mascot-face, .mascot-halo, .mascot-twinkle, .mascot-celebr, .mascot-sparkle, .hero-shine, .say-shimmer { animation: none !important; }
+  .mascot-bob, .mascot-wave, .mascot-face, .mascot-halo, .mascot-twinkle, .mascot-celebr, .mascot-sparkle, .hero-shine, .say-shimmer, .kicker-shimmer { animation: none !important; }
 }
