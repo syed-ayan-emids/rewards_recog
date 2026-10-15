@@ -17,7 +17,7 @@ export default function HomeScreen() {
   return (
     <div>
       {/* Dominating hero — curved video panel with the recognize panel separated on the right */}
-      <div className="relative isolate mb-16 grid gap-5 xs:mx-3 md:mx-3 sm:mx-3 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-stretch">
+      <div className="relative isolate mb-16 grid gap-5 xs:mx-3 md:mx-3 sm:mx-3 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-stretch">
         <div className="relative isolate flex min-h-[360px] items-center overflow-hidden rounded-[28px] shadow-[0_18px_44px_-20px_rgba(3,13,28,0.55)]">
           <HeroBackdrop />
           <div className="relative z-10 flex w-full flex-col items-start justify-between gap-6 px-7 py-8 sm:px-9 xl:px-10 xl:py-10">
