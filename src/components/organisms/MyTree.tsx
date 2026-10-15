@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { Check, ChevronDown, GitBranch, X } from 'lucide-react'
 import { Avatar, useOutside } from '../atoms'
-import { ORG_TREE, TEAM_LEADERBOARD, TEAM_STATS, person, type TeamId, type TreeNode } from '../../data'
+import { ORG_TREE, TEAM_LEADERBOARD, TEAM_STATS, TEAMS, person, type TeamId, type TreeNode } from '../../data'
 import { useStore } from '../../store'
 
 export interface MyTreeProps {
@@ -36,7 +36,7 @@ type Filter = 'all' | TeamId
 const FILTERS: { key: Filter; label: string }[] = [
   { key: 'all', label: 'All Teams' },
   { key: 'humana', label: 'Humana' },
-  { key: 'dev', label: 'Development' },
+  { key: 'dev', label: 'PACCA AI' },
 ]
 
 export default function MyTree({ open, onClose }: MyTreeProps) {
@@ -70,12 +70,12 @@ export default function MyTree({ open, onClose }: MyTreeProps) {
   const activeLabel = FILTERS.find((f) => f.key === filter)?.label
 
   return ReactDOM.createPortal(
-    <div className="fixed inset-x-0 bottom-0 top-[104px] z-30 flex flex-col overflow-hidden bg-page-art animate-rise lg:top-16" role="dialog" aria-modal="true" aria-label="My tree">
+    <div className="fixed inset-x-0 bottom-0 top-[104px] z-30 flex flex-col overflow-hidden bg-page-art animate-rise lg:top-16" role="dialog" aria-modal="true" aria-label="Recognition tree">
       {/* Header bar */}
       <div className="relative z-20 shrink-0 border-b border-line bg-white px-6 py-2">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
           <h2 className="flex items-center gap-2.5 text-xl font-extrabold tracking-tight text-navy">
-            <GitBranch size={20} className="text-brand" /> My Tree
+            <GitBranch size={20} className="text-brand" /> Recognition Tree
           </h2>
           <div className="flex items-center gap-3">
             <div ref={ddRef} className="relative">
@@ -103,7 +103,7 @@ export default function MyTree({ open, onClose }: MyTreeProps) {
                 </div>
               )}
             </div>
-            <button onClick={onClose} aria-label="Close My Tree" className="flex h-9 w-9 items-center justify-center rounded-full bg-coral-soft text-coral transition hover:bg-coral hover:text-white">
+            <button onClick={onClose} aria-label="Close Recognition Tree" className="flex h-9 w-9 items-center justify-center rounded-full bg-coral-soft text-coral transition hover:bg-coral hover:text-white">
               <X size={18} />
             </button>
           </div>
@@ -126,7 +126,7 @@ export default function MyTree({ open, onClose }: MyTreeProps) {
             {visible.map((k, i) => {
               const p = person(k.id)
               const tm = teamOf(k.id)
-              const teamName = tm === 'humana' ? 'Humana' : 'Development'
+              const teamName = TEAMS.find((t) => t.id === tm)?.name ?? ''
               return (
                 <div key={k.id} className="relative" style={{ animation: `rise .4s cubic-bezier(.22,1,.36,1) ${Math.min(i * 40, 360)}ms both` }}>
                   <span className="absolute -left-[29px] top-[20px] h-px w-7 bg-[#c9d8ee]" aria-hidden />

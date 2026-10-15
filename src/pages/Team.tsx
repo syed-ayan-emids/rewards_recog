@@ -3,12 +3,21 @@ import type { ReactNode } from 'react'
 import { Check, ChevronDown, GitBranch, CalendarCheck, Send, Users, PartyPopper, Eye } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, Modal, CloseX, useOutside } from '../components/atoms'
 import { CORE_VALUES, TEAMS, TEAM_STATS, person } from '../data'
-import type { TeamId } from '../data'
+import type { TeamId, TeamMemberStat } from '../data'
 import { useStore, fmtNum } from '../store'
 import MyTree from '../components/organisms/MyTree'
 import ApprovalsScreen from './Approvals'
 
 type TeamTab = 'team' | 'approvals'
+type TeamFilter = 'all' | TeamId
+type TeamRow = TeamMemberStat & { team: TeamId }
+
+const TEAM_CHIP: Record<TeamId, string> = {
+  humana: 'bg-brand-soft text-brand',
+  dev: 'bg-violet-soft text-violet',
+}
+
+const TEAM_ROWS: TeamRow[] = (Object.keys(TEAM_STATS) as TeamId[]).flatMap((id) => TEAM_STATS[id].map((s) => ({ ...s, team: id })))
 
 export default function MyTeamScreen() {
   const { screenParam, notifications } = useStore()
@@ -16,8 +25,8 @@ export default function MyTeamScreen() {
   const approvalsCount = notifications.filter((n) => n.unread && n.group === 'approval').length
 
   const TABS: { key: TeamTab; label: string; icon: ReactNode; badge?: number }[] = [
-    { key: 'team', label: 'My team overview', icon: <Users size={16} /> },
-    { key: 'approvals', label: 'Approvals', icon: <CalendarCheck size={16} />, badge: approvalsCount },
+    { key: 'team', label: 'My team info', icon: <Users size={16} /> },
+    { key: 'approvals', label: 'My Approvals', icon: <CalendarCheck size={16} />, badge: approvalsCount },
   ]
 
   return (
@@ -44,7 +53,7 @@ export default function MyTeamScreen() {
 
 function TeamScreen() {
   const { setComposer, openProfile } = useStore()
-  const [team, setTeam] = useState<TeamId>('humana')
+  const [team, setTeam] = useState<TeamFilter>('humana')
   const [ddOpen, setDdOpen] = useState(false)
   const ddRef = useOutside<HTMLDivElement>(() => setDdOpen(false))
   const [viewId, setViewId] = useState<string | null>(null)
@@ -55,10 +64,10 @@ function TeamScreen() {
     if (headRef.current && bodyRef.current) headRef.current.scrollLeft = bodyRef.current.scrollLeft
   }
 
-  const teamMeta = TEAMS.find((t) => t.id === team) ?? TEAMS[0]
-  const rows = TEAM_STATS[team]
+  const teamName = team === 'all' ? 'All Teams' : TEAMS.find((t) => t.id === team)?.name ?? 'All Teams'
+  const rows = team === 'all' ? TEAM_ROWS : TEAM_ROWS.filter((r) => r.team === team)
   const total = rows.reduce((s, t) => s + t.given + t.received, 0)
-  const viewRow = viewId ? TEAM_STATS[team].find((t) => t.id === viewId) : null
+  const viewRow = viewId ? rows.find((t) => t.id === viewId) : null
   const viewPerson = viewRow ? person(viewRow.id) : null
   const viewValue = viewRow ? CORE_VALUES[viewRow.valuesTop] : null
 
@@ -68,7 +77,7 @@ function TeamScreen() {
       <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">My team</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">Team</h1>
           </div>
           <div ref={ddRef} className="relative">
             <button
@@ -77,12 +86,12 @@ function TeamScreen() {
               aria-expanded={ddOpen}
               className={`flex items-center gap-2 rounded-xl border bg-white pl-4 pr-3 py-2.5 text-[14px] font-bold text-navy shadow-card transition hover:border-brand/40 ${ddOpen ? 'border-brand' : 'border-line'}`}
             >
-              {teamMeta.name}
+              {teamName}
               <ChevronDown size={15} className={`text-muted transition-transform duration-200 ${ddOpen ? 'rotate-180 text-brand' : ''}`} />
             </button>
             {ddOpen && (
               <div className="absolute left-0 top-13 z-30 mt-1 w-60 animate-rise overflow-hidden rounded-2xl border border-line bg-white p-1.5 shadow-lift">
-                {TEAMS.map((t) => (
+                {([{ id: 'all' as TeamFilter, name: 'All Teams' }, ...TEAMS]).map((t) => (
                   <button
                     key={t.id}
                     onClick={() => { setTeam(t.id); setDdOpen(false) }}
@@ -108,7 +117,7 @@ function TeamScreen() {
             onClick={() => setTreeOpen(true)}
             className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-[13.5px] font-bold text-white shadow-[0_1px_2px_rgba(10,31,68,.18)] transition hover:bg-brand-deep"
           >
-            <GitBranch size={16} /> View my Tree
+            <GitBranch size={16} /> Recognition Tree
           </button>
           <div className="flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-2.5 shadow-card">
           <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-soft text-brand"><PartyPopper size={15} /></span>
@@ -147,8 +156,9 @@ function TeamScreen() {
                   <span className="tnum text-[13px] font-extrabold text-muted">{String(i + 1).padStart(2, '0')}</span>
                   <button onClick={() => openProfile(t.id)} className="group flex min-w-0 items-center gap-3 text-left">
                     <Avatar id={t.id} size={36} />
-                    <span className="min-w-0">
+                    <span className="flex min-w-0 items-center gap-2">
                       <span className="block truncate text-[13.5px] font-extrabold text-navy group-hover:text-brand group-hover:underline">{p.name}</span>
+                      {team === 'all' && <span><Chip className={`shrink-0 px-1.5 py-0 text-[10px] font-bold ${TEAM_CHIP[t.team]}`}>{TEAMS.find((tm) => tm.id === t.team)?.name}</Chip></span>}
                     </span>
                   </button>
                   <span className="truncate text-[13px] font-medium text-muted">{p.title}</span>

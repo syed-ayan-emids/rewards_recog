@@ -307,7 +307,7 @@ export type TeamId = 'humana' | 'dev'
 
 export const TEAMS: { id: TeamId; name: string }[] = [
   { id: 'humana', name: 'Humana' },
-  { id: 'dev', name: 'Development' },
+  { id: 'dev', name: 'PACCA AI' },
 ]
 
 export const TEAM_STATS: Record<TeamId, TeamMemberStat[]> = {
