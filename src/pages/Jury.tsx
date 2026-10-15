@@ -43,14 +43,14 @@ export default function JuryScreen() {
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-muted">EoQ Q4 FY26 · Round 2 — executive jury</p>
+          <p className="text-[12px] font-bold font-mono uppercase tracking-[0.14em] text-muted">EoQ Q4 FY26 · Round 2 — executive jury</p>
           <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">Jury dashboard</h1>
           <p className="mt-1 text-[15px] text-muted">Your ballot locks at 5:00 PM IST · briefs below are AI-prepared from nomination evidence</p>
         </div>
         <div className="flex items-center gap-3">
           <Card className="tnum px-4 py-2.5 text-center">
             <p className="text-[19px] font-extrabold text-navy">{voteCount}<span className="text-muted">/7</span></p>
-            <p className="text-[10px] font-bold uppercase tracking-wide text-muted">Votes cast</p>
+            <p className="text-[10px] font-bold font-mono uppercase tracking-wide text-muted">Votes cast</p>
           </Card>
           <Btn variant="gold" size="lg" onClick={doReveal}><Trophy size={17} /> Reveal winners</Btn>
         </div>
@@ -86,7 +86,7 @@ export default function JuryScreen() {
                 <button
                   onClick={() => setShortlist((s) => ({ ...s, [n.id]: !s[n.id] }))}
                   aria-pressed={shortlist[n.id]}
-                  className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-wide transition ${shortlist[n.id] ? 'border-gold bg-gold-soft text-gold-ink' : 'border-line text-muted hover:border-gold/50'}`}
+                  className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-extrabold font-mono uppercase tracking-wide transition ${shortlist[n.id] ? 'border-gold bg-gold-soft text-gold-ink' : 'border-line text-muted hover:border-gold/50'}`}
                 >
                   Shortlist
                 </button>
@@ -94,7 +94,7 @@ export default function JuryScreen() {
 
               {/* AI brief */}
               <div className="mt-3.5 rounded-xl border-l-4 border-violet bg-violet-soft/50 px-3.5 py-3">
-                <p className="flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-wider text-violet"><Sparkles size={11} /> AI brief · from evidence</p>
+                <p className="flex items-center gap-1.5 text-[10.5px] font-extrabold font-mono uppercase tracking-wider text-violet"><Sparkles size={11} /> AI brief · from evidence</p>
                 <p className="mt-1.5 text-[13.5px] leading-relaxed text-ink">{n.brief}</p>
               </div>
 
@@ -152,7 +152,7 @@ function RevealOverlay({ winners, onClose }: RevealOverlayProps) {
       <button onClick={doClose} aria-label="Close reveal" className="absolute right-6 top-6 z-10 rounded-full p-2 text-white/70 transition hover:bg-white/10 hover:text-white"><X size={22} /></button>
       <div className="relative z-10 mx-auto max-w-2xl px-6 text-center">
         <span className="mx-auto block w-fit animate-pop rounded-full bg-gold/15 p-5"><Trophy size={54} className="text-gold" /></span>
-        <p className="mt-5 text-[12px] font-extrabold uppercase tracking-[0.3em] text-gold">Q4 FY26 · End of Quarter awards</p>
+        <p className="mt-5 text-[12px] font-extrabold font-mono uppercase tracking-[0.3em] text-gold">Q4 FY26 · End of Quarter awards</p>
         <h2 className="mt-2 text-4xl font-extrabold text-white md:text-5xl">The jury has decided</h2>
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
           {winners.map((w, i) => {

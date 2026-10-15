@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-navy: #154071;
   --color-navy-deep: #0a2038;
@@ -42,12 +43,12 @@
 
   --color-value-cf: #0fa3a3;
   --color-value-cf-soft: #dcf3f2;
-  --color-value-in: #7a5af8;
-  --color-value-in-soft: #f1edfd;
-  --color-value-co: #3898ff;
-  --color-value-co-soft: #e3f0ff;
-  --color-value-ow: #ff8938;
-  --color-value-ow-soft: #ffeede;
+  --color-value-in: #ff8938;
+  --color-value-in-soft: #ffeede;
+  --color-value-co: #7a5af8;
+  --color-value-co-soft: #f1edfd;
+  --color-value-ow: #17b26a;
+  --color-value-ow-soft: #ddf5e8;
   --color-value-wm: #ff5a5f;
   --color-value-wm-soft: #fee9e9;
 
@@ -118,11 +119,54 @@ body {
 .rail-scroll::-webkit-scrollbar-track { background: transparent; }
 
 /* Balance bank card — violet tint of the same family */
-/* Premium dark stat cards (emids.com style) */
-.stat-dark {
-  background: linear-gradient(160deg, #16233a 0%, #0d1526 60%, #090e1a 100%);
+/* Premium teal stat panel — emids.com fintech style */
+.stat-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: linear-gradient(160deg, #10515b 0%, #0c4350 48%, #07313e 100%);
   border-color: rgba(255, 255, 255, 0.10);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 18px 38px -16px rgba(3, 10, 22, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 26px 52px -22px rgba(7, 49, 62, 0.55);
+}
+.stat-ring {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(103, 222, 222, 0.25);
+}
+
+/* contrast variant — deep navy milestone card */
+.stat-milestone {
+  background: linear-gradient(150deg, #0a1a31 0%, #0d2440 55%, #081e33 100%);
+}
+
+/* ice-light wallet card */
+.stat-ice {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(150deg, #f4f8fa 0%, #e8f1f4 55%, #dfeaf0 100%);
+  border-color: rgba(13, 71, 92, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 18px 38px -16px rgba(13, 71, 92, 0.20);
+}
+
+/* decorative shapes — rings, squares, triangles */
+.stat-shape {
+  position: absolute;
+  pointer-events: none;
+}
+.stat-diamond, .stat-triangle {
+  opacity: 0.14;
+}
+.stat-diamond {
+  transform: rotate(45deg);
+}
+.stat-triangle {
+  width: 0 !important;
+  height: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border-style: solid;
+  opacity: 0.18;
 }
 
 /* Deep blue→teal sweep cards with curved cyan accents (recognitions + wallet) */
@@ -130,8 +174,8 @@ body {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(130% 170% at 100% 0%, rgba(70, 214, 187, 0.16) 0%, rgba(21, 94, 116, 0.20) 40%, transparent 66%),
-    linear-gradient(150deg, #102c46 0%, #0b1c30 55%, #0e3040 100%);
+    radial-gradient(130% 170% at 100% 0%, rgba(70, 214, 187, 0.20) 0%, rgba(21, 94, 116, 0.26) 40%, transparent 66%),
+    linear-gradient(150deg, #0d5464 0%, #0a3e4d 55%, #0d4a5c 100%);
   border-color: rgba(255, 255, 255, 0.10);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 18px 38px -16px rgba(3, 10, 22, 0.55);
 }
@@ -236,6 +280,12 @@ body {
 .card-org > *, .card-my > *, .bank-aurora > * {
   position: relative;
   z-index: 1;
+}
+
+/* smooth crossfade for the hero rotating phrase */
+@keyframes recognize-fade {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* film-grain texture over every stat tile */
@@ -354,6 +404,20 @@ body {
   0%, 100% { transform: translateY(2px) rotate(-2deg); }
   50% { transform: translateY(-7px) rotate(2.5deg); }
 }
+/* Celebrate cycle: mostly idle, hops with a wiggle every few seconds */
+.mascot-celebr { animation: mascot-celebr 6s ease-in-out infinite; }
+@keyframes mascot-celebr {
+  0%, 66%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  74% { transform: translateY(-16px) rotate(-9deg) scale(1.12); }
+  82% { transform: translateY(-3px) rotate(9deg) scale(1.07); }
+  90% { transform: translateY(-6px) rotate(0deg) scale(1.02); }
+}
+.mascot-sparkle { position: absolute; width: 9px; height: 9px; border-radius: 9999px; opacity: 0; animation: mascot-sparks 6s ease-in-out infinite; }
+@keyframes mascot-sparks {
+  0%, 66%, 100% { opacity: 0; transform: translateY(6px) scale(0.3); }
+  72% { opacity: 1; transform: translateY(-4px) scale(1); }
+  86% { opacity: 0; transform: translateY(-16px) scale(0.7); }
+}
 .mascot-wave { transform-origin: 92px 34px; animation: mascot-wave 3.2s ease-in-out infinite; }
 @keyframes mascot-wave {
   0%, 60%, 100% { transform: rotate(0deg); }
@@ -378,5 +442,5 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mascot-bob, .mascot-wave, .mascot-face, .mascot-halo, .mascot-twinkle, .hero-shine, .say-shimmer { animation: none !important; }
+  .mascot-bob, .mascot-wave, .mascot-face, .mascot-halo, .mascot-twinkle, .mascot-celebr, .mascot-sparkle, .hero-shine, .say-shimmer { animation: none !important; }
 }

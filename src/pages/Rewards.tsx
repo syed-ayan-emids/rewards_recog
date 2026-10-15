@@ -35,7 +35,7 @@ export default function RewardsScreen() {
             <div className="flex items-start justify-between gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 <img src="/emids-logo-tight.png" alt="emids" className="h-4 w-auto shrink-0" />
-                <p className="text-[9.5px] font-extrabold uppercase tracking-[0.14em] text-gold">Total reward balance</p>
+                <p className="text-[9.5px] font-extrabold font-mono uppercase tracking-[0.14em] text-gold">Total reward balance</p>
               </div>
               <span className="tnum shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[10.5px] font-bold text-gold">🔥 6-week streak</span>
             </div>
@@ -51,7 +51,7 @@ export default function RewardsScreen() {
         </Card>
 
         <Card className="p-5">
-          <p className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-muted">Earned lifetime</p>
+          <p className="text-[10.5px] font-extrabold font-mono uppercase tracking-[0.14em] text-muted">Earned lifetime</p>
           <p className="tnum mt-2 text-[28px] font-extrabold leading-none text-navy">4,460</p>
           <div className="mt-3.5 space-y-1.5">
             <p className="flex items-center justify-between text-[12.5px] font-semibold text-muted"><span>Awards</span><span className="tnum font-extrabold text-navy">2,650</span></p>

@@ -2,9 +2,9 @@ export type ValueKey = 'customerFirst' | 'innovation' | 'collaboration' | 'owner
 
 export const CORE_VALUES: Record<ValueKey, { label: string; ink: string; soft: string; solid: string }> = {
   customerFirst: { label: 'Customer First', ink: 'text-value-cf', soft: 'bg-value-cf-soft', solid: '#0fa3a3' },
-  innovation: { label: 'Innovation', ink: 'text-value-in', soft: 'bg-value-in-soft', solid: '#7a5af8' },
-  collaboration: { label: 'Collaboration', ink: 'text-value-co', soft: 'bg-value-co-soft', solid: '#3898ff' },
-  ownership: { label: 'Ownership', ink: 'text-value-ow', soft: 'bg-value-ow-soft', solid: '#ff8938' },
+  innovation: { label: 'Innovation', ink: 'text-value-in', soft: 'bg-value-in-soft', solid: '#ff8938' },
+  collaboration: { label: 'Collaboration', ink: 'text-value-co', soft: 'bg-value-co-soft', solid: '#7a5af8' },
+  ownership: { label: 'Ownership', ink: 'text-value-ow', soft: 'bg-value-ow-soft', solid: '#17b26a' },
   winningMindset: { label: 'Winning Mindset', ink: 'text-value-wm', soft: 'bg-value-wm-soft', solid: '#ff5a5f' },
 }
 export const VALUE_KEYS = Object.keys(CORE_VALUES) as ValueKey[]
