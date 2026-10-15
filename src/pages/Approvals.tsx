@@ -130,7 +130,7 @@ function ApprovalDetail({ item, onResolve, verdict }: ApprovalDetailProps) {
     <div>
       <div className="hero-room dotgrid px-6 py-4 text-white">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[10.5px] font-bold uppercase tracking-[0.08em] text-gold">{kindLabel(item)}</p>
+          <p className="text-[10.5px] font-bold font-mono uppercase tracking-[0.08em] text-gold">{kindLabel(item)}</p>
           {verdict && <Chip className={verdict === 'approved' ? 'bg-mint text-white' : 'bg-warn text-navy-deep'}>{verdict === 'approved' ? 'Approved' : 'Next time'}</Chip>}
         </div>
         <div className="mt-2 flex items-center gap-3">

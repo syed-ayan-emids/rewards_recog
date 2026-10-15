@@ -3,8 +3,11 @@ import React from 'react'
 /* Blobby — the emids teal round character (chosen mascot, was candidate #2) */
 export default function Mascot() {
   return (
-    <div className="pointer-events-none absolute right-[268px] hidden xl:block" aria-hidden>
-      <svg width="112" height="112" viewBox="0 0 120 120" fill="none" className="mascot-bob">
+    <div className="mascot-celebr pointer-events-none relative inline-block" aria-hidden>
+      <span aria-hidden className="mascot-sparkle bg-gold" style={{ top: 2, left: -12 }} />
+      <span aria-hidden className="mascot-sparkle" style={{ top: -4, right: -10, background: '#7a5af8', animationDelay: '0.12s' }} />
+      <span aria-hidden className="mascot-sparkle" style={{ bottom: 20, right: -14, background: 'var(--color-brand)', animationDelay: '0.26s' }} />
+      <svg width="88" height="88" viewBox="0 0 120 120" fill="none" className="mascot-bob">
         <defs>
           <linearGradient id="mascotBlob" x1="20" y1="22" x2="100" y2="105" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stopColor="#156F63" />

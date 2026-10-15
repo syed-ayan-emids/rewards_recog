@@ -59,7 +59,7 @@ export default function EoQShowcase() {
             <img src={s.img} alt="" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-navy-deep/55" />
             <div className="relative p-5">
-              <span className="flex items-center gap-1.5 text-[10.5px] font-extrabold uppercase tracking-[0.16em] text-gold">
+              <span className="flex items-center gap-1.5 text-[10.5px] font-extrabold font-mono uppercase tracking-[0.16em] text-gold">
                 {i === 0 ? <CalendarClock size={13} /> : <Users size={13} />} {s.title}
               </span>
               <p className="mt-2.5 max-w-[300px] text-[22px] font-extrabold leading-snug text-white">
