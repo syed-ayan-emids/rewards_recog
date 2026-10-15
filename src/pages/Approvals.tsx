@@ -1,14 +1,15 @@
 import { useState } from 'react'
 import { CheckCircle2, UserCheck } from 'lucide-react'
 import { Avatar, Btn, Card, Chip, EmptyState } from '../components/atoms'
-import { PENDING_APPROVALS, person } from '../data'
+import { TemplateCard } from '../components/organisms/Composer'
+import { CORE_VALUES, person } from '../data'
 import { useStore, fmtNum } from '../store'
 import type { ApprovalItem } from '../data'
 
 const TABS = [
   { key: 'inbox', label: 'To approve' },
   { key: 'endorse', label: 'Endorsements' },
-  { key: 'done', label: 'Done' },
+  { key: 'done', label: 'History' },
 ] as const
 type Tab = (typeof TABS)[number]['key']
 
@@ -16,13 +17,12 @@ const kindLabel = (a: ApprovalItem) =>
   a.kind === 'nomination-endorsement' ? 'Nomination endorsement' : a.points ? `Points approval · +${a.points} pts` : 'High-value redemption'
 
 export default function ApprovalsScreen() {
-  const { toast } = useStore()
+  const { toast, approvals, decided, resolveApproval } = useStore()
   const [tab, setTab] = useState<Tab>('inbox')
-  const [sel, setSel] = useState<string | null>(PENDING_APPROVALS[0]?.id ?? null)
-  const [decided, setDecided] = useState<Record<string, 'approved' | 'returned' | 'declined'>>({})
+  const [sel, setSel] = useState<string | null>(approvals.find((a) => a.kind !== 'nomination-endorsement')?.id ?? null)
 
-  const live = PENDING_APPROVALS.filter((a) => !decided[a.id])
-  const done = PENDING_APPROVALS.filter((a) => decided[a.id] !== undefined)
+  const live = approvals.filter((a) => !decided[a.id])
+  const done = approvals.filter((a) => decided[a.id] !== undefined)
   const list: ApprovalItem[] =
     tab === 'inbox'
       ? live.filter((a) => a.kind !== 'nomination-endorsement')
@@ -32,7 +32,7 @@ export default function ApprovalsScreen() {
   const item = list.find((a) => a.id === sel) ?? list[0] ?? null
 
   const resolve = (a: ApprovalItem, verdict: 'approved' | 'returned' | 'declined') => {
-    setDecided((d) => ({ ...d, [a.id]: verdict }))
+    resolveApproval(a.id, verdict)
     setSel(null)
     toast(
       verdict === 'approved' ? `${a.points ? fmtNum(a.points) + ' pts ' : ''}approved — routed to next step` : verdict === 'returned' ? 'Returned with query — sender notified' : 'Noted for next time — policy record updated',
@@ -145,7 +145,22 @@ function ApprovalDetail({ item, onResolve, verdict }: ApprovalDetailProps) {
       <div className="divide-y divide-line">
         <section className="px-6 py-4">
           <p className="text-[14px] font-semibold text-navy">{item.title}</p>
-          <blockquote className="mt-2 rounded-xl border-l-4 border-slate-300 bg-slate-50 px-4 py-2.5 text-[13px] italic leading-snug text-ink">{item.detail}</blockquote>
+          {item.template ? (
+            item.template.urls[0] && (
+              <div className="mt-3 max-w-[430px]">
+                <TemplateCard
+                  tpl={{ name: item.template.name, emoji: item.template.emoji }}
+                  url={item.template.urls[0]}
+                  previewValue={item.valueKey ? CORE_VALUES[item.valueKey] : null}
+                  recipients={(item.toIds ?? []).map((id) => ({ id, label: person(id).name.split(' ')[0] }))}
+                  points={item.points ?? 0}
+                  msg={item.detail.replace(/^"|"$/g, '')}
+                />
+              </div>
+            )
+          ) : (
+            <blockquote className="mt-2 rounded-xl border-l-4 border-slate-300 bg-slate-50 px-4 py-2.5 text-[13px] italic leading-snug text-ink">{item.detail}</blockquote>
+          )}
         </section>
 
         <section className="px-6 py-4">
