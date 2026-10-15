@@ -28,10 +28,10 @@ describe('Approvals screen', () => {
     expect(screen.getByText('Daniel redeemed MakeMyTrip ₹2,000 voucher')).toBeInTheDocument()
   })
 
-  it('approves a request and tracks the decision in Done', () => {
+  it('approves a request and tracks the decision in History', () => {
     renderWithStore(<ApprovalsScreen />)
     fireEvent.click(screen.getByRole('button', { name: 'Approve' }))
-    fireEvent.click(screen.getByRole('button', { name: /^Done/ }))
+    fireEvent.click(screen.getByRole('button', { name: /^History/ }))
     expect(screen.getByText('Approved')).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Approve' })).not.toBeInTheDocument()
   })
@@ -39,7 +39,7 @@ describe('Approvals screen', () => {
   it('marks a request for next time', () => {
     renderWithStore(<ApprovalsScreen />)
     fireEvent.click(screen.getByRole('button', { name: 'Next time' }))
-    fireEvent.click(screen.getByRole('button', { name: /^Done/ }))
+    fireEvent.click(screen.getByRole('button', { name: /^History/ }))
     expect(screen.getByText('Next time')).toBeInTheDocument()
   })
 })

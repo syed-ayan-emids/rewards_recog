@@ -105,6 +105,27 @@ describe('StoreProvider', () => {
     unmount()
   })
 
+  it('routes praises with points into the manager approval inbox and records the decision', () => {
+    const { unmount } = renderProbe()
+    const before = s.approvals.length
+    act(() => s.sendPraise({ toIds: ['p1'], valueKey: 'ownership', message: 'Great save on the pipeline.', points: 50 }))
+    expect(s.approvals.length).toBe(before + 1)
+    expect(s.approvals[0].title).toBe('Ayan wants to award +50 pts to Aarav Sharma')
+    expect(s.approvals[0].points).toBe(50)
+    expect(s.decided[s.approvals[0].id]).toBeUndefined()
+    act(() => s.resolveApproval(s.approvals[0].id, 'approved'))
+    expect(s.decided[s.approvals[0].id]).toBe('approved')
+    unmount()
+  })
+
+  it('zero-point praisess never enter the approval inbox', () => {
+    const { unmount } = renderProbe()
+    const before = s.approvals.length
+    act(() => s.sendPraise({ toIds: ['p3'], valueKey: 'collaboration', message: 'Cross-team glue as always.', points: 0 }))
+    expect(s.approvals.length).toBe(before)
+    unmount()
+  })
+
   it('toasts are queued and expire', () => {
     vi.useFakeTimers()
     const { unmount } = renderProbe()

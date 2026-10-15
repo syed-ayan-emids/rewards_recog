@@ -232,9 +232,18 @@ export type ApprovalItem = {
   title: string
   detail: string
   valueKey?: ValueKey
+  /** Set when the recognition was composed with one of the platform's card templates. */
+  toIds?: string[]
+  template?: { name: string; emoji: string; urls: string[] }
   policy: { verdict: 'pass' | 'flag'; notes: string[] }
   route: { step: string; owner: string; done: boolean }[]
   budget: string
+}
+
+/* Snapshot of a card template so mock approvals render as complete posts. */
+const templateSnapshot = (key: ValueKey): { name: string; emoji: string; urls: string[] } => {
+  const t = VALUE_TEMPLATES[key][0]
+  return { name: t.name, emoji: t.emoji, urls: t.urls }
 }
 
 export const PENDING_APPROVALS: ApprovalItem[] = [
@@ -243,6 +252,8 @@ export const PENDING_APPROVALS: ApprovalItem[] = [
     title: 'Rohan wants to award +100 pts to Sofia Reyes',
     detail: '"Sofia caught the race condition before the freeze and wrote the repro test so it never slips again."',
     valueKey: 'winningMindset',
+    toIds: ['p5'],
+    template: templateSnapshot('winningMindset'),
     policy: { verdict: 'pass', notes: ['Write-up quality: specific and factual', 'Within per-person monthly limit (100/150)'] },
     route: [
       { step: 'Direct manager (you)', owner: 'Ayan', done: false },
@@ -255,6 +266,8 @@ export const PENDING_APPROVALS: ApprovalItem[] = [
     title: 'Priya nominated Nia Thomas for Customer Champion',
     detail: 'Nia led the payer-portal redesign analytics and drove a 12-point CSAT jump for the CVS account. Client PM named her individually in the QBR.',
     valueKey: 'customerFirst',
+    toIds: ['p10'],
+    template: templateSnapshot('customerFirst'),
     policy: { verdict: 'pass', notes: ['Client-attributable outcome present', 'Not a prior winner this fiscal (rule ok)'] },
     route: [
       { step: 'Manager endorsement (you)', owner: 'Ayan', done: false },
@@ -267,6 +280,8 @@ export const PENDING_APPROVALS: ApprovalItem[] = [
     title: 'Sanjay wants to award +250 pts to Kenji Watanabe',
     detail: '"Kenji rebuilt the drift monitor overnight before demos."',
     valueKey: 'innovation',
+    toIds: ['p6'],
+    template: templateSnapshot('innovation'),
     policy: { verdict: 'flag', notes: ['Exceeds single-gift cap of 100 for IC givers', 'Write-up is short — specificity score 38/100', 'Suggested: reduce to 100 pts or add named outcomes'] },
     route: [
       { step: 'Direct manager (you)', owner: 'Ayan', done: false },
@@ -278,6 +293,8 @@ export const PENDING_APPROVALS: ApprovalItem[] = [
     id: 'a4', kind: 'high-value-redemption', fromId: 'p2', points: 1850, when: '2 d ago',
     title: 'Daniel redeemed MakeMyTrip ₹2,000 voucher',
     detail: 'High-value redemption routed to you per finance policy (≥ ₹1,500).',
+    toIds: ['p2'],
+    template: templateSnapshot('ownership'),
     policy: { verdict: 'pass', notes: ['Balance earned legitimately (4,120 pts lifetime)', 'No velocity anomaly detected'] },
     route: [
       { step: 'Manager ack (you)', owner: 'Ayan', done: true },
