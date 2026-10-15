@@ -62,9 +62,10 @@ export default function HomeScreen() {
             <div className="flex flex-wrap items-center gap-4">
               <button
                 onClick={() => setComposer({ open: true })}
-                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#4b94a0] px-6 py-3 text-[12.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-[#06222e] transition hover:brightness-110"
+                aria-label="Recognize a teammate"
+                className="inline-flex w-[300px] shrink-0 items-center justify-center rounded-xl bg-[#4b94a0] px-4 py-3 text-[12.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-[#06222e] transition hover:brightness-110"
               >
-                Recognize a teammate
+                <RecognizeCycle className="whitespace-nowrap" />
               </button>
 
               <Mascot />
@@ -94,7 +95,7 @@ export default function HomeScreen() {
               <Gem size={16} />
             </span>
             <span>
-              <span className="block text-[10.5px] font-extrabold font-mono uppercase tracking-[0.2em] text-[#0e4a5c]">Total points balance</span>
+              <span className="kicker-shimmer block text-[10.5px] font-extrabold font-mono uppercase tracking-[0.2em]">Total points balance</span>
               <span className="mt-1 block h-px w-10 bg-[#0e4a5c]/30" />
             </span>
           </div>
@@ -105,7 +106,7 @@ export default function HomeScreen() {
             </div>
             <button
               onClick={() => setScreen('rewards')}
-              className="flex flex-nowrap items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-[#0c2f4e] px-7 py-3.5 text-[14px] font-extrabold text-white shadow-[0_12px_30px_rgba(2,12,24,0.25)] transition hover:brightness-110"
+              className="flex flex-nowrap items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-[#09253e] px-7 py-3.5 text-[14px] font-extrabold text-white shadow-[0_12px_30px_rgba(2,12,24,0.25)] transition hover:brightness-110"
             >
               Redeem Now <ArrowRight size={16} />
             </button>
@@ -185,9 +186,9 @@ export default function HomeScreen() {
               <button
                 key={r.id}
                 onClick={() => openProfile(r.id)}
-                className={`flex w-full items-center gap-2.5 border-b border-line px-3 py-2.5 text-left transition last:border-b-0 hover:bg-brand-soft/40 ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/70'} ${r.id === 'me' ? 'bg-brand-soft/50' : ''}`}
+                className={`flex w-full items-center gap-2.5 border-b border-line px-3 py-2.5 text-left transition last:border-b-0 hover:bg-brand-soft/60 ${i % 2 === 0 ? 'bg-white' : 'bg-[#ecf6f4]'} ${r.id === 'me' ? 'bg-brand-soft/60' : ''}`}
               >
-                <span className={`tnum flex h-6 w-12 shrink-0 items-center justify-center rounded-full text-[11px] font-extrabold ${['bg-gold-soft text-gold-ink', 'bg-slate-200 text-slate-600', 'bg-warn-soft text-warn'][i] ?? 'bg-slate-100 text-muted'}`}>{i + 1}</span>
+                <span className={`tnum flex h-6 w-12 shrink-0 items-center justify-center rounded-full text-[11px] font-extrabold ${i % 2 === 0 ? 'bg-violet-soft text-violet' : 'bg-gold-soft text-gold-ink'}`}>{i + 1}</span>
                 <Avatar id={r.id} size={28} />
                 <span className="min-w-0 flex-1 truncate text-[12.5px] font-bold text-navy">
                   {(() => { const parts = person(r.id).name.split(' '); return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0]}.` : parts[0] })()}
