@@ -35,7 +35,7 @@ export default function NotifBell() {
               const m = GROUP_META[g]
               return (
                 <div key={g} className="mb-1">
-                  <div className={`flex items-center gap-2 px-2.5 pt-2 pb-1 text-[11px] font-bold uppercase tracking-wide ${m.fg}`}>
+                  <div className={`flex items-center gap-2 px-2.5 pt-2 pb-1 text-[11px] font-bold font-mono uppercase tracking-wide ${m.fg}`}>
                     {m.icon} {m.label}
                   </div>
                   {items.map((n) => (

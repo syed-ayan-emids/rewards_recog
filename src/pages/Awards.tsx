@@ -15,7 +15,7 @@ export default function AwardsScreen() {
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-muted">End of Quarter · Q4 FY26</p>
+          <p className="text-[12px] font-bold font-mono uppercase tracking-[0.14em] text-muted">End of Quarter · Q4 FY26</p>
           <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">Quarterly Awards</h1>
           <p className="mt-1 text-[15px] text-muted">Nominations open until Oct 31 · jury voting Nov 3–14 · winners announced Dec 5</p>
         </div>
@@ -45,7 +45,7 @@ export default function AwardsScreen() {
                 {voting && (
                   <div className="flex items-center gap-2 bg-violet px-5 py-2.5 text-white">
                     <span className="flex h-1.5 w-1.5 animate-ping rounded-full bg-gold" />
-                    <p className="text-[11.5px] font-extrabold uppercase tracking-[0.14em]">Jury voting underway · 12 finalists</p>
+                    <p className="text-[11.5px] font-extrabold font-mono uppercase tracking-[0.14em]">Jury voting underway · 12 finalists</p>
                     <button onClick={() => setScreen('jury')} className="ml-auto rounded-full bg-white/15 px-3 py-1 text-[11.5px] font-bold transition hover:bg-white/25">Cast votes →</button>
                   </div>
                 )}
@@ -55,7 +55,7 @@ export default function AwardsScreen() {
                       <span className={`flex h-10 w-10 items-center justify-center rounded-xl ${v.soft} ${v.ink}`}><Trophy size={18} /></span>
                       <div>
                         <p className="text-lg font-extrabold text-navy">{c.name}</p>
-                        <p className="text-[11.5px] font-bold uppercase tracking-wide text-muted">Lives the {v.label} value</p>
+                        <p className="text-[11.5px] font-bold font-mono uppercase tracking-wide text-muted">Lives the {v.label} value</p>
                       </div>
                       <Chip className={`ml-auto ${voting ? 'bg-violet-soft text-violet' : 'bg-mint-soft text-mint'}`}>{c.status === 'open' ? 'Open' : voting ? 'Voting' : 'Announced'}</Chip>
                     </div>
@@ -192,7 +192,7 @@ function NominationModal({ category, onClose, onDone, onOpenJury }: NominationMo
     <Modal open={!!category} onClose={onClose} wide label="Nominate a teammate">
       <div className="flex flex-col">
         <div className="hero-room relative px-6 py-5 text-white dotgrid">
-          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gold">EoQ nomination · jury-reviewed</p>
+          <p className="text-[11px] font-bold font-mono uppercase tracking-[0.14em] text-gold">EoQ nomination · jury-reviewed</p>
           <h2 className="mt-1 text-2xl font-extrabold">Put receipts on the table</h2>
           <CloseX onClick={onClose} className="text-white hover:bg-white/10 hover:text-white" />
         </div>
@@ -205,7 +205,7 @@ function NominationModal({ category, onClose, onDone, onOpenJury }: NominationMo
               ))}
             </div>
 
-            <label className="mb-1.5 mt-5 block text-[12px] font-bold uppercase tracking-wide text-muted">Nominee</label>
+            <label className="mb-1.5 mt-5 block text-[12px] font-bold font-mono uppercase tracking-wide text-muted">Nominee</label>
             {personId ? (
               <div className="flex items-center gap-3 rounded-xl border border-line bg-slate-50 px-3 py-2.5">
                 <Avatar id={personId} size={36} />
@@ -230,7 +230,7 @@ function NominationModal({ category, onClose, onDone, onOpenJury }: NominationMo
               </div>
             )}
 
-            <label className="mb-1.5 mt-5 block text-[12px] font-bold uppercase tracking-wide text-muted">Evidence — what did they do, what changed?</label>
+            <label className="mb-1.5 mt-5 block text-[12px] font-bold font-mono uppercase tracking-wide text-muted">Evidence — what did they do, what changed?</label>
             <textarea value={text} onChange={(e) => setText(e.target.value)} rows={4} placeholder="Named systems, metrics, outcomes. 'Hard-working team player' will not survive the jury brief." className="w-full resize-none rounded-xl border border-line bg-slate-50 px-4 py-3 text-[14px] leading-relaxed outline-none focus:border-violet/40 focus:bg-white" />
             <div className="mt-2 flex items-center justify-between">
               <Btn size="sm" variant="violet" onClick={aiPolish} disabled={busy}>

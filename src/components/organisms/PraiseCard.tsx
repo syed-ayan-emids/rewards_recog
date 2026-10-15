@@ -37,7 +37,7 @@ export function PraiseCard({ post, index }: PraiseCardProps) {
     >
       {isAward && (
         <div className="hero-room dotgrid relative h-24">
-          <span className="absolute right-4 top-3 rounded-full bg-gold px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#3d2b00]">
+          <span className="absolute right-4 top-3 rounded-full bg-gold px-3 py-1 text-[11px] font-extrabold font-mono uppercase tracking-wider text-[#3d2b00]">
             {post.awardLabel}
           </span>
         </div>

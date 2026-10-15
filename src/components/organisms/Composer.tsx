@@ -122,7 +122,7 @@ export default function Composer({ open, preset }: ComposerProps) {
           {/* Left: compose */}
           <div>
             {/* To */}
-            <label className="mb-1.5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
+            <label className="mb-1.5 flex items-center justify-between text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">
               <span>To</span>
             </label>
             <div
@@ -183,7 +183,7 @@ export default function Composer({ open, preset }: ComposerProps) {
                 <span key={id} className="flex items-center gap-1.5 rounded-full bg-navy/5 border border-line py-0.5 pl-1 pr-2">
                   <Avatar id={id} size={20} />
                   <span className="text-[12px] font-semibold text-navy">{PEOPLE[id]?.name.split(' ')[0] ?? 'Manager'}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-muted">· manager</span>
+                  <span className="text-[10px] font-bold font-mono uppercase tracking-wide text-muted">· manager</span>
                 </span>
               ))}
               {ccSel.map((id) => (
@@ -233,14 +233,14 @@ export default function Composer({ open, preset }: ComposerProps) {
                     <Avatar id={p.id} size={26} />
                     <span className="text-[13px] font-semibold text-navy">{p.name}</span>
                     <span className="text-[12px] text-muted">{p.title}</span>
-                    {p.managerId && <span className="ml-auto text-[10.5px] font-bold text-muted uppercase tracking-wide">manager: {PEOPLE[p.managerId]?.name.split(' ')[0]}</span>}
+                    {p.managerId && <span className="ml-auto text-[10.5px] font-bold text-muted font-mono uppercase tracking-wide">manager: {PEOPLE[p.managerId]?.name.split(' ')[0]}</span>}
                   </button>
                 ))}
               </div>
             )}
 
             {/* Value */}
-            <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
+            <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">
               <span>Which emids value did they demonstrate?</span>
             </label>
             <div className="flex flex-wrap gap-2">
@@ -274,7 +274,7 @@ export default function Composer({ open, preset }: ComposerProps) {
             </div>
 
             {/* Message */}
-            <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
+            <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">
               <span>Describe Their Contribution</span>
             </label>
             <div className="rounded-xl border border-line bg-slate-50 transition focus-within:border-brand/40 focus-within:bg-white">
@@ -296,7 +296,7 @@ export default function Composer({ open, preset }: ComposerProps) {
             </div>
 
             {/* Points */}
-            <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
+            <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">
               <span>Attach points</span>
               <span className="normal-case tracking-normal font-semibold">optional</span>
             </label>
@@ -315,7 +315,7 @@ export default function Composer({ open, preset }: ComposerProps) {
 
           {/* Right: template chooser */}
           <div className="flex h-full flex-col lg:sticky lg:top-20">
-            <p className="mb-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">Templates</p>
+            <p className="mb-1.5 text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">Templates</p>
             <div className="grid grid-cols-3 gap-1.5">
               {activeTpl.urls.map((u, idx) => (
                 <button
@@ -334,7 +334,7 @@ export default function Composer({ open, preset }: ComposerProps) {
                 </button>
               ))}
             </div>
-            <p className="mb-1.5 mt-5 text-[11.5px] font-extrabold uppercase tracking-[0.12em] text-muted">Preview</p>
+            <p className="mb-1.5 mt-5 text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">Preview</p>
             <div className="relative flex flex-1 flex-col">
               <TemplateCard
                 tpl={activeTpl}
