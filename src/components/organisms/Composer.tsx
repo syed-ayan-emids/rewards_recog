@@ -114,21 +114,18 @@ export default function Composer({ open, preset }: ComposerProps) {
 
   return (
     <div className="flex flex-col">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 pt-6">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-4">
           <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">Recognize a teammate</h1>
           <Btn variant="ghost" size="sm" onClick={closeComposer}><ArrowLeft size={16} /> Back</Btn>
         </div>
-        <div className="mx-auto grid w-full max-w-6xl gap-x-8 gap-y-6 px-6 py-5 lg:grid-cols-[1fr_1.4fr]">
+        <div className="mx-auto grid w-full max-w-6xl gap-x-6 gap-y-5 px-5 py-4 lg:grid-cols-[1fr_1.4fr]">
           {/* Left: compose */}
           <div>
             {/* To */}
-            <label className="mb-1.5 flex items-center justify-between text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">
-              <span>To</span>
-            </label>
             <div
               className="flex min-h-12 flex-wrap items-center gap-2 rounded-xl border border-line bg-slate-50 px-3 py-2 transition focus-within:border-brand/40 focus-within:bg-white"
             >
-              <Users size={16} className="text-muted" />
+              <span className="text-[13px] font-bold text-muted">To</span>
               {toSel.map((id) => (
                 <span key={id} className="flex items-center gap-1.5 rounded-full bg-white py-0.5 pl-1 pr-1.5 shadow-card border border-line">
                   <Avatar id={id} size={22} />
@@ -327,7 +324,7 @@ export default function Composer({ open, preset }: ComposerProps) {
                   style={{ backgroundImage: `url(${u})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
                 >
                   <div className="aspect-[1100/314] w-full" />
-                  <span className="absolute bottom-1 left-1 rounded-full bg-white/85 px-1.5 py-0.5 text-[9px] font-bold text-navy">{activeTpl.emoji} {idx + 1}</span>
+                  <span className="absolute bottom-1 left-1 rounded-full bg-white/85 px-1.5 py-0.5 text-[9px] font-bold text-navy">{idx + 1}</span>
                   {variantIdx === idx && (
                     <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-brand text-white shadow-card"><Check size={10} /></span>
                   )}
@@ -399,14 +396,8 @@ export function TemplateCard({ tpl, url, previewValue, recipients, points, msg, 
   const pad = big ? 'px-5' : 'px-3.5'
   return (
     <div className={`flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card ${big ? 'rounded-3xl' : ''}`}>
-      {tpl && (
-        <div className={`flex items-center gap-2 ${pad} ${big ? 'py-3.5' : 'py-3'}`}>
-          <span className="text-lg leading-none">{tpl.emoji}</span>
-          <p className="min-w-0 flex-1 truncate text-[13px] font-extrabold leading-tight text-navy">{tpl.name}</p>
-        </div>
-      )}
       {url && (
-        <div className="border-y border-line bg-brand-soft/30">
+        <div className="border-b border-line bg-brand-soft/30">
           <img src={url} alt="" className="block min-h-[150px] w-full object-cover" />
         </div>
       )}
