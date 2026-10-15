@@ -28,7 +28,7 @@ export interface ComposerProps {
 }
 
 export default function Composer({ open, preset }: ComposerProps) {
-  const { setComposer, closeComposer, sendPraise, toast } = useStore()
+  const { setComposer, closeComposer, sendPraise, submitForApproval, toast } = useStore()
   const [toSel, setToSel] = useState<string[]>(preset?.toId ? [preset.toId] : [])
   const [q, setQ] = useState('')
   const [pickerOpen, setPickerOpen] = useState(false)
@@ -196,7 +196,7 @@ export default function Composer({ open, preset }: ComposerProps) {
               <input
                 value={ccq}
                 onChange={(e) => { setCcq(e.target.value); setCcPickerOpen(true) }}
-                placeholder={ccSel.length || ccManagers.length ? 'Add more CC…' : 'Share Recognition With'}
+                placeholder={ccSel.length || ccManagers.length ? 'Add more…' : 'Share Recognition With'}
                 className="h-7 min-w-[150px] flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted"
               />
             </div>
@@ -387,9 +387,9 @@ export default function Composer({ open, preset }: ComposerProps) {
   )
 }
 
-function TemplateCard({ tpl, url, previewValue, recipients, points, msg, big }: {
-  tpl: { name: string; emoji: string }
-  url: string
+export function TemplateCard({ tpl, url, previewValue, recipients, points, msg, big }: {
+  tpl?: { name: string; emoji: string }
+  url?: string
   previewValue: { label: string; soft: string; ink: string } | null
   recipients: { id: string; label: string }[]
   points: number
@@ -399,13 +399,17 @@ function TemplateCard({ tpl, url, previewValue, recipients, points, msg, big }: 
   const pad = big ? 'px-5' : 'px-3.5'
   return (
     <div className={`flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card ${big ? 'rounded-3xl' : ''}`}>
-      <div className={`flex items-center gap-2 ${pad} ${big ? 'py-3.5' : 'py-3'}`}>
-        <span className="text-lg leading-none">{tpl.emoji}</span>
-        <p className="min-w-0 flex-1 truncate text-[13px] font-extrabold leading-tight text-navy">{tpl.name}</p>
-      </div>
-      <div className="border-y border-line bg-brand-soft/30">
-        <img src={url} alt="" className="block min-h-[150px] w-full object-cover" />
-      </div>
+      {tpl && (
+        <div className={`flex items-center gap-2 ${pad} ${big ? 'py-3.5' : 'py-3'}`}>
+          <span className="text-lg leading-none">{tpl.emoji}</span>
+          <p className="min-w-0 flex-1 truncate text-[13px] font-extrabold leading-tight text-navy">{tpl.name}</p>
+        </div>
+      )}
+      {url && (
+        <div className="border-y border-line bg-brand-soft/30">
+          <img src={url} alt="" className="block min-h-[150px] w-full object-cover" />
+        </div>
+      )}
       <div className={`${pad} ${big ? 'py-5' : 'py-4'}`}>
         <p className={`leading-relaxed text-ink ${big ? 'text-[15px]' : 'text-[13px]'}`}>
           {msg.trim()
