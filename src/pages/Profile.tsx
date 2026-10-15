@@ -50,7 +50,7 @@ export default function ProfileScreen() {
             ].map(([l, v]) => (
               <div key={l} className="rounded-xl bg-white/10 px-4 py-3.5 backdrop-blur-sm">
                 <p className="tnum text-[20px] font-extrabold text-gold">{v}</p>
-                <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-white/60">{l}</p>
+                <p className="mt-0.5 text-[10px] font-bold font-mono uppercase tracking-wider text-white/60">{l}</p>
               </div>
             ))}
           </div>

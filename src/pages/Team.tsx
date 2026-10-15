@@ -114,7 +114,7 @@ function TeamScreen() {
           <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-brand-soft text-brand"><PartyPopper size={15} /></span>
           <div className="leading-tight">
             <p className="tnum text-[18px] font-extrabold text-navy">{fmtNum(total)}</p>
-            <p className="text-[10.5px] font-bold uppercase tracking-wide text-muted">Recognitions · this quarter</p>
+            <p className="text-[10.5px] font-bold font-mono uppercase tracking-wide text-muted">Recognitions · this quarter</p>
           </div>
         </div>
         </div>
@@ -125,7 +125,7 @@ function TeamScreen() {
       {/* People table */}
       <Card className="p-0">
         <div ref={headRef} className="sticky top-16 z-10 rounded-t-2xl border-b border-line bg-slate-50/95 backdrop-blur-sm">
-          <div className="grid min-w-[780px] grid-cols-[56px_minmax(230px,1.35fr)_minmax(200px,1fr)_170px_210px] items-center gap-4 px-5 py-3 text-[10.5px] font-extrabold uppercase tracking-[0.12em] text-muted">
+          <div className="grid min-w-[780px] grid-cols-[56px_minmax(230px,1.35fr)_minmax(200px,1fr)_170px_210px] items-center gap-4 px-5 py-3 text-[10.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">
             <span>S.no</span>
             <span>Name</span>
             <span>Designation</span>
@@ -181,15 +181,15 @@ function TeamScreen() {
                 {viewValue && <Chip className={`mt-1.5 ${viewValue.soft} ${viewValue.ink}`}>{viewValue.label}</Chip>}
               </div>
             </div>
-            <p className="mb-1.5 mt-6 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-muted">This quarter</p>
+            <p className="mb-1.5 mt-6 text-[10.5px] font-extrabold font-mono uppercase tracking-[0.14em] text-muted">This quarter</p>
             <Card className="grid grid-cols-2 divide-x divide-line">
               <div className="px-4 py-3.5">
                 <p className="tnum text-[22px] font-extrabold text-navy">{viewRow.received}</p>
-                <p className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-muted">Recognitions received</p>
+                <p className="mt-0.5 text-[10.5px] font-bold font-mono uppercase tracking-wide text-muted">Recognitions received</p>
               </div>
               <div className="px-4 py-3.5">
                 <p className="tnum text-[22px] font-extrabold text-navy">{viewRow.given}</p>
-                <p className="mt-0.5 text-[10.5px] font-bold uppercase tracking-wide text-muted">Recognitions given</p>
+                <p className="mt-0.5 text-[10.5px] font-bold font-mono uppercase tracking-wide text-muted">Recognitions given</p>
               </div>
             </Card>
             <div className="mt-3 space-y-2.5 rounded-2xl border border-line bg-slate-50 px-4 py-3.5">
