@@ -22,7 +22,9 @@ export interface SendPraisePayload {
   valueKey: string
   message: string
   points: number
-  /** Optional template id that prefilled the message. */
+  /** Exact banner the user picked (one of the template's `urls`). */
+  artUrl?: string
+  /** The template id that prefilled the message. */
   tpl?: string
 }
 
@@ -105,7 +107,7 @@ export function StoreProvider({ children }: StoreProviderProps) {
 
   const postGesture = (n: number) => setBalance((b) => b + n)
 
-  const sendPraise = ({ toIds, valueKey, message, points, tpl }: SendPraisePayload) => {
+  const sendPraise = ({ toIds, valueKey, message, points, artUrl, tpl }: SendPraisePayload) => {
     const p: Post = {
       id: 'u' + Date.now(), kind: 'praise', fromId: 'me', toIds, valueKey: valueKey as Post['valueKey'],
       tpl, message, points, when: 'Just now', comments: [], counts: {},
@@ -117,7 +119,7 @@ export function StoreProvider({ children }: StoreProviderProps) {
       ...n,
     ])
     /* Any praise posted with points attached routes to the manager's approval inbox. */
-    if (points > 0) submitForApproval({ toIds, valueKey, message, points, tpl })
+    if (points > 0) submitForApproval({ toIds, valueKey, message, points, artUrl, tpl })
     toast('Sent! Their manager has been notified.', 'gold')
   }
 
@@ -141,7 +143,7 @@ export function StoreProvider({ children }: StoreProviderProps) {
   const redeem = (pts: number) => setBalance((b) => Math.max(0, b - pts))
 
   /* Any praise posted with points attached routes to the manager's approval inbox. */
-  const submitForApproval = ({ toIds, valueKey, message, points, tpl }: SendPraisePayload) => {
+  const submitForApproval = ({ toIds, valueKey, message, points, artUrl, tpl }: SendPraisePayload) => {
     if (points <= 0) return
     const names = toIds.map((id) => PEOPLE[id]?.name ?? 'teammate').join(', ')
     const chosen = tpl ? VALUE_TEMPLATES[valueKey as keyof typeof VALUE_TEMPLATES]?.find((t) => t.id === tpl) : null
@@ -157,6 +159,7 @@ export function StoreProvider({ children }: StoreProviderProps) {
       valueKey: valueKey as ApprovalItem['valueKey'],
       toIds,
       template: snapshotTpl ? { name: snapshotTpl.name, emoji: snapshotTpl.emoji, urls: snapshotTpl.urls } : undefined,
+      artUrl: artUrl ?? snapshotTpl?.urls?.[0],
       policy: { verdict: 'pass', notes: [] },
       route: [
         { step: 'Direct manager (you)', owner: 'Ayan', done: false },

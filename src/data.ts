@@ -235,6 +235,8 @@ export type ApprovalItem = {
   /** Set when the recognition was composed with one of the platform's card templates. */
   toIds?: string[]
   template?: { name: string; emoji: string; urls: string[] }
+  /** The exact banner variant the sender picked for the card. */
+  artUrl?: string
   policy: { verdict: 'pass' | 'flag'; notes: string[] }
   route: { step: string; owner: string; done: boolean }[]
   budget: string

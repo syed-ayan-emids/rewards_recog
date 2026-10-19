@@ -150,7 +150,7 @@ function ApprovalDetail({ item, onResolve, verdict }: ApprovalDetailProps) {
               <div className="mt-3 max-w-[430px]">
                 <TemplateCard
                   tpl={{ name: item.template.name, emoji: item.template.emoji }}
-                  url={item.template.urls[0]}
+                  url={item.artUrl ?? item.template.urls[0]}
                   previewValue={item.valueKey ? CORE_VALUES[item.valueKey] : null}
                   recipients={(item.toIds ?? []).map((id) => ({ id, label: person(id).name.split(' ')[0] }))}
                   points={item.points ?? 0}

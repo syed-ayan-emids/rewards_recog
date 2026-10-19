@@ -99,7 +99,7 @@ export default function Composer({ open, preset }: ComposerProps) {
 
   const submit = () => {
     if (!canSend || !valueKey) return
-    sendPraise({ toIds: toSel, valueKey, message: msg.trim(), points, tpl: tpl?.id })
+    sendPraise({ toIds: toSel, valueKey, message: msg.trim(), points, artUrl: tpl ? (tpl.urls[variantIdx] ?? tpl.urls[0]) : undefined, tpl: tpl?.id })
     closeComposer()
     import('canvas-confetti').then((mod) => {
       mod.default({ particleCount: 90, spread: 70, origin: { y: 0.65 }, colors: ['#FFB224', '#FF5A5F', '#7A5AF8', '#0E9384'], disableForReducedMotion: true })
