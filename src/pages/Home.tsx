@@ -195,7 +195,9 @@ export default function HomeScreen() {
       <div className="grid grid-cols-1 md:grid-cols-2 items-stretch gap-4 -mx-2.5 lg:-mx-[30px]">
         <div className="flex flex-col">
           <p className="mb-3 text-[11px] font-extrabold font-mono uppercase tracking-[0.2em] text-brand">Team highlights</p>
-          <EoQShowcase />
+          <div className="flex flex-1 flex-col [&>*]:flex [&>*]:h-full [&>*]:min-h-0">
+            <EoQShowcase />
+          </div>
         </div>
 
         <div className="flex flex-col">
