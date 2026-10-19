@@ -138,7 +138,7 @@ export default function AiDrawer() {
             <p className="text-[15px] font-extrabold">emids AI</p>
             <p className="text-[11.5px] text-white/70">Validates · drafts · routes approvals</p>
           </div>
-          <button onClick={() => setAi(false)} aria-label="Close AI assistant" className="ml-auto rounded-full p-1.5 text-white/80 transition hover:bg-white/10 hover:text-white"><X size={18} /></button>
+          <button onClick={() => setAi(false)} aria-label="Close AI assistant" className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-white text-navy shadow-card transition hover:bg-slate-50"><X size={18} /></button>
         </div>
 
         <div ref={listRef} className="rail-scroll flex-1 overflow-y-auto px-4 py-4">
