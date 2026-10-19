@@ -296,7 +296,6 @@ export default function Composer({ open, preset }: ComposerProps) {
             {/* Points */}
             <label className="mb-1.5 mt-5 flex items-center justify-between text-[11.5px] font-extrabold font-mono uppercase tracking-[0.12em] text-muted">
               <span>Attach points</span>
-              <span className="normal-case tracking-normal font-semibold">optional</span>
             </label>
             <div className="grid grid-cols-4 gap-1.5">
               {POINT_PRESETS.map((p) => (
