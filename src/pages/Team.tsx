@@ -20,8 +20,8 @@ const TEAM_CHIP: Record<TeamId, string> = {
 const TEAM_ROWS: TeamRow[] = (Object.keys(TEAM_STATS) as TeamId[]).flatMap((id) => TEAM_STATS[id].map((s) => ({ ...s, team: id })))
 
 export default function MyTeamScreen() {
-  const { screenParam, notifications } = useStore()
-  const [tab, setTab] = useState<TeamTab>((screenParam as TeamTab) || 'team')
+  const { screenParam, notifications, setScreen } = useStore()
+  const tab: TeamTab = (screenParam as TeamTab) || 'team'
   const approvalsCount = notifications.filter((n) => n.unread && n.group === 'approval').length
 
   const TABS: { key: TeamTab; label: string; icon: ReactNode; badge?: number }[] = [
@@ -35,7 +35,7 @@ export default function MyTeamScreen() {
         {TABS.map((t) => (
           <button
             key={t.key}
-            onClick={() => setTab(t.key)}
+            onClick={() => t.key !== tab && setScreen('team', t.key)}
             className={`flex shrink-0 items-center gap-2 rounded-xl border px-4 py-2.5 text-[13.5px] font-bold transition ${tab === t.key ? 'border-brand bg-brand text-white shadow-card' : 'border-line bg-white text-muted hover:text-ink'}`}
           >
             {t.icon}

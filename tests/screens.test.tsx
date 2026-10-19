@@ -47,7 +47,7 @@ describe('Approvals screen', () => {
 describe('Composer page', () => {
   it('renders the page heading and closes via Cancel', () => {
     renderWithStore(<Composer open />)
-    expect(screen.getByText('Recognize a teammate')).toBeInTheDocument()
+    expect(screen.getByText('Recognize someone')).toBeInTheDocument()
     expect(screen.getByText('Cancel')).toBeInTheDocument()
     expect(screen.getByText('Post it')).toBeInTheDocument()
   })
