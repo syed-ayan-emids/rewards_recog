@@ -115,7 +115,7 @@ export default function Composer({ open, preset }: ComposerProps) {
   return (
     <div className="flex flex-col">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-4">
-          <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">Recognize a teammate</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">Recognize someone</h1>
           <Btn variant="ghost" size="sm" onClick={closeComposer}><ArrowLeft size={16} /> Back</Btn>
         </div>
         <div className="mx-auto grid w-full max-w-6xl gap-x-6 gap-y-5 px-5 py-4 lg:grid-cols-[1fr_1.4fr]">
