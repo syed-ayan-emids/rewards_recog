@@ -398,6 +398,38 @@ body {
   animation: shimmer-pan 7s linear infinite;
 }
 
+/* Kill the browser's keyboard bracket/outline on the navbar items in Edge */
+/* Skip-to-main-content link: hidden until it receives keyboard focus (first Tab stop) */
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: var(--color-brand);
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* Visible keyboard focus for every interactive element — brand rounded ring, WCAG-compliant */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
 /* Running gradient for the mono kicker labels (eyebrow voice) */
 .kicker-shimmer {
   background: linear-gradient(100deg, #0e4a5c 25%, #0aa393 42%, #ffb224 58%, #0e4a5c 78%);
@@ -406,6 +438,14 @@ body {
   background-clip: text;
   color: transparent;
   animation: shimmer-pan 6s linear infinite;
+}
+
+/* Hero headline slide: enters from the left, holds ~3s, exits to the right */
+@keyframes hero-slide {
+  0% { opacity: 0; transform: translateX(-48px); }
+  14% { opacity: 1; transform: translateX(0); }
+  85% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(48px); }
 }
 
 /* Hero mascot (spark character) */
@@ -453,4 +493,5 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .mascot-bob, .mascot-wave, .mascot-face, .mascot-halo, .mascot-twinkle, .mascot-celebr, .mascot-sparkle, .hero-shine, .say-shimmer, .kicker-shimmer { animation: none !important; }
+  .hero-slide-cycle { animation: none !important; opacity: 1 !important; transform: none !important; }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { ReactNode } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react'
 import { ChevronDown, Home, Gift, Sparkles, PartyPopper, Users } from 'lucide-react'
 import { useStore, type Screen } from '../../store'
 import { Avatar, useOutside } from '../atoms'
@@ -8,8 +8,6 @@ import ProfileMenu from '../organisms/ProfileMenu'
 import Composer from '../organisms/Composer'
 import AiDrawer from '../organisms/AiDrawer'
 import Toasts from '../organisms/Toasts'
-import ProgramAdmin from '../../admin/ProgramAdmin'
-import FinanceAdmin from '../../admin/FinanceAdmin'
 import HomeScreen from '../../pages/Home'
 import RewardsScreen from '../../pages/Rewards'
 import AwardsScreen from '../../pages/Awards'
@@ -56,22 +54,52 @@ export default function AppShell() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen])
 
-  /* Admin portals run on their own chrome (#/admin, #/finance) — the employee shell is bypassed entirely. */
-  if (screen === 'admin' || screen === 'finance') {
-    return (
-      <>
-        {screen === 'admin'
-          ? <ProgramAdmin onExit={() => setScreen('home')} />
-          : <FinanceAdmin onExit={() => setScreen('home')} />}
-        <Toasts />
-      </>
-    )
+  // Arrow Left/Right cycles focus across the emids logo + nav items
+  // (handler on the header so it works whether focus starts on the logo or a nav item)
+  const onHeaderKey = (e: ReactKeyboardEvent) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return
+    const items = [...(e.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>('button[aria-label="Go to dashboard"], nav button')]
+    const idx = items.indexOf(document.activeElement as HTMLButtonElement)
+    if (idx < 0) return
+    e.preventDefault()
+    const next = e.key === 'ArrowRight' ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length
+    items[next]?.focus()
   }
+
+  // First ArrowUp/ArrowDown touch: navbar grabs focus on the nav item matching the current screen
+  // (Dashboard on home as default); once in the navbar, further Up/Down presses resume page scrolling
+  // and no longer re-grab the navbar (that caused the flicker while keyboard-scrolling)
+  const navArmed = useRef(false)
+  const navReleased = useRef(false)
+  useEffect(() => {
+    navArmed.current = false
+    navReleased.current = false
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
+      const headerEl = document.querySelector('header')
+      const items = headerEl ? [...headerEl.querySelectorAll<HTMLButtonElement>('button[aria-label="Go to dashboard"], nav button')] : []
+      if (items.indexOf(document.activeElement as HTMLButtonElement) >= 0) {
+        ;(document.activeElement as HTMLElement).blur()
+        navArmed.current = false
+        navReleased.current = true
+        return // default Up/Down scrolls the page from here
+      }
+      if (navArmed.current || navReleased.current) return // stay released — no re-grab flicker
+      e.preventDefault()
+      const target = items.find((b) => b.dataset.screen === screen) ?? items.find((b) => b.dataset.screen === 'home') ?? items[0] ?? null
+      target?.focus()
+      navArmed.current = true
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [screen])
 
   return (
     <div className="min-h-dvh bg-page-art">
+      {/* Skip to main content — first keyboard stop */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
       {/* Top bar — curved floating pill */}
-      <header className={`sticky top-2 z-20 mx-2.5 mt-2 rounded-[20px] border border-line bg-white/88 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_18px_rgba(10,31,68,0.07)]' : ''}`}>
+      <header onKeyDown={onHeaderKey} className={`sticky top-2 z-20 mx-2.5 mt-2 rounded-[20px] border border-line bg-white/88 backdrop-blur-md transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_18px_rgba(10,31,68,0.07)]' : ''}`}>
         <div className="mx-auto flex h-16 max-w-[1560px] items-stretch gap-2 px-5 lg:px-10">
           <div className="mr-5 flex items-center gap-2.5">
             <button onClick={() => setScreen('home')} aria-label="Go to dashboard" title="Go to dashboard" className="flex cursor-pointer items-center gap-2.5 rounded-lg transition hover:opacity-80">
@@ -86,9 +114,10 @@ export default function AppShell() {
               return (
                 <button
                   key={n.key}
+                  data-screen={n.key}
                   onClick={() => setScreen(n.key)}
                   aria-current={active ? 'page' : undefined}
-                  className={`relative flex shrink-0 items-center gap-1.5 px-3.5 text-[13px] font-semibold transition ${active ? 'text-navy' : 'text-muted hover:text-ink'}`}
+                  className={`relative flex shrink-0 items-center gap-1.5 rounded-xl px-3.5 text-[13px] font-semibold transition outline-none focus-visible:bg-brand-soft/50 ${active ? 'text-navy' : 'text-muted hover:text-ink'}`}
                 >
                   {n.icon}
                   {n.label}
@@ -130,7 +159,7 @@ export default function AppShell() {
         </div>
       </header>
 
-      <main className="mx-auto mt-2 max-w-[1560px] px-5 pb-28 pt-3 lg:px-10 lg:pb-16">
+      <main id="main-content" tabIndex={-1} className="mx-auto mt-2 max-w-[1560px] px-5 pb-28 pt-3 lg:px-10 lg:pb-16">
         <div key={screen} className="page-fade">
           {screen === 'home' && <HomeScreen />}
           {screen === 'rewards' && <RewardsScreen />}
@@ -143,14 +172,21 @@ export default function AppShell() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-line bg-white pb-20 lg:pb-0">
-        <div className="mx-auto flex max-w-[1560px] flex-col items-center justify-between gap-2 px-5 py-6 text-center sm:flex-row sm:px-10 sm:text-left">
+      <footer className="bg-[#0d0d12] pb-20 pt-8 text-white/85 lg:pb-0">
+        <div className="mx-auto flex max-w-[1560px] flex-col items-center justify-center gap-3 px-5 py-5 text-center sm:px-10">
           <div className="flex items-center gap-2">
             <button onClick={() => setScreen('home')} aria-label="Go to dashboard" title="Go to dashboard" className="flex cursor-pointer items-center gap-2 rounded-lg transition hover:opacity-80">
               <img src="/emids-icon.png" alt="emids" className="h-6 w-6 object-contain" />
-              <span className="text-[13px] font-extrabold tracking-tight text-navy">EMIDS <span className="font-bold text-muted">· Rewards and Recognition</span></span>
+              <span className="text-[13px] font-extrabold tracking-tight text-white">EMIDS <span className="font-bold text-white/60">· Rewards and Recognition</span></span>
             </button>
           </div>
+          <nav className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-[13px] font-semibold" aria-label="Brand">
+            <a href="https://www.emids.com/code-of-conduct/" target="_blank" rel="noreferrer" className="transition hover:text-white">Code of Conduct</a>
+            <a href="https://www.emids.com/privacy-policy/" target="_blank" rel="noreferrer" className="transition hover:text-white">Privacy Policy</a>
+            <a href="https://Health1.Meritain.com/app/public/#/one/insurerCode=MERITAIN_I&brandCode=MERITAINOVER/machine-readable-transparency-in-coverage?reportingEntityType=TPA_A6673&lock=true" target="_blank" rel="noreferrer" className="transition hover:text-white">Transparency in Coverage</a>
+            <a href="https://www.emids.com/cookie-policy/" target="_blank" rel="noreferrer" className="transition hover:text-white">Cookie Policy</a>
+            <a href="https://www.emids.com/accessibility-statement/" target="_blank" rel="noreferrer" className="transition hover:text-white">Accessibility Statement</a>
+          </nav>
         </div>
       </footer>
 
