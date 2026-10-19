@@ -8,6 +8,8 @@ import ProfileMenu from '../organisms/ProfileMenu'
 import Composer from '../organisms/Composer'
 import AiDrawer from '../organisms/AiDrawer'
 import Toasts from '../organisms/Toasts'
+import ProgramAdmin from '../../admin/ProgramAdmin'
+import FinanceAdmin from '../../admin/FinanceAdmin'
 import HomeScreen from '../../pages/Home'
 import RewardsScreen from '../../pages/Rewards'
 import AwardsScreen from '../../pages/Awards'
@@ -53,6 +55,18 @@ export default function AppShell() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen])
+
+  /* Admin portals run on their own chrome (#/admin, #/finance) — the employee shell is bypassed entirely. */
+  if (screen === 'admin' || screen === 'finance') {
+    return (
+      <>
+        {screen === 'admin'
+          ? <ProgramAdmin onExit={() => setScreen('home')} />
+          : <FinanceAdmin onExit={() => setScreen('home')} />}
+        <Toasts />
+      </>
+    )
+  }
 
   return (
     <div className="min-h-dvh bg-page-art">

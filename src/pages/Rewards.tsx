@@ -29,26 +29,41 @@ export default function RewardsScreen() {
 
       {/* Top strip */}
       <div className="mb-8 grid gap-4 md:grid-cols-3">
-        <Card className="hero-room relative overflow-hidden p-0 text-white md:col-span-2">
-          <div className="dotgrid relative flex h-full flex-col p-5">
-            <Sparkles size={44} className="absolute right-6 top-5 text-gold/20" aria-hidden />
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-3">
-                <img src="/emids-logo-tight.png" alt="emids" className="h-4 w-auto shrink-0" />
-                <p className="text-[9.5px] font-extrabold font-mono uppercase tracking-[0.14em] text-gold">Total reward balance</p>
-              </div>
-              <span className="tnum shrink-0 rounded-full bg-white/10 px-2.5 py-1 text-[10.5px] font-bold text-gold">🔥 6-week streak</span>
-            </div>
-            <p className="tnum mt-3 text-[38px] font-extrabold leading-none tracking-[0.03em] text-gold">
-              {fmtNum(n)}<span className="ml-2 text-[14px] font-bold tracking-normal text-white/60">pts</span>
-            </p>
-            <p className="mt-1.5 text-[12px] text-white/60">+{earnedThisQuarter} earned this quarter · 1 point = ₹1 · never expires</p>
-            <div className="mt-4 flex flex-wrap gap-2">
+        {/* Total reward balance — same family as the dashboard's tile */}
+        <div
+          className="relative min-h-[220px] overflow-hidden rounded-[28px] border border-[#C9E4F2] bg-[linear-gradient(115deg,#E2F7F1_0%,#EAF9FB_45%,#DDEFFA_100%)] shadow-[0_18px_40px_-24px_rgba(3,13,28,0.35)] md:col-span-2"
+        >
+          {/* bottom-left — concentric quarter-rings anchored to the corner */}
+          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#DDF3EA]" style={{ width: 480, height: 480, left: -240, bottom: -240 }} />
+          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#7ECDBE]/55" style={{ width: 380, height: 380, left: -190, bottom: -190 }} />
+          <span aria-hidden className="pointer-events-none absolute rounded-full border-2 border-[#0B2740]/10" style={{ width: 320, height: 320, left: -160, bottom: -160 }} />
+          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#164D61]" style={{ width: 240, height: 240, left: -120, bottom: -120 }} />
+          {/* top-right — icy discs anchored to the corner */}
+          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#8CC7E7]/30" style={{ width: 360, height: 360, right: -180, top: -180 }} />
+          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#B7DFF1]/45" style={{ width: 260, height: 260, right: -130, top: -130 }} />
 
-              <Btn size="sm" variant="gold" onClick={() => scrollTo('ledger')}>View ledger <ArrowRight size={13} /></Btn>
+          <div className="relative z-10 flex h-full min-h-[220px] flex-col justify-between p-7">
+            <p className="text-[clamp(0.7rem,1vw,0.8rem)] font-medium uppercase tracking-[4px] text-[#0B2740]/85">Total reward balance</p>
+
+            <div className="-translate-x-[20px]">
+              <div className="flex justify-center items-end gap-3">
+                <p className="tnum text-[clamp(2.8rem,6.6vw,4.7rem)] font-black leading-[0.9] tracking-[-0.04em] text-[#0B2740]">
+                  {fmtNum(n)}
+                </p>
+                <p className="mb-2 text-[clamp(1.1rem,1.9vw,1.6rem)] font-extrabold tracking-tight text-[#0E7C8C]">PTS</p>
+              </div>
+            </div>
+
+            <div className="flex justify-end pr-1 sm:pr-4">
+              <button
+                onClick={() => scrollTo('ledger')}
+                className="flex items-center gap-3 rounded-full bg-[#153B5A] px-7 py-3 text-[13.5px] font-semibold text-white shadow-[0_10px_22px_rgba(3,13,28,0.28)] transition hover:brightness-110"
+              >
+                View ledger <ArrowRight size={15} />
+              </button>
             </div>
           </div>
-        </Card>
+        </div>
 
         <Card className="p-5">
           <p className="text-[10.5px] font-extrabold font-mono uppercase tracking-[0.14em] text-muted">Earned lifetime</p>

@@ -5,7 +5,7 @@ import type { ApprovalItem, Post, ReactionKey } from './data'
 
 export type ApprovalVerdict = 'approved' | 'returned' | 'declined'
 
-export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile' | 'compose'
+export type Screen = 'home' | 'team' | 'rewards' | 'awards' | 'jury' | 'profile' | 'compose' | 'admin' | 'finance'
 
 export interface ComposerPreset {
   /** Person pre-selected in the "To" field of the composer. */
@@ -63,6 +63,14 @@ type Ctx = {
 const StoreCtx = createContext<Ctx>(null as unknown as Ctx)
 export const useStore = () => useContext(StoreCtx)
 
+/** Maps the /admin and /finance URLs to their screens (anything else → null). */
+function screenFromPath(): Screen | null {
+  const path = window.location.pathname
+  if (path === '/admin') return 'admin'
+  if (path === '/finance') return 'finance'
+  return null
+}
+
 export interface StoreProviderProps {
   children: ReactNode
 }
@@ -75,7 +83,7 @@ export function StoreProvider({ children }: StoreProviderProps) {
   const [composerFrom, setComposerFrom] = useState<Screen>('home')
   const [ai, setAi] = useState(false)
   const [toasts, setToasts] = useState<Toast[]>([])
-  const [screen, setScreenRaw] = useState<Screen>('home')
+  const [screen, setScreenRaw] = useState<Screen>(() => screenFromPath() ?? 'home')
   const [screenParam, setScreenParam] = useState<string | undefined>()
   const [profileId, setProfileId] = useState('me')
   const [approvals, setApprovals] = useState<ApprovalItem[]>(PENDING_APPROVALS)
@@ -87,6 +95,13 @@ export function StoreProvider({ children }: StoreProviderProps) {
     setToasts((t) => [...t.slice(-1), { id, msg, kind }])
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3400)
   }
+
+  /* Browser back/forward between /admin and /finance deep links. */
+  useEffect(() => {
+    const onPop = () => { const s = screenFromPath(); if (s) setScreenRaw(s) }
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
 
   const postGesture = (n: number) => setBalance((b) => b + n)
 
@@ -156,7 +171,12 @@ export function StoreProvider({ children }: StoreProviderProps) {
     setDecided((d) => ({ ...d, [id]: verdict }))
   }
 
-  const setScreen = (s: Screen, param?: string) => { setComposerRaw({ open: false }); setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 }) }
+  const setScreen = (s: Screen, param?: string) => {
+    setComposerRaw({ open: false }); setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 })
+    /* URLs: /admin and /finance open the admin portals directly; other screens reset to /. */
+    if (s === 'admin' || s === 'finance') history.replaceState(null, '', `/${s}`)
+    else if (location.pathname === '/admin' || location.pathname === '/finance') history.replaceState(null, '', '/')
+  }
   const openProfile = (id: string) => { setComposerRaw({ open: false }); setProfileId(id); setScreenRaw('profile'); window.scrollTo({ top: 0 }) }
   const setComposer = (o: ComposerState) => {
     if (o.open && !composer.open) setComposerFrom(screen)
