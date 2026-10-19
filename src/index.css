@@ -100,10 +100,17 @@ a {
   cursor: pointer;
 }
 
+/* Keyboard focus — high-contrast teal ring, visible on light and dark surfaces */
 *:focus-visible {
-  outline: 2px solid var(--color-brand);
+  outline: 3px solid var(--color-brand);
   outline-offset: 2px;
-  border-radius: 6px;
+  border-radius: 8px;
+  box-shadow: 0 0 0 6px rgba(14, 147, 132, 0.25);
+}
+.on-dark :focus-visible,
+.on-dark:focus-visible {
+  outline-color: #7de0d3;
+  box-shadow: 0 0 0 6px rgba(125, 224, 211, 0.2);
 }
 
 ::selection { background: rgba(255, 178, 36, 0.35); }
