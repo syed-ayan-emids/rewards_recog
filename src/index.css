@@ -93,6 +93,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Tailwind v4 preflight makes buttons default-cursor — interactive things point. */
+button,
+[role='button'],
+a {
+  cursor: pointer;
+}
+
 /* Keyboard focus — high-contrast teal ring, visible on light and dark surfaces */
 *:focus-visible {
   outline: 3px solid var(--color-brand);

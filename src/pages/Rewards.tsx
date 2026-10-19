@@ -73,8 +73,6 @@ export default function RewardsScreen() {
             <p className="flex items-center justify-between text-[12.5px] font-semibold text-muted"><span>Grants &amp; kudos</span><span className="tnum font-extrabold text-navy">1,310</span></p>
             <p className="flex items-center justify-between text-[12.5px] font-semibold text-muted"><span>Milestones</span><span className="tnum font-extrabold text-navy">500</span></p>
           </div>
-          <p className="mt-3 border-t border-line pt-2.5 text-[12px] font-bold text-navy">Next tier · Platinum giver</p>
-          <p className="text-[11.5px] text-muted">213 more recognitions to unlock</p>
         </Card>
       </div>
 

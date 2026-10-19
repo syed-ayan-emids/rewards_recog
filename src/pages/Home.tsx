@@ -130,7 +130,7 @@ export default function HomeScreen() {
                 onClick={() => setScreen('rewards')}
                 className="flex items-center gap-3 rounded-full bg-[#153B5A] px-9 py-4 text-[15px] font-semibold text-white shadow-[0_10px_24px_rgba(3,13,28,0.28)] transition hover:brightness-110"
               >
-                Redeem Now <ArrowRight size={17} />
+                Go to My Rewards <ArrowRight size={17} />
               </button>
             </div>
           </div>

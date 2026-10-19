@@ -65,12 +65,31 @@ type Ctx = {
 const StoreCtx = createContext<Ctx>(null as unknown as Ctx)
 export const useStore = () => useContext(StoreCtx)
 
-/** Maps the /admin and /finance URLs to their screens (anything else → null). */
-function screenFromPath(): Screen | null {
-  const path = window.location.pathname
-  if (path === '/admin') return 'admin'
-  if (path === '/finance') return 'finance'
-  return null
+/** Maps a URL path to the screen it represents (anything unknown → home). */
+function screenFromPath(path = window.location.pathname): { screen: Screen; param?: string } {
+  if (path === '/team/approvals') return { screen: 'team', param: 'approvals' }
+  if (path === '/team') return { screen: 'team' }
+  if (path === '/rewards') return { screen: 'rewards' }
+  if (path === '/awards') return { screen: 'awards' }
+  if (path === '/jury') return { screen: 'jury' }
+  if (path === '/profile') return { screen: 'profile' }
+  if (path === '/recognize') return { screen: 'compose' }
+  if (path === '/admin') return { screen: 'admin' }
+  if (path === '/finance') return { screen: 'finance' }
+  return { screen: 'home' }
+}
+
+/** Maps a screen (and its param) to the URL it lives at. */
+function pathForScreen(screen: Screen, param?: string): string {
+  if (screen === 'team') return param === 'approvals' ? '/team/approvals' : '/team'
+  if (screen === 'rewards') return '/rewards'
+  if (screen === 'awards') return '/awards'
+  if (screen === 'jury') return '/jury'
+  if (screen === 'profile') return '/profile'
+  if (screen === 'compose') return '/recognize'
+  if (screen === 'admin') return '/admin'
+  if (screen === 'finance') return '/finance'
+  return '/'
 }
 
 export interface StoreProviderProps {
@@ -85,11 +104,29 @@ export function StoreProvider({ children }: StoreProviderProps) {
   const [composerFrom, setComposerFrom] = useState<Screen>('home')
   const [ai, setAi] = useState(false)
   const [toasts, setToasts] = useState<Toast[]>([])
-  const [screen, setScreenRaw] = useState<Screen>(() => screenFromPath() ?? 'home')
-  const [screenParam, setScreenParam] = useState<string | undefined>()
+  const [screen, setScreenRaw] = useState<Screen>(() => screenFromPath().screen)
+  const [screenParamInit] = useState<string | undefined>(() => screenFromPath().param)
+  const [screenParam, setScreenParam] = useState<string | undefined>(screenParamInit)
   const [profileId, setProfileId] = useState('me')
   const [approvals, setApprovals] = useState<ApprovalItem[]>(PENDING_APPROVALS)
   const [decided, setDecided] = useState<Record<string, ApprovalVerdict>>({})
+
+  /* Browser back/forward step through the app's screens: one popstate handler
+     maps the URL back to a screen (and closes/opens the composer as needed). */
+  const suppressPopRef = useRef(false)
+  useEffect(() => {
+    const onPopstate = () => {
+      if (suppressPopRef.current) { suppressPopRef.current = false; return }
+      const { screen: s, param } = screenFromPath(window.location.pathname)
+      if (s === 'compose') setComposerFrom('home')
+      else setComposerRaw({ open: false })
+      setScreenRaw(s)
+      setScreenParam(param)
+      window.scrollTo({ top: 0 })
+    }
+    window.addEventListener('popstate', onPopstate)
+    return () => window.removeEventListener('popstate', onPopstate)
+  }, [])
 
   const toastId = useRef(0)
   const toast = (msg: string, kind?: Toast['kind']) => {
@@ -99,11 +136,6 @@ export function StoreProvider({ children }: StoreProviderProps) {
   }
 
   /* Browser back/forward between /admin and /finance deep links. */
-  useEffect(() => {
-    const onPop = () => { const s = screenFromPath(); if (s) setScreenRaw(s) }
-    window.addEventListener('popstate', onPop)
-    return () => window.removeEventListener('popstate', onPop)
-  }, [])
 
   const postGesture = (n: number) => setBalance((b) => b + n)
 
@@ -174,19 +206,31 @@ export function StoreProvider({ children }: StoreProviderProps) {
     setDecided((d) => ({ ...d, [id]: verdict }))
   }
 
+
   const setScreen = (s: Screen, param?: string) => {
-    setComposerRaw({ open: false }); setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 })
-    /* URLs: /admin and /finance open the admin portals directly; other screens reset to /. */
-    if (s === 'admin' || s === 'finance') history.replaceState(null, '', `/${s}`)
-    else if (location.pathname === '/admin' || location.pathname === '/finance') history.replaceState(null, '', '/')
+    const path = pathForScreen(s, param)
+    if (window.location.pathname !== path) window.history.pushState(null, '', path)
+    setComposerRaw({ open: false })
+    setScreenRaw(s); setScreenParam(param); window.scrollTo({ top: 0 })
   }
-  const openProfile = (id: string) => { setComposerRaw({ open: false }); setProfileId(id); setScreenRaw('profile'); window.scrollTo({ top: 0 }) }
+  const openProfile = (id: string) => { setProfileId(id); setScreen('profile') }
   const setComposer = (o: ComposerState) => {
-    if (o.open && !composer.open) setComposerFrom(screen)
-    setComposerRaw(o)
-    if (o.open) setScreenRaw('compose')
+    if (o.open) {
+      if (window.location.pathname !== '/recognize') window.history.pushState(null, '', '/recognize')
+      setComposerFrom(screen)
+      setComposerRaw(o)
+      setScreenRaw('compose')
+      window.scrollTo({ top: 0 })
+    } else setComposerRaw(o)
   }
-  const closeComposer = () => { setComposerRaw({ open: false }); setScreen(composerFrom) }
+  const closeComposer = () => {
+    if (window.location.pathname === '/recognize') {
+      suppressPopRef.current = true
+      window.history.back()
+    }
+    setComposerRaw({ open: false })
+    setScreen(composerFrom)
+  }
 
   const value: Ctx = { balance, postGesture, posts, sendPraise, react, addComment, notifications, markAllRead, redeem, openComposer: composer, setComposer, composerFrom, closeComposer, openAi: ai, setAi, toasts, toast, screen, setScreen, screenParam, profileId, openProfile, approvals, decided, resolveApproval, submitForApproval }
   return <StoreCtx.Provider value={value}>{children}</StoreCtx.Provider>
