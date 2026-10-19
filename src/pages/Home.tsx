@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, CalendarClock, Trophy, Users } from 'lucide-react'
+import { ArrowRight, CalendarClock, Gem, Trophy, Users } from 'lucide-react'
 
 import { Avatar, Btn, Card, Mascot } from '../components/atoms'
 import EoQShowcase from '../components/organisms/EoQShowcase'
@@ -14,6 +14,33 @@ const RECOGNIZE_PHRASES = [
   'Say Thanks to your manager',
   'Commend your lead',
 ]
+
+/** Rotating hero headlines — slide in from the left, hold ~3 s, exit to the right. */
+const HERO_LINES = [
+  { main: 'celebrate the progress.', accent: 'Make their moment.' },
+  { main: 'someone had a great week.', accent: 'Say kudos.' },
+  { main: 'see something great.', accent: 'Appreciate it.' },
+]
+
+function HeroSlide() {
+  const [idx, setIdx] = useState(0)
+  useEffect(() => {
+    const t = setInterval(() => setIdx((v) => (v + 1) % HERO_LINES.length), 4200)
+    return () => clearInterval(t)
+  }, [])
+  const line = HERO_LINES[idx]
+  return (
+    <span key={idx} className="hero-slide-cycle inline" style={{ animation: 'hero-slide 4200ms cubic-bezier(0.33, 1, 0.68, 1) both' }}>
+      <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>{line.main}</span>{' '}
+      <span className="relative inline-block">
+        <span className="say-shimmer">{line.accent}</span>
+        <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden>
+          <path d="M2 6 C 30 1, 90 1, 118 5" fill="none" stroke="var(--color-gold)" strokeWidth="3" strokeLinecap="round" opacity="0.75" />
+        </svg>
+      </span>
+    </span>
+  )
+}
 
 /** Cycles through the recognize phrases with the soft 1200ms fade. */
 function RecognizeCycle({ className = '' }: { className: string }) {
@@ -50,14 +77,9 @@ export default function HomeScreen() {
         <div className="relative isolate flex min-h-[360px] items-center overflow-hidden rounded-[28px] shadow-[0_18px_44px_-20px_rgba(3,13,28,0.55)]">
           <HeroBackdrop />
           <div className="relative z-10 flex w-full flex-col items-start justify-center gap-6 px-7 py-8 sm:px-9 xl:px-10 xl:py-10">
-            <h1 className="max-w-3xl text-[clamp(2.5rem,4.6vw,3.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em]">
-              <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>Hello Ayan — someone had a great week.</span>{' '}
-              <span className="relative inline-block">
-                <span className="say-shimmer">Say kudos.</span>
-                <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden>
-                  <path d="M2 6 C 30 1, 90 1, 118 5" fill="none" stroke="var(--color-gold)" strokeWidth="3" strokeLinecap="round" opacity="0.75" />
-                </svg>
-              </span>
+            <h1 className="max-w-3xl text-[50px] font-extrabold leading-[1.06] tracking-[-0.03em]">
+              <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>Hello Ayan — </span>
+              <HeroSlide />
             </h1>
             <div className="flex flex-wrap items-center gap-4">
               <button
@@ -78,41 +100,40 @@ export default function HomeScreen() {
       <div className="mb-3 flex items-end justify-between gap-4 -mx-2.5 lg:-mx-[30px]">
         <p className="text-[11px] font-extrabold font-mono uppercase tracking-[0.2em] text-brand">My activity</p>
       </div>
-      <div className="mb-4 grid gap-4 md:grid-cols-1 xl:grid-cols-2 xl:items-stretch -mx-2.5 lg:-mx-[30px]">
-        {/* Total points balance — pale mint/ice tile, geometric corner shapes */}
-        <div
-          className="relative min-h-[280px] overflow-hidden rounded-[28px] border border-[#C9E4F2] bg-[linear-gradient(115deg,#E2F7F1_0%,#EAF9FB_45%,#DDEFFA_100%)] shadow-[0_18px_40px_-24px_rgba(3,13,28,0.35)]"
+      <div className="mb-4 grid grid-cols-2 items-stretch gap-4 -mx-2.5 lg:-mx-[30px]">
+        {/* Total points balance — ice-light wallet panel with shapes */}
+        <Card
+          className="stat-ice stat-tile relative flex flex-col justify-between overflow-hidden p-6"
         >
-          {/* bottom-left — concentric quarter-rings anchored to the corner */}
-          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#DDF3EA]" style={{ width: 570, height: 570, left: -285, bottom: -285 }} />
-          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#7ECDBE]/55" style={{ width: 450, height: 450, left: -225, bottom: -225 }} />
-          <span aria-hidden className="pointer-events-none absolute rounded-full border-2 border-[#0B2740]/10" style={{ width: 380, height: 380, left: -190, bottom: -190 }} />
-          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#164D61]" style={{ width: 200, height: 200, left: -100, bottom: -100 }} />
-          {/* top-right — concentric ice-blue discs anchored to the corner */}
-          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#8CC7E7]/30" style={{ width: 510, height: 510, right: -255, top: -255 }} />
-          <span aria-hidden className="pointer-events-none absolute rounded-full bg-[#B7DFF1]/45" style={{ width: 350, height: 350, right: -175, top: -175 }} />
-          <span aria-hidden className="pointer-events-none absolute rounded-full border-2 border-[#B7DFF1]/70" style={{ width: 250, height: 250, right: -125, top: -125 }} />
+          {/* light decor — teal circle, square, triangle */}
+          <span aria-hidden className="stat-shape pointer-events-none absolute -right-40 -top-40 h-96 w-96 rounded-full border-[10px] border-teal-500/10" />
+          <span aria-hidden className="stat-shape pointer-events-none absolute -right-14 -top-10 h-56 w-56 rounded-full bg-teal-500/10" />
+          <span aria-hidden className="stat-shape stat-triangle pointer-events-none absolute -right-6 bottom-8 border-b-[36px] border-l-[22px] border-r-[22px] border-b-teal-600/25 border-l-transparent border-r-transparent" />
+          <span aria-hidden className="stat-shape stat-diamond pointer-events-none absolute right-24 bottom-14 h-10 w-10 border-2 border-teal-600/25" />
+          <span aria-hidden className="stat-shape stat-diamond pointer-events-none absolute right-44 top-6 h-6 w-6 bg-teal-500/15" />
 
-          <div className="relative z-10 flex h-full min-h-[280px] flex-col justify-between gap-6 px-8 py-9 sm:px-12 sm:py-10">
-            <p className="text-[clamp(0.8rem,1.2vw,1rem)] font-medium uppercase tracking-[4px] text-[#0B2740]/85">Total points balance</p>
-
-            <div className="flex items-end gap-4 px-2">
-              <p className="tnum text-[clamp(4rem,10vw,8rem)] font-black leading-[0.85] tracking-[-0.04em] text-[#0B2740]">
-                {fmtNum(useCountUp(balance))}
-              </p>
-              <p className="mb-2 text-[clamp(1.4rem,2.6vw,2.25rem)] font-extrabold tracking-tight text-[#0E7C8C]">PTS</p>
-            </div>
-
-            <div className="flex justify-end pr-2 sm:pr-10">
-              <button
-                onClick={() => setScreen('rewards')}
-                className="flex items-center gap-3 rounded-full bg-[#153B5A] px-9 py-4 text-[15px] font-semibold text-white shadow-[0_10px_24px_rgba(3,13,28,0.28)] transition hover:brightness-110"
-              >
-                Redeem Now <ArrowRight size={17} />
-              </button>
-            </div>
+          <div className="relative z-10 flex items-center gap-2.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0c4a5c] text-white">
+              <Gem size={16} />
+            </span>
+            <span>
+              <span className="kicker-shimmer block text-[10.5px] font-extrabold font-mono uppercase tracking-[0.2em]">Total points balance</span>
+              <span className="mt-1 block h-px w-10 bg-[#0e4a5c]/30" />
+            </span>
           </div>
-        </div>
+          <div className="relative z-10 mb-2 flex flex-col justify-center gap-6 sm:-translate-y-1 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-baseline gap-3">
+              <p className="tnum text-[58px] font-extrabold leading-none tracking-[-0.03em] text-[#0e2b3c]">{fmtNum(useCountUp(balance))}</p>
+              <p className="text-[16px] font-extrabold text-[#0c9dab]">PTS</p>
+            </div>
+            <button
+              onClick={() => setScreen('rewards')}
+              className="flex flex-nowrap items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-[#09253e] px-7 py-3.5 text-[14px] font-extrabold text-white shadow-[0_12px_30px_rgba(2,12,24,0.25)] transition hover:brightness-110"
+            >
+              Redeem Now <ArrowRight size={16} />
+            </button>
+          </div>
+        </Card>
 
         {/* Right column — recognitions + milestone, together as tall as the wallet panel */}
         <div className="flex h-full flex-col gap-4">
@@ -170,7 +191,7 @@ export default function HomeScreen() {
       </div>
 
       {/* Quick cards — side spacing matches hero / navbar (10px viewport inset) */}
-      <div className="grid gap-4 lg:grid-cols-2 -mx-2.5 lg:-mx-[30px]">
+      <div className="grid grid-cols-2 gap-4 -mx-2.5 lg:-mx-[30px]">
         <EoQShowcase />
 
         <Card className="flex flex-col min-h-[248px] p-5">
