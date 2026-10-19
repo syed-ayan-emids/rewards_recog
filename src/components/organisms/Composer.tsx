@@ -176,6 +176,7 @@ export default function Composer({ open, preset }: ComposerProps) {
             <div
               className="mt-2.5 flex min-h-11 flex-wrap items-center gap-2 rounded-xl border border-line bg-slate-50 px-3 py-2 transition focus-within:border-brand/40 focus-within:bg-white"
             >
+              <span className="text-[13px] font-bold text-muted">cc</span>
               {ccManagers.map((id) => (
                 <span key={id} className="flex items-center gap-1.5 rounded-full bg-navy/5 border border-line py-0.5 pl-1 pr-2">
                   <Avatar id={id} size={20} />
@@ -193,7 +194,7 @@ export default function Composer({ open, preset }: ComposerProps) {
               <input
                 value={ccq}
                 onChange={(e) => { setCcq(e.target.value); setCcPickerOpen(true) }}
-                placeholder={ccSel.length || ccManagers.length ? 'Add more…' : 'Share Recognition With'}
+                placeholder={ccSel.length || ccManagers.length ? 'Add more…' : 'Anyone else who should hear about this?'}
                 className="h-7 min-w-[150px] flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted"
               />
             </div>
