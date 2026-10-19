@@ -462,6 +462,14 @@ a {
   100% { opacity: 0; transform: translateX(48px); }
 }
 
+/* Composer heading — the rotating "Recognize ___" word rolls in soft from below and out upward */
+@keyframes word-roll {
+  0% { opacity: 0; transform: translateY(95%); filter: blur(5px); }
+  14% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  84% { opacity: 1; transform: translateY(0); filter: blur(0); }
+  100% { opacity: 0; transform: translateY(-95%); filter: blur(5px); }
+}
+
 /* Hero mascot (spark character) */
 .mascot-bob { animation: mascot-bob 5.5s ease-in-out infinite; transform-origin: 50% 60%; }
 @keyframes mascot-bob {
@@ -508,4 +516,5 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .mascot-bob, .mascot-wave, .mascot-face, .mascot-halo, .mascot-twinkle, .mascot-celebr, .mascot-sparkle, .hero-shine, .say-shimmer, .kicker-shimmer { animation: none !important; }
   .hero-slide-cycle { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .word-roll-cycle { animation: none !important; opacity: 1 !important; transform: none !important; }
 }

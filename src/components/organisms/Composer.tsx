@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Check, Maximize2, Send, Sparkles, Users, X } from 'lucide-react'
 import { Avatar, Btn, Modal } from '../atoms'
 import { CORE_VALUES, VALUE_KEYS, VALUE_TEMPLATES, PEOPLE_LIST, PEOPLE, EMAIL_RE, ensurePersonFromEmail } from '../../data'
@@ -6,6 +6,43 @@ import type { ValueKey } from '../../data'
 import { useStore } from '../../store'
 
 const POINT_PRESETS = [0, 25, 50, 100]
+
+/** Who you might be recognizing — rolls through vertically in the composer heading. */
+const ROTATE_WORDS = ['teammate', 'colleague', 'team lead', 'manager', 'peer']
+
+export function RollWord({ className = '' }: { className?: string }) {
+  const [idx, setIdx] = useState(0)
+  const [w, setW] = useState<number | undefined>(undefined)
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx((v) => (v + 1) % ROTATE_WORDS.length), 2600)
+    return () => clearInterval(t)
+  }, [])
+
+  /* Keep the clip window as wide as the current word so it glides instead of snapping. */
+  useLayoutEffect(() => {
+    if (ref.current) setW(ref.current.offsetWidth)
+  }, [idx])
+
+  return (
+    <span
+      aria-live="polite"
+      /* inline-flex + align-items baseline keeps the rolling word on the same text baseline as the words around it */
+      className="relative inline-flex items-baseline overflow-hidden"
+      style={{ width: w, transition: 'width 420ms cubic-bezier(0.33, 1, 0.68, 1)' }}
+    >
+      <span
+        key={idx}
+        ref={ref}
+        className={`word-roll-cycle whitespace-nowrap ${className}`}
+        style={{ animation: 'word-roll 2600ms cubic-bezier(0.33, 1, 0.68, 1) both' }}
+      >
+        {ROTATE_WORDS[idx]}
+      </span>
+    </span>
+  )
+}
 
 const AI_DRAFTS: Record<ValueKey, string> = {
   customerFirst: 'went above and beyond for the client this week — the turnaround on their urgent request was seamless, and the client team specifically called it out in the QBR thread.',
@@ -115,7 +152,9 @@ export default function Composer({ open, preset }: ComposerProps) {
   return (
     <div className="flex flex-col">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-4">
-          <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">Recognize someone</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">
+            Recognize your <RollWord className="say-shimmer" />
+          </h1>
           <Btn variant="ghost" size="sm" onClick={closeComposer}><ArrowLeft size={16} /> Back</Btn>
         </div>
         <div className="mx-auto grid w-full max-w-6xl gap-x-6 gap-y-5 px-5 py-4 lg:grid-cols-[1fr_1.4fr]">
