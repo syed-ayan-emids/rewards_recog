@@ -160,6 +160,17 @@ export default function AppShell() {
       </header>
 
       <main id="main-content" tabIndex={-1} className="mx-auto mt-2 max-w-[1560px] px-5 pb-28 pt-3 lg:px-10 lg:pb-16">
+        {/* Back affordance for pages not reachable from the primary nav (awards, jury, profile) */}
+        {!NAV.some((n) => n.key === screen) && screen !== 'compose' && (
+          <div className="flex justify-end">
+            <button
+              onClick={() => setScreen('home')}
+              className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[12.5px] font-bold text-muted transition hover:text-navy"
+            >
+              ← Back to dashboard
+            </button>
+          </div>
+        )}
         <div key={screen} className="page-fade">
           {screen === 'home' && <HomeScreen />}
           {screen === 'rewards' && <RewardsScreen />}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Bell, Check, CalendarCheck, Trophy, MessageSquare, Cake } from 'lucide-react'
 import { useOutside } from '../atoms'
@@ -14,16 +14,37 @@ const GROUP_META: Record<string, { icon: ReactNode; label: string; bg: string; f
 export default function NotifBell() {
   const [open, setOpen] = useState(false)
   const ref = useOutside<HTMLDivElement>(() => setOpen(false))
+  const bellRef = useRef<HTMLButtonElement>(null)
   const { notifications, markAllRead, setScreen } = useStore()
   const unread = notifications.filter((n) => n.unread).length
+
+  // Escape closes and refocuses the bell; Arrow Up/Down move through items
+  const onMenuKey = (e: React.KeyboardEvent) => {
+    const items = [...(e.currentTarget as HTMLElement).querySelectorAll<HTMLButtonElement>('button')]
+    if (e.key === 'Escape') { e.preventDefault(); setOpen(false); bellRef.current?.focus(); return }
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return
+    e.preventDefault()
+    const idx = items.indexOf(document.activeElement as HTMLButtonElement)
+    const next = e.key === 'ArrowDown' ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length
+    items[next]?.focus()
+  }
+
   return (
     <div ref={ref} className="relative">
-      <button onClick={() => setOpen(!open)} aria-label={`Notifications, ${unread} unread`} className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-white text-muted transition hover:text-ink hover:border-brand/30">
+      <button
+        ref={bellRef}
+        onClick={() => setOpen(!open)}
+        aria-label={`Notifications, ${unread} unread`}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onKeyDown={(e) => { if (e.key === 'ArrowDown' && open) { e.preventDefault(); (ref.current?.querySelector('button') as HTMLButtonElement)?.focus() } }}
+        className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-white text-muted transition hover:text-ink hover:border-brand/30"
+      >
         <Bell size={18} />
         {unread > 0 && <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-coral px-1 text-[10px] font-bold text-white">{unread}</span>}
       </button>
       {open && (
-        <div className="absolute right-0 top-12 z-40 w-[380px] max-w-[92vw] animate-rise overflow-hidden rounded-2xl border border-line bg-white shadow-lift">
+        <div role="menu" onKeyDown={onMenuKey} aria-label="Notifications" className="absolute right-0 top-12 z-40 w-[380px] max-w-[92vw] animate-rise overflow-hidden rounded-2xl border border-line bg-white shadow-lift">
           <div className="flex items-center justify-between border-b border-line px-4 py-3">
             <p className="font-bold text-navy">Notifications</p>
             <button onClick={markAllRead} className="flex items-center gap-1 text-xs font-semibold text-brand hover:underline"><Check size={13} /> Mark all read</button>
@@ -41,7 +62,8 @@ export default function NotifBell() {
                   {items.map((n) => (
                     <button
                       key={n.id}
-                      onClick={() => { setOpen(false); if (n.group === 'approval') setScreen('team', 'approvals'); else setScreen(n.go ?? 'home') }}
+                      role="menuitem"
+                      onClick={() => { setOpen(false); bellRef.current?.focus(); if (n.group === 'approval') setScreen('team', 'approvals'); else setScreen(n.go ?? 'home') }}
                       className="flex w-full items-start gap-3 rounded-xl px-2.5 py-2 text-left transition hover:bg-slate-50"
                     >
                       <span className="mt-1 h-2 w-2 shrink-0 rounded-full" style={{ background: n.unread ? 'var(--color-brand)' : 'transparent' }} />
