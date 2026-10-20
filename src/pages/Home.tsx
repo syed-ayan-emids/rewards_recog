@@ -128,7 +128,7 @@ export default function HomeScreen() {
             <div className="flex justify-end pr-2 sm:pr-10">
               <button
                 onClick={() => setScreen('rewards')}
-                className="flex items-center gap-3 rounded-full bg-[#153B5A] px-9 py-4 text-[15px] font-semibold text-white shadow-[0_10px_24px_rgba(3,13,28,0.28)] transition hover:brightness-110"
+                className="flex items-center gap-3 rounded-xl bg-[#153B5A] px-8 py-3.5 text-[15px] font-semibold text-white shadow-[0_10px_24px_rgba(3,13,28,0.28)] transition hover:brightness-110"
               >
                 Go to My Rewards <ArrowRight size={17} />
               </button>
