@@ -154,9 +154,8 @@ export default function RewardsScreen() {
       </div>
       {/* Ledger — always last */}
       <section id="ledger" className="mt-8 scroll-mt-24">
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-3">
           <h2 className="text-xl font-extrabold tracking-tight text-navy">Points ledger</h2>
-          <Chip className="bg-slate-100 text-muted">Digital · immutable</Chip>
         </div>
         <Card className="divide-y divide-line p-0">
           {LEDGER.map((e) => {
