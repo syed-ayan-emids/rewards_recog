@@ -57,7 +57,7 @@ export default function RewardsScreen() {
             <div className="flex justify-end pr-1 sm:pr-4">
               <button
                 onClick={() => scrollTo('ledger')}
-                className="flex items-center gap-3 rounded-full bg-[#153B5A] px-7 py-3 text-[13.5px] font-semibold text-white shadow-[0_10px_22px_rgba(3,13,28,0.28)] transition hover:brightness-110"
+                className="flex items-center gap-3 rounded-xl bg-[#153B5A] px-7 py-3 text-[13.5px] font-semibold text-white shadow-[0_10px_22px_rgba(3,13,28,0.28)] transition hover:brightness-110"
               >
                 View ledger <ArrowRight size={15} />
               </button>
