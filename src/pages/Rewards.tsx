@@ -23,7 +23,7 @@ export default function RewardsScreen() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-extrabold tracking-tight text-navy">My Rewards</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">My Rewards</h1>
         <p className="mt-1 text-[15px] text-muted">Your balance, what you can spend it on, and everything you have earned.</p>
       </div>
 
@@ -154,9 +154,8 @@ export default function RewardsScreen() {
       </div>
       {/* Ledger — always last */}
       <section id="ledger" className="mt-8 scroll-mt-24">
-        <div className="mb-3 flex items-center justify-between">
+        <div className="mb-3">
           <h2 className="text-xl font-extrabold tracking-tight text-navy">Points ledger</h2>
-          <Chip className="bg-slate-100 text-muted">Digital · immutable</Chip>
         </div>
         <Card className="divide-y divide-line p-0">
           {LEDGER.map((e) => {

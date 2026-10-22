@@ -23,7 +23,7 @@ export default function ProfileScreen() {
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
             <Avatar id={p.id} size={86} />
             <div className="min-w-0 flex-1">
-              <h1 className="text-3xl font-extrabold tracking-tight">{p.name}</h1>
+              <h1 className="text-3xl font-extrabold tracking-tight md:text-[34px]">{p.name}</h1>
               <p className="mt-1 text-[15px] font-semibold text-white/80">{p.title} · {p.dept}</p>
               <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-1.5 text-[12.5px] text-white/60">
                 <span className="flex items-center gap-1.5"><MapPin size={13} /> {p.office}</span>

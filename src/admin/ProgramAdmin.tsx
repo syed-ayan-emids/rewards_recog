@@ -508,7 +508,7 @@ function SetupChecklist({ banners }: { banners: AdminBanner[] }) {
         <p className="text-[15px] font-extrabold text-navy">Program checklist</p>
         <Chip className="bg-mint-soft text-mint">{doneCount} / {items.length} done</Chip>
       </div>
-      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-[#E9EEF7]">
+      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100">
         <div className="h-full rounded-full bg-brand transition-[width] duration-700" style={{ width: `${(doneCount / items.length) * 100}%` }} />
       </div>
       <div className="mt-3 space-y-2">
