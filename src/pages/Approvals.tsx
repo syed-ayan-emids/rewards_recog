@@ -43,7 +43,7 @@ export default function ApprovalsScreen() {
   return (
     <div>
       <div className="mb-5">
-        <h1 className="text-2xl font-extrabold tracking-tight text-navy md:text-[28px]">Approvals inbox</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">Approvals inbox</h1>
       </div>
 
       <div className="grid items-start gap-4 lg:grid-cols-[150px_310px_1fr]">

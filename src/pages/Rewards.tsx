@@ -23,7 +23,7 @@ export default function RewardsScreen() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-extrabold tracking-tight text-navy">My Rewards</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight text-navy md:text-[34px]">My Rewards</h1>
         <p className="mt-1 text-[15px] text-muted">Your balance, what you can spend it on, and everything you have earned.</p>
       </div>
 

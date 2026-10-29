@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "web-dashboard",
+      "runtimeExecutable": "wsl",
+      "runtimeArgs": ["--cd", "D:\\review\\web", "npm", "run", "dev", "--", "--port", "3000"],
+      "port": 3000
+    },
+    {
       "name": "portal",
       "runtimeExecutable": "wsl",
       "runtimeArgs": ["--cd", "C:\\Users\\syeda2\\Desktop\\recognition_portal", "npm", "run", "dev"],
@@ -23,6 +29,12 @@
       "runtimeExecutable": "wsl",
       "runtimeArgs": ["--cd", "C:\\Users\\syeda2\\Desktop\\recognition_portal", "npm", "run", "dev", "--", "--port", "5199", "--strictPort"],
       "port": 5199
+    },
+    {
+      "name": "db-site",
+      "runtimeExecutable": "wsl",
+      "runtimeArgs": ["--cd", "/mnt/d/review", "npx", "--yes", "serve", "-l", "8931", "database/website"],
+      "port": 8931
     }
   ]
 }

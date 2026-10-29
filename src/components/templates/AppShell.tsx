@@ -14,6 +14,8 @@ import AwardsScreen from '../../pages/Awards'
 import MyTeamScreen from '../../pages/Team'
 import JuryScreen from '../../pages/Jury'
 import ProfileScreen from '../../pages/Profile'
+import ProgramAdmin from '../../admin/ProgramAdmin'
+import FinanceAdmin from '../../admin/FinanceAdmin'
 
 const NAV: { key: Screen; label: string; icon: ReactNode }[] = [
   { key: 'home', label: 'Dashboard', icon: <Home size={17} /> },
@@ -93,6 +95,19 @@ export default function AppShell() {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [screen])
+
+  /* Admin portals run on their own chrome (/admin, /finance) — the employee shell is bypassed entirely.
+     Placed after all hooks so the hook order stays stable when switching between admin and employee screens. */
+  if (screen === 'admin' || screen === 'finance') {
+    return (
+      <>
+        {screen === 'admin'
+          ? <ProgramAdmin onExit={() => setScreen('home')} />
+          : <FinanceAdmin onExit={() => setScreen('home')} />}
+        <Toasts />
+      </>
+    )
+  }
 
   return (
     <div className="min-h-dvh bg-page-art">

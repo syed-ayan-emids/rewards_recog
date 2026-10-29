@@ -16,31 +16,32 @@ export interface AdminShellProps {
 export default function AdminShell({ role, tabs, active, onTab, onExit, children }: AdminShellProps) {
   return (
     <div className="min-h-dvh bg-page-art">
-      <header className="sticky top-0 z-20 bg-navy text-white shadow-[0_8px_24px_rgba(3,13,28,0.35)]">
-        <div className="mx-auto flex h-14 max-w-[1200px] items-center gap-3 px-5">
-          <img src="/emids-icon.png" alt="emids" className="h-8 w-8 rounded-md bg-white/95 object-contain p-0.5" />
-          <p className="text-[14px] font-extrabold tracking-tight">emids · Admin console</p>
-          <span className="hidden rounded-full bg-gold px-2.5 py-0.5 text-[10.5px] font-extrabold uppercase tracking-wider text-[#3d2b00] sm:inline-flex">{role}</span>
-          <Btn size="sm" variant="ghost" onClick={onExit} className="!text-white/85 hover:!bg-white/10 ml-auto !h-8">
+      {/* Floating pill header — same chrome language as the employee shell */}
+      <header className="sticky top-2 z-20 mx-2.5 mt-2 rounded-[20px] border border-line bg-white/88 backdrop-blur-md shadow-[0_4px_18px_rgba(10,31,68,0.07)]">
+        <div className="mx-auto flex h-16 max-w-[1560px] items-center gap-3 px-5 lg:px-10">
+          <img src="/emids-icon.png" alt="emids" className="h-9 w-9 object-contain" />
+          <p className="text-[16px] font-extrabold tracking-tight text-navy">EMIDS <span className="hidden font-bold text-muted sm:inline">· Admin console</span></p>
+          <span className="hidden shrink-0 items-center rounded-full bg-brand text-white px-2.5 py-1 text-[10.5px] font-extrabold font-mono uppercase tracking-wider sm:inline-flex">{role}</span>
+          <Btn size="sm" variant="ghost" onClick={onExit} className="ml-auto !h-8 text-muted hover:!bg-slate-100 hover:text-navy">
             <ArrowLeft size={14} /> Back to app
           </Btn>
         </div>
-        <div className="mx-auto flex max-w-[1200px] gap-1.5 overflow-x-auto px-5 pb-0 pt-1.5">
+        <div className="rail-scroll mx-auto flex max-w-[1560px] gap-2 overflow-x-auto px-5 pb-2.5 pt-1 lg:px-10">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => onTab(t.key)}
-              className={`relative flex shrink-0 items-center gap-1.5 rounded-t-lg px-3.5 py-2 text-[12.5px] font-bold transition ${active === t.key ? 'bg-page-art text-brand' : 'text-white/70 hover:bg-white/10 hover:text-white'}`}
+              className={`flex shrink-0 items-center gap-1.5 rounded-xl border px-3.5 py-2 text-[13px] font-bold transition outline-none focus-visible:bg-brand-soft/50 ${active === t.key ? 'border-brand bg-brand text-white shadow-card' : 'border-line bg-white text-muted hover:text-ink'}`}
             >
               {t.label}
-              {t.badge !== undefined && (
-                <span className={`tnum rounded-full px-1.5 py-0.5 text-[10px] font-extrabold ${active === t.key ? 'bg-brand-soft text-brand' : 'bg-white/15 text-white/75'}`}>{t.badge}</span>
+              {t.badge !== undefined && t.badge > 0 && (
+                <span className={`tnum flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10.5px] font-extrabold ${active === t.key ? 'bg-white/25 text-white' : 'bg-brand-soft text-brand'}`}>{t.badge}</span>
               )}
             </button>
           ))}
         </div>
       </header>
-      <main className="mx-auto max-w-[1200px] px-5 py-7">
+      <main className="mx-auto max-w-[1560px] px-5 py-5 lg:px-10 lg:py-7">
         <div key={active} className="animate-rise">
           {children}
         </div>

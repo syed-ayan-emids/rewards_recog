@@ -1,0 +1,10 @@
+# Quality gate — runs before every commit from D:\review\web
+# formatter -> linter -> SCA -> unit tests
+cd web
+npx lint-staged || exit 1
+
+npm run scan:sca --silent
+
+# unit tests stay fast: they gate every commit; full coverage + e2e run in CI / npm run test:coverage
+npm run test --silent || exit 1
+echo "✳ quality gate passed"
