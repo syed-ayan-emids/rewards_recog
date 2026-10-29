@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { Mascot } from '../atoms'
 
 const RECOGNIZE_PHRASES = [
@@ -27,12 +28,34 @@ function HeroSlide() {
   }, [])
   const line = HERO_LINES[idx]
   return (
-    <span key={idx} className="hero-slide-cycle inline" style={{ animation: 'hero-slide 4200ms cubic-bezier(0.33, 1, 0.68, 1) both' }}>
-      <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>{line.main}</span>{' '}
+    <span
+      key={idx}
+      className="hero-slide-cycle inline"
+      style={{ animation: 'hero-slide 4200ms cubic-bezier(0.33, 1, 0.68, 1) both' }}
+    >
+      <span
+        className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent"
+        style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}
+      >
+        {line.main}
+      </span>{' '}
       <span className="relative inline-block">
         <span className="say-shimmer">{line.accent}</span>
-        <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 120 8" preserveAspectRatio="none" aria-hidden>
-          <path d="M2 6 C 30 1, 90 1, 118 5" fill="none" stroke="var(--color-gold)" strokeWidth="3" strokeLinecap="round" opacity="0.75" />
+        <svg
+          className="absolute -bottom-2 left-0 w-full"
+          height="8"
+          viewBox="0 0 120 8"
+          preserveAspectRatio="none"
+          aria-hidden
+        >
+          <path
+            d="M2 6 C 30 1, 90 1, 118 5"
+            fill="none"
+            stroke="var(--color-gold)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            opacity="0.75"
+          />
         </svg>
       </span>
     </span>
@@ -63,7 +86,7 @@ function HeroBackdrop() {
   return (
     <div className="pointer-events-none absolute -inset-x-8 -bottom-10 -top-16 -z-10 overflow-hidden" aria-hidden>
       {videoMissing ? (
-        <img src="/emids-hero.webp" alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <Image src="/emids-hero.webp" alt="" fill className="object-cover" sizes="100vw" />
       ) : (
         <video
           className="absolute inset-0 h-full w-full object-cover"
@@ -88,7 +111,12 @@ export default function Hero({ name }: { name: string }) {
         <HeroBackdrop />
         <div className="relative z-10 flex w-full flex-col items-start justify-center gap-6 px-7 py-8 sm:px-9 xl:px-10 xl:py-10">
           <h1 className="max-w-3xl text-[50px] font-extrabold leading-[1.06] tracking-[-0.03em]">
-            <span className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent" style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}>Hello {name} — </span>
+            <span
+              className="bg-gradient-to-r from-white via-white to-[#d9fbe9] bg-clip-text text-transparent"
+              style={{ textShadow: '0 2px 24px rgba(0,0,0,0.35)' }}
+            >
+              Hello {name} —{' '}
+            </span>
             <HeroSlide />
           </h1>
           <div className="flex flex-wrap items-center gap-4">

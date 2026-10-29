@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { CalendarClock, ChevronLeft, ChevronRight, Users } from 'lucide-react'
 import { Card } from '../atoms'
 import type { Slide } from '@/lib/mock-data'
@@ -14,10 +15,9 @@ export default function EoQShowcase({ slides }: { slides: Slide[] }) {
 
   // auto-advance every 5.5s; each change re-arms the timer, so manual clicks reset the countdown
   useEffect(() => {
-    const t = setTimeout(next, 5500)
+    const t = setTimeout(() => setOnScreen((s) => (s + 1) % slides.length), 5500)
     return () => clearTimeout(t)
-  }, [onScreen])
-
+  }, [onScreen, slides.length])
 
   return (
     <Card className="relative min-h-[248px] overflow-hidden p-0 text-white">
@@ -29,7 +29,15 @@ export default function EoQShowcase({ slides }: { slides: Slide[] }) {
             aria-hidden={!active}
             className={`absolute inset-0 flex flex-col justify-between transition-opacity duration-700 ${active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
           >
-            <img src={s.img} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" />
+            <Image
+              src={s.img}
+              alt=""
+              aria-hidden="true"
+              fill
+              className="object-cover"
+              priority={i === 0}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
             <div className="absolute inset-0 bg-navy-deep/55" />
             <div className="relative p-5">
               <span className="flex items-center gap-1.5 text-[10.5px] font-extrabold font-mono uppercase tracking-[0.16em] text-gold">

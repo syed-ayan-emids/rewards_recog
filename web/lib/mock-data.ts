@@ -15,16 +15,28 @@ export const PEOPLE: Record<string, Person> = {
   p1: { id: 'p1', name: 'Aarav Sharma', email: 'aarav.sharma@emids.com', title: 'Data Engineer II', status: 'online' },
   p2: { id: 'p2', name: 'Daniel Cho', email: 'daniel.cho@emids.com', title: 'Principal Engineer', status: 'offline' },
   p3: { id: 'p3', name: 'Priya Menon', email: 'priya.menon@emids.com', title: 'Analytics Lead', status: 'online' },
-  p6: { id: 'p6', name: 'Kenji Watanabe', email: 'kenji.watanabe@emids.com', title: 'Data Scientist', status: 'online' },
+  p6: {
+    id: 'p6',
+    name: 'Kenji Watanabe',
+    email: 'kenji.watanabe@emids.com',
+    title: 'Data Scientist',
+    status: 'online',
+  },
 }
 
 export const person = (id: string): Person => PEOPLE[id] ?? PEOPLE.me
 
 export const initials = (name: string) =>
-  name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase()
+  name
+    .split(' ')
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
 
 export interface LeaderRow {
   id: string
+  name: string
   pts: number
 }
 
@@ -34,7 +46,7 @@ export const TEAM_LEADERBOARD: LeaderRow[] = [
   { id: 'p1', pts: 275 },
   { id: 'p3', pts: 250 },
   { id: 'p6', pts: 220 },
-]
+].map((r) => ({ ...r, name: person(r.id).name }))
 
 export const ORG_STATS = { recognitions: 279 }
 

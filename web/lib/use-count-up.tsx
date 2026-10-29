@@ -9,8 +9,9 @@ export function useCountUp(target: number, durationMs = 1100): number {
   useEffect(() => {
     let raf = 0
     const start = performance.now()
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / durationMs)
+    const tick = () => {
+      // self-measured time — some environments (jsdom) give rAF callbacks an unreliable timestamp
+      const t = Math.min(1, (performance.now() - start) / durationMs)
       setValue(Math.round(target * (1 - Math.pow(1 - t, 3))))
       if (t < 1) raf = requestAnimationFrame(tick)
     }
